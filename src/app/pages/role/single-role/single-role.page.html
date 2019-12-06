@@ -1,0 +1,227 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>User Role</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <div *ngIf="item">
+        <ion-fab *ngIf="isMD" horizontal="end" slot="fixed" vertical="top">
+            <!--            <ion-fab-button (click)="showMenu(item.id)" class="ion-float-end" color="primary" size="small">-->
+            <ion-fab-button class="ion-float-end" color="primary" size="small">
+                <ion-icon name="menu"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+        <div>
+            <ion-fab *ngIf="!isMD" horizontal="end" vertical="top">
+                <ion-fab-button>
+                    <ion-icon name="menu"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="bottom">
+                    <ion-fab-button (click)="delete()" color="danger"><!-- delete -->
+                        <ion-icon name="trash"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary"><!-- edit -->
+                        <ion-icon name="create"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
+                        <ion-icon name="close-circle-outline"></ion-icon>
+                    </ion-fab-button>
+                    <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
+                        <ion-icon name="send"></ion-icon>
+                    </ion-fab-button>
+
+                </ion-fab-list>
+            </ion-fab>
+        </div>
+
+        <ion-card>
+            <form [formGroup]="editForm">
+                <ion-card-header>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <ion-card-title>Role:</ion-card-title>
+                                <ion-item>
+                                    <ion-label *ngIf="!isEdit">{{item.user_role_description}}</ion-label>
+                                    <ion-input *ngIf="isEdit"
+                                               [appDisableControl]="!isEdit" autofocus="false"
+                                               color="primary" formControlName="user_role_description"
+                                               type="text"></ion-input>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col size-md="2">
+                                <ion-label>Permission:</ion-label>
+                            </ion-col>
+                            <ion-col>
+                                <ion-grid>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>User Module</ion-label>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>View only</ion-label>
+                                                <ion-toggle [appDisableControl]="!isEdit"
+                                                            formControlName="user_view"></ion-toggle>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Full access</ion-label>
+                                                <ion-toggle [appDisableControl]="!isEdit"
+                                                            formControlName="user_full"></ion-toggle>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Company Module</ion-label>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>View only</ion-label>
+                                                <ion-toggle [appDisableControl]="!isEdit"
+                                                            formControlName="company_view"></ion-toggle>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Full access</ion-label>
+                                                <ion-toggle [appDisableControl]="!isEdit"
+                                                            formControlName="company_full"></ion-toggle>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Employee Module</ion-label>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>View only</ion-label>
+                                                <ion-toggle [appDisableControl]="!isEdit"
+                                                            formControlName="employee_view"></ion-toggle>
+                                            </ion-item>
+                                        </ion-col>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Full access</ion-label>
+                                                <ion-toggle [appDisableControl]="!isEdit"
+                                                            formControlName="employee_full"></ion-toggle>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                </ion-grid>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size-md="2">
+                                <ion-label>Users under this permission:</ion-label>
+                            </ion-col>
+                            <ion-col>
+                                <ion-label>{{item.users}}</ion-label>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </ion-card-content>
+            </form>
+        </ion-card>
+    </div>
+
+    <div *ngIf="!item">
+        <ion-card>
+            <ion-card-header>
+                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col size-md="2">
+                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                        </ion-col>
+                        <ion-col>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size-md="2">
+                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                        </ion-col>
+                        <ion-col>
+                            <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </div>
+</ion-content>

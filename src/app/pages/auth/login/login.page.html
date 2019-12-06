@@ -1,0 +1,24 @@
+<ion-title>Login</ion-title>
+
+<ion-content class="ion-padding">
+    <form (ngSubmit)="login(LoginForm)" [formGroup]="LoginForm">
+        <ion-item>
+            <ion-label position="floating">Username</ion-label>
+            <ion-input autocomplete="true" autofocus="false" formControlName="username" type="text"></ion-input>
+        </ion-item>
+        <div *ngIf="LoginForm.controls.username.invalid && (LoginForm.controls.username.dirty || LoginForm.controls.username.touched)"
+             class="alert alert-danger">
+            <div *ngIf="LoginForm.controls.username.errors?.required">Username is required</div>
+        </div>
+        <ion-item>
+            <ion-label position="floating">Password</ion-label>
+            <ion-input (keyup.enter)="LoginForm.valid && login(LoginForm)" formControlName="password"
+                       inputmode="password" type="password"></ion-input>
+        </ion-item>
+        <div *ngIf="LoginForm.controls.password.invalid && (LoginForm.controls.password.dirty || LoginForm.controls.password.touched)"
+             class="alert alert-danger">
+            <div *ngIf="LoginForm.controls.password.errors?.required">Password is required</div>
+        </div>
+        <ion-button color="primary" expand="full" type="submit">Login</ion-button>
+    </form>
+</ion-content>
