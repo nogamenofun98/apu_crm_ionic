@@ -10,8 +10,8 @@
 <ion-content class="ion-padding">
     <div *ngIf="item">
         <ion-fab *ngIf="isMD" horizontal="end" slot="fixed" vertical="top">
-            <!--            <ion-fab-button (click)="showMenu(item.id)" class="ion-float-end" color="primary" size="small">-->
-            <ion-fab-button class="ion-float-end" color="primary" size="small">
+            <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
+                <!--            <ion-fab-button class="ion-float-end" color="primary" size="small">-->
                 <ion-icon name="menu"></ion-icon>
             </ion-fab-button>
         </ion-fab>
@@ -136,13 +136,11 @@
                                 <ion-label>Users under this permission:</ion-label>
                             </ion-col>
                             <ion-col>
-                                <ng-container *ngIf="users !== null">
-                                    <ion-list *ngFor="let user of users">
-                                        <ion-item>
-                                            <ion-label>{{user.user_full_name}}</ion-label>
-                                        </ion-item>
-                                    </ion-list>
-                                </ng-container>
+                                <ion-list *ngFor="let user of users">
+                                    <ion-item>
+                                        <ion-label>{{user.user_full_name}}</ion-label>
+                                    </ion-item>
+                                </ion-list>
                             </ion-col>
                         </ion-row>
                         <ion-row *ngIf="users?.length == 0">

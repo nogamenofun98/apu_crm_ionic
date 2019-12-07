@@ -12,11 +12,11 @@ export class InterceptorService implements HttpInterceptor {
     }
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-        console.log('request intercepted successfully!');
+        // console.log('request intercepted successfully!');
         if (req.url.includes(this.env.CAS_URL)) {
             return next.handle(req);
         }
-        console.log('non CAS url: ' + req.url);
+        // console.log('non CAS url: ' + req.url);
         return from(this.test()).pipe(switchMap(params => {
             // tslint:disable-next-line:no-shadowed-variable
             const authReq = req.clone({

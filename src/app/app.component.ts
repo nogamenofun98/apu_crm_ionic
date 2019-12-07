@@ -28,7 +28,12 @@ export class AppComponent {
             title: 'User Role',
             url: '/roles',
             icon: 'list'
-        }
+        },
+        {
+            title: 'User',
+            url: '/users',
+            icon: 'list'
+        },
     ];
 
     constructor(

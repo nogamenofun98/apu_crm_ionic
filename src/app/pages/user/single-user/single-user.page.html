@@ -1,0 +1,140 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>CRM - User</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div *ngIf="item">
+    <ion-fab *ngIf="isMD" horizontal="end" slot="fixed" vertical="top">
+      <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
+        <!--                <ion-fab-button class="ion-float-end" color="primary" size="small">-->
+        <ion-icon name="menu"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    <div>
+      <ion-fab *ngIf="!isMD" horizontal="end" vertical="top">
+        <ion-fab-button>
+          <ion-icon name="menu"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="bottom">
+          <!--                    <ion-fab-button (click)="delete()" color="danger">&lt;!&ndash; delete &ndash;&gt;-->
+          <!--                        <ion-icon name="trash"></ion-icon>-->
+          <!--                    </ion-fab-button>-->
+          <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary"><!-- edit -->
+            <ion-icon name="create"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
+            <ion-icon name="close-circle-outline"></ion-icon>
+          </ion-fab-button>
+          <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
+            <ion-icon name="send"></ion-icon>
+          </ion-fab-button>
+
+        </ion-fab-list>
+      </ion-fab>
+    </div>
+
+    <ion-card>
+      <form [formGroup]="editForm">
+        <ion-card-header>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-card-title>User:</ion-card-title>
+                <ion-item>
+                  <ion-label>{{item.user_full_name}}</ion-label>
+                </ion-item>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+
+        </ion-card-header>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col>
+                <ion-item>
+                  <ion-label>Username: {{item.username}}</ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label>Email: {{item.user_email}}</ion-label>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label>Role:</ion-label>
+                  <ion-select [appDisableControl]="!isEdit" formControlName="user_role">
+                    <ion-select-option *ngFor="let val of roleList" [value]="val.user_role_id">
+                      {{val.user_role_description}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+              <ion-col>
+                <ion-item>
+                  <ion-label>Industry:</ion-label>
+                  <ion-select [appDisableControl]="!isEdit" formControlName="user_handle_industry">
+                    <ion-select-option *ngFor="let val of industryList" [value]="val.industry_id">
+                      {{val.industry_name}}
+                    </ion-select-option>
+                  </ion-select>
+                </ion-item>
+              </ion-col>
+
+            </ion-row>
+          </ion-grid>
+        </ion-card-content>
+      </form>
+    </ion-card>
+  </div>
+
+  <div *ngIf="!item">
+    <ion-card>
+      <ion-card-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-card-title>User:</ion-card-title>
+              <ion-item>
+                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+              </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+              </ion-item>
+            </ion-col>
+            <ion-col>
+              <ion-item>
+                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+              </ion-item>
+            </ion-col>
+
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

@@ -124,5 +124,59 @@ export class SingleRolePage implements OnInit {
         });
     }
 
+    async showMenu() {
+        let button = [];
+        if (!this.isEdit) {
+            button = [
+                {
+                    text: 'Delete',
+                    role: 'destructive',
+                    icon: 'trash',
+                    handler: () => {
+                        this.delete();
+                    }
+                },
+                {
+                    text: 'Edit',
+                    icon: 'create',
+                    handler: () => {
+                        this.isEdit = true;
+                    }
+                },
+            ];
+        } else {
+            button = [
+                {
+                    text: 'Delete',
+                    role: 'destructive',
+                    icon: 'trash',
+                    handler: () => {
+                        this.delete();
+                    }
+                },
+                {
+                    text: 'Cancel Edit',
+                    role: 'destructive',
+                    icon: 'close',
+                    handler: () => {
+                        this.isEdit = false;
+                    }
+                },
+                {
+                    text: 'Submit',
+                    icon: 'send',
+                    handler: () => {
+                        this.submitForm();
+                    }
+                },
+            ];
+        }
+        const actionSheet = await this.actionSheetController.create({
+            header: 'Action',
+            buttons: button,
+        });
+        await actionSheet.present();
+    }
+
 
 }

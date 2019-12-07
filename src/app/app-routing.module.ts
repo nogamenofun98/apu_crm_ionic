@@ -19,16 +19,29 @@ const routes: Routes = [
         path: 'industry-areas/:id',
         loadChildren: './pages/industry-area/single-area/single-area.module#SingleAreaPageModule', canActivate: [AuthGuard]
     },
-    {
-        path: 'roles',
-        loadChildren: './pages/role/role.module#RolePageModule', canActivate: [AuthGuard]
-    },
-    {
-        path: 'roles/:id',
-        loadChildren: './pages/role/single-role/single-role.module#SingleRolePageModule',
-        canActivate: [AuthGuard]
-    },
-    {path: '**', redirectTo: '/'},
+        {
+            path: 'roles',
+            loadChildren: './pages/role/role.module#RolePageModule', canActivate: [AuthGuard]
+        },
+        {
+            path: 'roles/:id',
+            loadChildren: './pages/role/single-role/single-role.module#SingleRolePageModule',
+            canActivate: [AuthGuard]
+        },
+        {
+            path: 'users',
+            loadChildren: './pages/user/user.module#UserPageModule', canActivate: [AuthGuard]
+        },
+        {
+            path: 'users/:id',
+            loadChildren: './pages/user/single-user/single-user.module#SingleUserPageModule',
+            canActivate: [AuthGuard]
+        },
+        {path: '**', redirectTo: '/'},
+        {
+            path: 'user',
+            loadChildren: () => import('./pages/user/user.module').then(m => m.UserPageModule)
+        },
     ]
 ;
 
