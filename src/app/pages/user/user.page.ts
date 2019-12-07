@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AlertService} from '../../services/alert.service';
 import {ModalController, NavController} from '@ionic/angular';
 import {EnvService} from '../../services/env.service';
@@ -41,15 +41,13 @@ export class UserPage implements OnInit {
 
     private getAll() {
         this.httpRequestService.read('users').then(data => {
-            if (data instanceof HttpErrorResponse) {
-                this.alertService.presentToast(data.message, 'danger');
-                return;
-            }
             this.items = data.data_response;
             for (const item of this.items) {
                 if (item.user_role !== null) {
                     this.httpRequestService.read('roles/' + item.user_role).then(role => {
                         item.role = role.data_response.user_role_description;
+                    }).catch(err => {
+                        console.error(err);
                     });
                 } else {
                     item.role = '';
@@ -57,12 +55,15 @@ export class UserPage implements OnInit {
                 if (item.user_handle_industry !== null) {
                     this.httpRequestService.read('industry-areas/' + item.user_handle_industry).then(area => {
                         item.industry = area.data_response.industry_name;
+                    }).catch(err => {
+                        console.error(err);
                     });
                 } else {
                     item.industry = '';
                 }
-                // console.error(item);
             }
+        }).catch(err => {
+            console.error(err);
         });
     }
 }

@@ -1,7 +1,7 @@
 /* tslint:disable:max-line-length object-literal-key-quotes */
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpHeaders} from '@angular/common/http';
 import {ModalController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpRequestService} from '../../../services/http-request.service';
@@ -55,13 +55,11 @@ export class CreateRolePage implements OnInit {
                 'Content-Type': 'application/json',
             });
             this.httpRequestService.create('roles', JSON.stringify(body), headers).then(data => {
-                if (data instanceof HttpErrorResponse) {
-                    this.alertService.presentToast(data.message, 'danger');
-                    return;
-                }
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 loadingObject.dismiss();
                 this.modalController.dismiss(true);
+            }).catch(err => {
+                console.error(err);
             });
         });
     }

@@ -5,7 +5,7 @@ import {EnvService} from '../../../services/env.service';
 import {ActionSheetController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpRequestService} from '../../../services/http-request.service';
-import {HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpHeaders} from '@angular/common/http';
 
 @Component({
     selector: 'app-single-area',
@@ -42,12 +42,10 @@ export class SingleAreaPage implements OnInit {
             alert.onDidDismiss().then(confirm => {
                 if (confirm.role === 'success') {
                     this.httpRequestService.delete('industry-areas/' + this.id).then(data => {
-                        if (data instanceof HttpErrorResponse) {
-                            this.alertService.presentToast(data.message, 'danger');
-                            return;
-                        }
                         this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/industry-areas');
+                    }).catch(err => {
+                        console.error(err);
                     });
                 }
             });
@@ -67,24 +65,18 @@ export class SingleAreaPage implements OnInit {
                 'Content-Type': 'application/json',
             });
             this.httpRequestService.update('industry-areas/' + this.id, JSON.stringify(body), headers).then(data => {
-                if (data instanceof HttpErrorResponse) {
-                    this.alertService.presentToast(data.message, 'danger');
-                    return;
-                }
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.id);
                 loadingObject.dismiss();
+            }).catch(err => {
+                console.error(err);
             });
         });
     }
 
     private getItem(id: string) {
         this.httpRequestService.read('industry-areas/' + id).then((data) => {
-            if (data instanceof HttpErrorResponse) {
-                this.alertService.presentToast(data.message, 'danger');
-                return;
-            }
             this.item = data.data_response;
             this.editForm = this.formBuilder.group({
                 industry_name: [this.item.industry_name, Validators.compose([
@@ -92,6 +84,8 @@ export class SingleAreaPage implements OnInit {
                 ])],
                 industry_desc: [this.item.industry_desc],
             });
+        }).catch(err => {
+            console.error(err);
         });
     }
 

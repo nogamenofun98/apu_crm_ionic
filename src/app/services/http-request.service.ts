@@ -15,40 +15,33 @@ export class HttpRequestService {
 
     }
 
+// .catch((error) => {
+//     console.error(url + ': ' + error);
+//     return error;
+// })
+
     create(url: string, body: string, headers: HttpHeaders = null): Promise<any> {
         headers = (headers == null) ? this.headers : headers;
         return this.http
-            .post<any>(this.env.API_URL + url, body, {headers}).toPromise().catch((error) => {
-                console.error(url + ': ' + error);
-                return error;
-            });
+            .post<any>(this.env.API_URL + url, body, {headers}).toPromise();
     }
 
     update(url: string, body: string, headers: HttpHeaders = null): Promise<any> {
         headers = (headers == null) ? this.headers : headers;
         return this.http
             .put<any>(this.env.API_URL + url,
-                body, {headers}).toPromise().catch((error) => {
-                console.error(url + ': ' + error);
-                return error;
-            });
+                body, {headers}).toPromise();
     }
 
     read(url: string, headers: HttpHeaders = null): Promise<any> {
         headers = (headers == null) ? this.headers : headers;
         return this.http
-            .get<any>(this.env.API_URL + url, {headers}).toPromise().catch((error) => {
-                console.error(url + ': ' + error);
-                return error;
-            });
+            .get<any>(this.env.API_URL + url, {headers}).toPromise();
     }
 
     delete(url: string, headers: HttpHeaders = null): Promise<any> {
         headers = (headers == null) ? this.headers : headers;
         return this.http
-            .delete<any>(this.env.API_URL + url, {headers}).toPromise().catch((error) => {
-                console.error(url + ': ' + error);
-                return error;
-            });
+            .delete<any>(this.env.API_URL + url, {headers}).toPromise();
     }
 }

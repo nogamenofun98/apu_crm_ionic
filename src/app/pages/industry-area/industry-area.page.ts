@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {AlertService} from '../../services/alert.service';
 import {ModalController, NavController} from '@ionic/angular';
 import {EnvService} from '../../services/env.service';
@@ -57,11 +57,9 @@ export class IndustryAreaPage implements OnInit {
 
     private getAll() {
         this.httpRequestService.read('industry-areas').then(data => {
-            if (data instanceof HttpErrorResponse) {
-                this.alertService.presentToast(data.message, 'danger');
-                return;
-            }
             this.items = data.data_response;
+        }).catch(err => {
+            console.error(err);
         });
     }
 

@@ -6,7 +6,7 @@ import {ActionSheetController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {EnvService} from '../../../services/env.service';
 import {HttpRequestService} from '../../../services/http-request.service';
-import {HttpErrorResponse, HttpHeaders} from '@angular/common/http';
+import {HttpHeaders} from '@angular/common/http';
 
 @Component({
     selector: 'app-single-role',
@@ -55,14 +55,12 @@ export class SingleRolePage implements OnInit {
                 'Content-Type': 'application/json',
             });
             this.httpRequestService.update('roles/' + this.id, JSON.stringify(body), headers).then(data => {
-                if (data instanceof HttpErrorResponse) {
-                    this.alertService.presentToast(data.message, 'danger');
-                    return;
-                }
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.id);
                 loadingObject.dismiss();
+            }).catch(err => {
+                console.error(err);
             });
         });
     }
@@ -72,12 +70,10 @@ export class SingleRolePage implements OnInit {
             alert.onDidDismiss().then(confirm => {
                 if (confirm.role === 'success') {
                     this.httpRequestService.delete('roles/' + this.id).then(data => {
-                        if (data instanceof HttpErrorResponse) {
-                            this.alertService.presentToast(data.message, 'danger');
-                            return;
-                        }
                         this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/roles');
+                    }).catch(err => {
+                        console.error(err);
                     });
                 }
             });
@@ -86,10 +82,6 @@ export class SingleRolePage implements OnInit {
 
     private getItem(id: string) {
         this.httpRequestService.read('roles/' + id).then((data) => {
-            if (data instanceof HttpErrorResponse) {
-                this.alertService.presentToast(data.message, 'danger');
-                return;
-            }
             this.item = data.data_response;
             this.getUserFromItem(); // get user detail after they fetch the response
             this.editForm = this.formBuilder.group({
@@ -103,6 +95,8 @@ export class SingleRolePage implements OnInit {
                 employee_view: [this.item.user_role_json.employee === 'view'],
                 employee_full: [this.item.user_role_json.employee === 'full'],
             });
+        }).catch(err => {
+            console.error(err);
         });
     }
 
@@ -114,12 +108,9 @@ export class SingleRolePage implements OnInit {
         }
         userIds.forEach(id => {
             this.httpRequestService.read('users/' + id).then(data => {
-                if (data instanceof HttpErrorResponse) {
-                    this.alertService.presentToast(data.message, 'danger');
-                    return;
-                }
                 this.users.push(data.data_response);
-                // console.error(this.users);
+            }).catch(err => {
+                console.error(err);
             });
         });
     }

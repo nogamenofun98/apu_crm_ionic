@@ -1,6 +1,6 @@
 /* tslint:disable:forin */
 import {Component, OnInit} from '@angular/core';
-import {HttpClient, HttpErrorResponse} from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {ModalController, NavController} from '@ionic/angular';
 import {EnvService} from '../../services/env.service';
 import {AuthService} from '../../services/auth.service';
@@ -40,12 +40,6 @@ export class RolePage implements OnInit {
 
     getAll() {
         this.httpRequestService.read('roles').then(data => {
-            // console.log('data: ', r);
-            // console.error('data response: ', data);
-            if (data instanceof HttpErrorResponse) {
-                this.alertService.presentToast(data.message, 'danger');
-                return;
-            }
             this.roles = data.data_response;
             for (const item of this.roles) {
                 let permissions = '';
@@ -58,6 +52,8 @@ export class RolePage implements OnInit {
                 });
                 item.user_role_json = permissions;
             }
+        }).catch(err => {
+            console.error(err);
         });
     }
 
