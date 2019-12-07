@@ -44,9 +44,8 @@ export class SingleAreaPage implements OnInit {
                     this.httpRequestService.delete('industry-areas/' + this.id).then(data => {
                         this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/industry-areas');
-                    }).catch(err => {
-                        console.error(err);
-                    });
+                    }).catch(err => console.error(err))
+                    ;
                 }
             });
         });
@@ -69,9 +68,8 @@ export class SingleAreaPage implements OnInit {
                 this.isEdit = false;
                 this.getItem(this.id);
                 loadingObject.dismiss();
-            }).catch(err => {
-                console.error(err);
-            });
+            }).catch(err => console.error(err))
+            ;
         });
     }
 
@@ -84,9 +82,8 @@ export class SingleAreaPage implements OnInit {
                 ])],
                 industry_desc: [this.item.industry_desc],
             });
-        }).catch(err => {
-            console.error(err);
-        });
+        }).catch(err => console.error(err))
+        ;
     }
 
     async showMenu() {

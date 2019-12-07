@@ -49,9 +49,8 @@ export class CreateAreaPage implements OnInit {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 loadingObject.dismiss();
                 this.modalController.dismiss(true);
-            }).catch(err => {
-                console.error(err);
-            });
+            }).catch(err => console.error(err))
+            ;
         });
     }
 }

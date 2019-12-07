@@ -52,9 +52,8 @@ export class RolePage implements OnInit {
                 });
                 item.user_role_json = permissions;
             }
-        }).catch(err => {
-            console.error(err);
-        });
+        }).catch(err => console.error(err))
+        ;
     }
 
     async showCreate() {

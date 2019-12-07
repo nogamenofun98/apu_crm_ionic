@@ -58,9 +58,8 @@ export class IndustryAreaPage implements OnInit {
     private getAll() {
         this.httpRequestService.read('industry-areas').then(data => {
             this.items = data.data_response;
-        }).catch(err => {
-            console.error(err);
-        });
+        }).catch(err => console.error(err))
+        ;
     }
 
 

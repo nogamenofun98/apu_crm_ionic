@@ -46,24 +46,21 @@ export class UserPage implements OnInit {
                 if (item.user_role !== null) {
                     this.httpRequestService.read('roles/' + item.user_role).then(role => {
                         item.role = role.data_response.user_role_description;
-                    }).catch(err => {
-                        console.error(err);
-                    });
+                    }).catch(err => console.error(err))
+                    ;
                 } else {
                     item.role = '';
                 }
                 if (item.user_handle_industry !== null) {
                     this.httpRequestService.read('industry-areas/' + item.user_handle_industry).then(area => {
                         item.industry = area.data_response.industry_name;
-                    }).catch(err => {
-                        console.error(err);
-                    });
+                    }).catch(err => console.error(err))
+                    ;
                 } else {
                     item.industry = '';
                 }
             }
-        }).catch(err => {
-            console.error(err);
-        });
+        }).catch(err => console.error(err))
+        ;
     }
 }

@@ -59,9 +59,8 @@ export class SingleRolePage implements OnInit {
                 this.isEdit = false;
                 this.getItem(this.id);
                 loadingObject.dismiss();
-            }).catch(err => {
-                console.error(err);
-            });
+            }).catch(err => console.error(err))
+            ;
         });
     }
 
@@ -72,9 +71,8 @@ export class SingleRolePage implements OnInit {
                     this.httpRequestService.delete('roles/' + this.id).then(data => {
                         this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/roles');
-                    }).catch(err => {
-                        console.error(err);
-                    });
+                    }).catch(err => console.error(err))
+                    ;
                 }
             });
         });
@@ -95,9 +93,8 @@ export class SingleRolePage implements OnInit {
                 employee_view: [this.item.user_role_json.employee === 'view'],
                 employee_full: [this.item.user_role_json.employee === 'full'],
             });
-        }).catch(err => {
-            console.error(err);
-        });
+        }).catch(err => console.error(err))
+        ;
     }
 
     private getUserFromItem() {
@@ -109,9 +106,8 @@ export class SingleRolePage implements OnInit {
         userIds.forEach(id => {
             this.httpRequestService.read('users/' + id).then(data => {
                 this.users.push(data.data_response);
-            }).catch(err => {
-                console.error(err);
-            });
+            }).catch(err => console.error(err))
+            ;
         });
     }
 

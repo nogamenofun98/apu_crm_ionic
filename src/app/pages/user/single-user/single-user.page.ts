@@ -74,9 +74,8 @@ export class SingleUserPage implements OnInit {
         this.isEdit = false;
         this.getItem(this.id);
         loadingObject.dismiss();
-      }).catch(err => {
-        console.error(err);
-      });
+      }).catch(err => console.error(err))
+      ;
     });
   }
 
@@ -141,21 +140,18 @@ export class SingleUserPage implements OnInit {
         user_role: [this.item.user_role],
         user_handle_industry: [this.item.user_handle_industry],
       });
-    }).catch(err => {
-      console.error(err);
-    });
+    }).catch(err => console.error(err))
+    ;
   }
 
   private prepareChoice() {
     this.httpRequestService.read('roles').then(data => {
       this.roleList = data.data_response;
-    }).catch(err => {
-      console.error(err);
-    });
+    }).catch(err => console.error(err))
+    ;
     this.httpRequestService.read('industry-areas').then(data => {
       this.industryList = data.data_response;
-    }).catch(err => {
-      console.error(err);
-    });
+    }).catch(err => console.error(err))
+    ;
   }
 }
