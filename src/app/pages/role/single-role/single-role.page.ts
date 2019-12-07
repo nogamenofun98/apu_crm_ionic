@@ -19,6 +19,7 @@ export class SingleRolePage implements OnInit {
     item: any;
     isEdit: boolean;
     editForm: any;
+    users: any[] = [];
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -91,6 +92,7 @@ export class SingleRolePage implements OnInit {
                 return;
             }
             this.item = data.data_response;
+            this.getUserFromItem(); // get user detail after they fetch the response
             this.editForm = this.formBuilder.group({
                 user_role_description: [this.item.user_role_description, Validators.compose([
                     Validators.required
@@ -101,6 +103,20 @@ export class SingleRolePage implements OnInit {
                 company_full: [this.item.user_role_json.company === 'full'],
                 employee_view: [this.item.user_role_json.employee === 'view'],
                 employee_full: [this.item.user_role_json.employee === 'full'],
+            });
+        });
+    }
+
+    private getUserFromItem() {
+        const userIds: any[] = this.item.users;
+        userIds.forEach(id => {
+            this.httpRequestService.read('users/' + id).then(data => {
+                if (data instanceof HttpErrorResponse) {
+                    this.alertService.presentToast(data.message, 'danger');
+                    return;
+                }
+                this.users.push(data.data_response);
+                // console.error(this.users);
             });
         });
     }
