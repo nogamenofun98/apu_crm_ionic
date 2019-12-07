@@ -59,7 +59,7 @@ export class SingleRolePage implements OnInit {
                     this.alertService.presentToast(data.message, 'danger');
                     return;
                 }
-                this.alertService.presentToast(data['message'], 'success', 1500, false);
+                this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.id);
                 loadingObject.dismiss();
@@ -76,8 +76,7 @@ export class SingleRolePage implements OnInit {
                             this.alertService.presentToast(data.message, 'danger');
                             return;
                         }
-                        console.error(data);
-                        this.alertService.presentToast(data['message'], 'success', 1500, false);
+                        this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/roles');
                     });
                 }
@@ -109,6 +108,10 @@ export class SingleRolePage implements OnInit {
 
     private getUserFromItem() {
         const userIds: any[] = this.item.users;
+        if (this.item.users.length === 0) {
+            this.users = null;
+            return;
+        }
         userIds.forEach(id => {
             this.httpRequestService.read('users/' + id).then(data => {
                 if (data instanceof HttpErrorResponse) {

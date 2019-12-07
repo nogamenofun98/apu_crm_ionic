@@ -4,7 +4,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 import {SingleRolePageRoutingModule} from './single-role-routing.module';
 import {SingleRolePage} from './single-role.page';
-import {DisableControlDirective} from '../../../directives/disable-control/disable-control.directive';
+import {SharedComponentsModule} from '../../sharedModules/SharedModules';
 
 
 @NgModule({
@@ -14,11 +14,10 @@ import {DisableControlDirective} from '../../../directives/disable-control/disab
         IonicModule,
         SingleRolePageRoutingModule,
         ReactiveFormsModule,
+        SharedComponentsModule,
     ],
-    declarations: [SingleRolePage, DisableControlDirective],
-    exports: [
-        DisableControlDirective
-    ],
+    declarations: [SingleRolePage],
+    exports: [],
     schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
 export class SingleRolePageModule {

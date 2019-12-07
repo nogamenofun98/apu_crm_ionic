@@ -25,10 +25,10 @@ export class AuthGuard implements CanActivate {
         });
         if (tgt !== null) {
             // authorised so return true
-            this.menu.enable(true);
+            await this.menu.enable(true);
             return true;
         }
-        this.menu.enable(false);
+        await this.menu.enable(false);
         this.navCtrl.navigateRoot('/');
         return false;
         // // not logged in so redirect to login page with the return url

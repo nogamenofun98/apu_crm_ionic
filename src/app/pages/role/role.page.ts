@@ -39,7 +39,6 @@ export class RolePage implements OnInit {
     }
 
     getAll() {
-        console.log('is in get all');
         this.httpRequestService.read('roles').then(data => {
             // console.log('data: ', r);
             // console.error('data response: ', data);

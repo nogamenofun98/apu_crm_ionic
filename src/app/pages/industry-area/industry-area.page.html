@@ -6,38 +6,38 @@
         <ion-title>CRM - Industry Area</ion-title>
     </ion-toolbar>
     <ion-toolbar>
-        <ion-searchbar (ionChange)="search()" [(ngModel)]="searchString" autocomplete="true"
-                       placeholder="Filter industry area"
+        <ion-searchbar [(ngModel)]="searchString" autocomplete="true"
+                       placeholder="Filter..."
                        type="text"></ion-searchbar>
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
     <ion-fab horizontal="end" slot="fixed" vertical="bottom">
-        <ion-fab-button (click)="create()" class="ion-float-end" color="primary">
+        <ion-fab-button (click)="showCreate()" class="ion-float-end" color="primary">
             <ion-icon name="add"></ion-icon>
         </ion-fab-button>
     </ion-fab>
     <!--<pre>{{areas | json}}</pre>-->
-    <div *ngIf="areas">
-        <ion-virtual-scroll [items]="areas | industryAreaFilter: searchString">
-            <ion-item (click)="select(area.id)" *virtualItem="let area" button="true" type="button">
+    <div *ngIf="items">
+        <ion-virtual-scroll [items]="items | industryAreaFilter: searchString">
+            <ion-item (click)="select(item.industry_id)" *virtualItem="let item" button="true" type="button">
                 <ion-grid>
                     <ion-row>
                         <ion-col size-md="10" size-xs="8">
                             <ion-label>
-                                <h3>Label: {{ area.class_label }}</h3>
+                                <h3>Area: {{ item.industry_name }}</h3>
                             </ion-label>
                         </ion-col>
                         <ion-col class="ion-align-items-start" size-md="2" size-xs="4">
                             <ion-label class="ion-text-left ion-text-wrap">
-                                <p>Campus: {{ area.campus }}</p>
+                                <p>ID: {{item.industry_id}}</p>
                             </ion-label>
                         </ion-col>
                     </ion-row>
                     <ion-row>
                         <ion-col size-md="10" size-xs="8">
                             <ion-label>
-                                <p>TBC: TBC</p>
+                                <p>Description: {{item.industry_desc}}</p>
                             </ion-label>
                         </ion-col>
                     </ion-row>
@@ -45,7 +45,7 @@
             </ion-item>
         </ion-virtual-scroll>
     </div>
-    <div *ngIf="!areas">
+    <div *ngIf="!items">
         <ion-list>
             <ion-item *ngFor="let i of fakeCount(10)" button="true" type="button">
                 <ion-grid>
