@@ -3,8 +3,8 @@ import {PreloadAllModules, RouterModule, Routes} from '@angular/router';
 import {AuthGuard} from './guard/auth.guard';
 
 const routes: Routes = [
-        // {
-        //     path: '',
+    // {
+    //     path: '',
     //     redirectTo: 'landing',
     //     pathMatch: 'full'
     // },  // this is comment out and path below is changed to '' because to let all incorrect url redirect back to the home page
@@ -19,16 +19,16 @@ const routes: Routes = [
         path: 'industry-areas/:id',
         loadChildren: './pages/industry-area/single-area/single-area.module#SingleAreaPageModule', canActivate: [AuthGuard]
     },
-        {
-            path: 'roles',
-            loadChildren: './pages/role/role.module#RolePageModule', canActivate: [AuthGuard]
-        },
-        {
-            path: 'roles/:id',
-            loadChildren: './pages/role/single-role/single-role.module#SingleRolePageModule',
-            canActivate: [AuthGuard]
-        },
-        {
+    {
+        path: 'roles',
+        loadChildren: './pages/role/role.module#RolePageModule', canActivate: [AuthGuard]
+    },
+    {
+        path: 'roles/:id',
+        loadChildren: './pages/role/single-role/single-role.module#SingleRolePageModule',
+        canActivate: [AuthGuard]
+    },
+    {
             path: 'users',
             loadChildren: './pages/user/user.module#UserPageModule', canActivate: [AuthGuard]
         },
@@ -38,10 +38,6 @@ const routes: Routes = [
             canActivate: [AuthGuard]
         },
         {path: '**', redirectTo: '/'},
-        {
-            path: 'user',
-            loadChildren: () => import('./pages/user/user.module').then(m => m.UserPageModule)
-        },
     ]
 ;
 

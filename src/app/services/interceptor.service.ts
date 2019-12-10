@@ -26,7 +26,7 @@ export class InterceptorService implements HttpInterceptor {
             return next.handle(authReq).pipe(catchError(err => {
                 if (err instanceof HttpErrorResponse) {
                     // console.error(err);
-                    this.alertService.presentToast(err.message, 'danger');
+                    this.alertService.presentToast(err.message, 'danger', 0, true);
                     return throwError(err);
                 }
             }));

@@ -42,20 +42,25 @@ export class LoginPage implements OnInit {
                 .set('password', form.get('password').value);
             // CAS auth api require the username and password to be in formEncoded format, cant be send like json format
             this.authService.login(this.payload).subscribe(
-                () => {
-                    // this.isLoading = false;
-                    this.loadingObject.dismiss();
-                    this.alertService.presentToast('Login successfully!', 'success');
+                data => {
+                    // console.error(data);
+                    this.authService.checkBlacklisted(data.tgt, data.serviceTicket).then(result => {
+                        this.loadingObject.dismiss();
+                        if (result) {
+                            this.alertService.presentToast('Account is not authorised to use this service!', 'danger', 0, true);
+                        } else {
+                            this.alertService.presentToast('Login successfully!', 'success');
+                            this.navCtrl.navigateRoot('/dashboard');
+                        }
+                    });
                 },
                 error => {
                     console.error(this.constructor.name, error);
                     // this.isLoading = false;
                     this.loadingObject.dismiss();
-                    this.alertService.presentToast('Username / Password wrong!', 'danger');
+                    this.alertService.presentToast('Username / Password wrong!', 'danger', 0, true);
                 },
                 () => {
-                    // this.dismissLogin();
-                    this.navCtrl.navigateRoot('/dashboard');
                 }
             );
         });

@@ -1,9 +1,9 @@
-/* tslint:disable:object-literal-shorthand object-literal-key-quotes */
+/* tslint:disable:object-literal-shorthand object-literal-key-quotes max-line-length */
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {EnvService} from './env.service';
 import {Storage} from '@ionic/storage';
-import {tap} from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import {from, Observable} from 'rxjs';
 
 @Injectable({
@@ -31,19 +31,10 @@ export class AuthService {
         return this.http.post(this.env.CAS_URL + 'cas/v1/tickets/',
             data.toString(), {headers: this.headers, responseType: 'text'}
         ).pipe( // how about using subscribe here?
-            tap(tgt => { // might need to console.log this tgt to see what return from api
-                // console.log('tgt: ');
-                // console.log(tgt);
-                this.storage.set('tgt', tgt)
-                    .then(
-                        () => {
-                            // console.log('tgt Stored');
-                        },
-                        error => console.error('Error storing item', error)
-                    );
-                this.tgt = tgt;
-                this.isLoggedIn = true;
-                return tgt;
+            switchMap(tgt => { // might need to console.log this tgt to see what return from api
+                return this.getServiceTicket(tgt).pipe(map(serviceTicket => {
+                    return {tgt: tgt, serviceTicket: serviceTicket};
+                }));
             }),
         );
     }
@@ -126,5 +117,25 @@ export class AuthService {
                 return serviceTicket;
             }),
         );
+    }
+
+    checkBlacklisted(tgt, serviceTicket) {
+        return this.http.get(this.env.CAS_URL + 'cas/p3/serviceValidate?service=' + this.env.SERVICE_URL + '&ticket=' + serviceTicket + '&format=json').toPromise().then(json => {
+            let isBlock = false;
+            // @ts-ignore
+            const memberOfList: any[] = json.serviceResponse.authenticationSuccess.attributes.memberOf;
+            memberOfList.forEach(item => {
+                if (this.env.blackListMemberOf.includes(item)) {
+                    isBlock = true;
+                }
+            });
+            if (isBlock) {
+                return true;
+            }
+            this.storage.set('tgt', tgt);
+            this.tgt = tgt;
+            this.isLoggedIn = true;
+            return false;
+        });
     }
 }
