@@ -42,7 +42,7 @@ export class AppComponent {
         private statusBar: StatusBar,
         private authService: AuthService,
         private navCtrl: NavController,
-        private alertService: AlertService
+        private alertService: AlertService,
     ) {
         this.initializeApp();
 
@@ -73,6 +73,22 @@ export class AppComponent {
             console.error(this.constructor.name, ': ', error);
         }, () => {
         });
+    }
+
+    willclose() {
+        console.error('willclose');
+    }
+
+    didclose() {
+        console.error('didclose');
+    }
+
+    willopen() {
+        console.error('willopen');
+    }
+
+    didopen() {
+        console.error('didopen');
     }
 
 }

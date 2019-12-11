@@ -42,12 +42,16 @@ export class SingleRolePage implements OnInit {
     submitForm() {
         this.alertService.presentLoading().then(loading => {
             const loadingObject = loading;
+            const role = (this.editForm.get('role_full').value === true) ? 'full' : (this.editForm.get('role_view').value === true) ? 'view' : 'deny';
+            const area = (this.editForm.get('area_full').value === true) ? 'full' : (this.editForm.get('area_view').value === true) ? 'view' : 'deny';
             const user = (this.editForm.get('user_full').value === true) ? 'full' : (this.editForm.get('user_view').value === true) ? 'view' : 'deny';
             const company = (this.editForm.get('company_full').value === true) ? 'full' : (this.editForm.get('company_view').value === true) ? 'view' : 'deny';
             const employee = (this.editForm.get('employee_full').value === true) ? 'full' : (this.editForm.get('employee_view').value === true) ? 'view' : 'deny';
+            const report = (this.editForm.get('report_full').value === true) ? 'full' : (this.editForm.get('report_view').value === true) ? 'view' : 'deny';
+            const email = (this.editForm.get('email_full').value === true) ? 'full' : (this.editForm.get('email_view').value === true) ? 'view' : 'deny';
             const body = {
                 user_role_description: this.editForm.get('user_role_description').value,
-                user_role_json: {user, company, employee}
+                user_role_json: {role, area, user, company, employee, report, email}
             };
             const headers = new HttpHeaders({
                 'Access-Control-Allow-Origin': '*',
@@ -86,12 +90,21 @@ export class SingleRolePage implements OnInit {
                 user_role_description: [this.item.user_role_description, Validators.compose([
                     Validators.required
                 ])],
+                // user_view: [this.item.user_role_json.user === 'view'],
+                role_view: [this.item.user_role_json.role === 'view'],
+                role_full: [this.item.user_role_json.role === 'full'],
+                area_view: [this.item.user_role_json.area === 'view'],
+                area_full: [this.item.user_role_json.area === 'full'],
                 user_view: [this.item.user_role_json.user === 'view'],
                 user_full: [this.item.user_role_json.user === 'full'],
                 company_view: [this.item.user_role_json.company === 'view'],
                 company_full: [this.item.user_role_json.company === 'full'],
                 employee_view: [this.item.user_role_json.employee === 'view'],
                 employee_full: [this.item.user_role_json.employee === 'full'],
+                report_view: [this.item.user_role_json.report === 'view'],
+                report_full: [this.item.user_role_json.report === 'full'],
+                email_view: [this.item.user_role_json.email === 'view'],
+                email_full: [this.item.user_role_json.email === 'full'],
             });
         }).catch(err => console.error(err))
         ;

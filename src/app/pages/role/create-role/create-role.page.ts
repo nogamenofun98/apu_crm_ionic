@@ -13,6 +13,7 @@ import {HttpRequestService} from '../../../services/http-request.service';
 })
 export class CreateRolePage implements OnInit {
     createForm: FormGroup;
+    lists: any[];
 
     constructor(private modalController: ModalController,
                 private navCtrl: NavController,
@@ -23,12 +24,20 @@ export class CreateRolePage implements OnInit {
             user_role_description: ['', Validators.compose([
                 Validators.required
             ])],
+            role_view: [''],
+            role_full: [''],
+            area_view: [''],
+            area_full: [''],
             user_view: [''],
             user_full: [''],
             company_view: [''],
             company_full: [''],
             employee_view: [''],
             employee_full: [''],
+            report_view: [''],
+            report_full: [''],
+            email_view: [''],
+            email_full: [''],
         });
     }
 
@@ -42,12 +51,16 @@ export class CreateRolePage implements OnInit {
     create(form: FormGroup) {
         this.alertService.presentLoading().then(loading => {
             const loadingObject = loading;
+            const role = (form.get('role_full').value === true) ? 'full' : (form.get('role_view').value === true) ? 'view' : 'deny';
+            const area = (form.get('area_full').value === true) ? 'full' : (form.get('area_view').value === true) ? 'view' : 'deny';
             const user = (form.get('user_full').value === true) ? 'full' : (form.get('user_view').value === true) ? 'view' : 'deny';
             const company = (form.get('company_full').value === true) ? 'full' : (form.get('company_view').value === true) ? 'view' : 'deny';
             const employee = (form.get('employee_full').value === true) ? 'full' : (form.get('employee_view').value === true) ? 'view' : 'deny';
+            const report = (form.get('report_full').value === true) ? 'full' : (form.get('report_view').value === true) ? 'view' : 'deny';
+            const email = (form.get('email_full').value === true) ? 'full' : (form.get('email_view').value === true) ? 'view' : 'deny';
             const body = {
                 user_role_description: form.get('user_role_description').value,
-                user_role_json: {user, company, employee}
+                user_role_json: {role, area, user, company, employee, report, email}
             };
             const headers = new HttpHeaders({
                 'Access-Control-Allow-Origin': '*',

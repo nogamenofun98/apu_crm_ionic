@@ -49,6 +49,11 @@ export class LoginPage implements OnInit {
                         if (result) {
                             this.alertService.presentToast('Account is not authorised to use this service!', 'danger', 0, true);
                         } else {
+                            this.authService.getUser().toPromise().then(user => {
+                                if (user.data_response.user_role) {
+                                    this.authService.getRoleJson(user.data_response.user_role);
+                                }
+                            });
                             this.alertService.presentToast('Login successfully!', 'success');
                             this.navCtrl.navigateRoot('/dashboard');
                         }

@@ -16,7 +16,7 @@ import {CreateRolePage} from './create-role/create-role.page';
         FormsModule,
         IonicModule,
         RolePageRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
     ],
     declarations: [RolePage, UserRoleFilterPipe, CreateRolePage],
     entryComponents: [CreateRolePage]

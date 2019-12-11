@@ -1,8 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {MenuController, ModalController, NavController} from '@ionic/angular';
 import {AuthService} from '../../services/auth.service';
-import {LoginPage} from '../auth/login/login.page';
-
 
 @Component({
     selector: 'app-landing',
@@ -10,6 +8,8 @@ import {LoginPage} from '../auth/login/login.page';
     styleUrls: ['./landing.page.scss'],
 })
 export class LandingPage implements OnInit {
+
+    showLogin = false;
 
     constructor(
         private modalController: ModalController,
@@ -20,23 +20,16 @@ export class LandingPage implements OnInit {
     }
 
     ngOnInit() {
-
-    }
-
-    ionViewWillEnter() {
+        this.menu.enable(false);
         this.authService.getTGT().subscribe(data => {
-            this.navCtrl.navigateRoot('/dashboard');
+            if (data) {
+                this.navCtrl.navigateRoot('/dashboard');
+            } else {
+                this.showLogin = true;
+            }
         }, error => {
             console.error(this.constructor.name, error);
         }, () => {
         });
-
-    }
-
-    async login() {
-        const loginModal = await this.modalController.create({
-            component: LoginPage,
-        });
-        return await loginModal.present();
     }
 }

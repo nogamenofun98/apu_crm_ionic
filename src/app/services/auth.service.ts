@@ -5,6 +5,7 @@ import {EnvService} from './env.service';
 import {Storage} from '@ionic/storage';
 import {map, switchMap, tap} from 'rxjs/operators';
 import {from, Observable} from 'rxjs';
+import {HttpRequestService} from './http-request.service';
 
 @Injectable({
     providedIn: 'root'
@@ -17,7 +18,8 @@ export class AuthService {
     constructor(
         private http: HttpClient,
         private storage: Storage,
-        private env: EnvService
+        private env: EnvService,
+        private httpRequestService: HttpRequestService,
     ) {
         this.headers = new HttpHeaders({
             'Access-Control-Allow-Origin': '*',
@@ -136,6 +138,13 @@ export class AuthService {
             this.tgt = tgt;
             this.isLoggedIn = true;
             return false;
+        });
+    }
+
+    getRoleJson(roleId) {
+        return this.httpRequestService.read('roles/' + roleId).then(data => {
+            this.storage.set('roleJson', data.data_response.user_role_json);
+            return data.data_response.user_role_json;
         });
     }
 }

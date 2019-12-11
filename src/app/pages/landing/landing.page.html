@@ -8,7 +8,7 @@
         <ion-row style="flex-grow: 1;">
             <ion-col sizeMd="2" sizeXs="0"></ion-col>
             <ion-col class="ion-align-self-center" sizeMd="8" sizeXs="12" style="flex-grow: 1; height:100%;">
-                <app-login></app-login>
+                <app-login *ngIf="showLogin"></app-login>
             </ion-col>
             <ion-col sizeMd="2" sizeXs="0"></ion-col>
         </ion-row>
