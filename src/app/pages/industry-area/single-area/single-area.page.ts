@@ -14,7 +14,7 @@ import {HttpHeaders} from '@angular/common/http';
 })
 export class SingleAreaPage implements OnInit {
     item: any;
-    id: string;
+    private id: string;
     isMD: any;
     isEdit: boolean;
     editForm: FormGroup;
@@ -41,7 +41,7 @@ export class SingleAreaPage implements OnInit {
         this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
             alert.onDidDismiss().then(confirm => {
                 if (confirm.role === 'success') {
-                    this.httpRequestService.delete('industry-areas/' + this.id).then(data => {
+                    this.httpRequestService.delete('industry-areas/' + encodeURIComponent(this.id)).then(data => {
                         this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/industry-areas');
                     }).catch(err => console.error(err))
@@ -74,7 +74,7 @@ export class SingleAreaPage implements OnInit {
     }
 
     private getItem(id: string) {
-        this.httpRequestService.read('industry-areas/' + id).then((data) => {
+        this.httpRequestService.read('industry-areas/' + encodeURIComponent(id)).then((data) => {
             this.item = data.data_response;
             this.editForm = this.formBuilder.group({
                 industry_name: [this.item.industry_name, Validators.compose([
@@ -82,7 +82,10 @@ export class SingleAreaPage implements OnInit {
                 ])],
                 industry_desc: [this.item.industry_desc],
             });
-        }).catch(err => console.error(err))
+        }).catch(err => {
+            console.error(err);
+            this.navCtrl.navigateBack('/industry-areas');
+        })
         ;
     }
 

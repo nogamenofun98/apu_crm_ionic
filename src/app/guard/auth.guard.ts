@@ -34,10 +34,13 @@ export class AuthGuard implements CanActivate {
                     Object.keys(roleJson).forEach((key, i) => {
                         // console.error(state.url);
                         // console.error(key);
-                        // console.error(roleJson[key]);
+                        // console.error(state.url.includes(key));
                         if (state.url.includes(key)) { // confirm the role is belong to this url
                             if (roleJson[key] !== 'deny') {
+                                // console.error(roleJson[key]);
                                 isAuthorise = true;
+                            } else {
+                                // console.error('denny', roleJson[key]);
                             }
                         }
                     });

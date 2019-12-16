@@ -21,14 +21,9 @@ export class DashboardPage implements OnInit {
     }
 
     ionViewWillEnter() {
-        this.authService.getUser().subscribe(
-            user => {
-                this.user = user.data_response;
-                // console.log(this.constructor.name, ': ', this.user);
-            }, (error) => {
-                console.error(this.constructor.name, error);
-            }, () => {
-            });
+        this.authService.getUserFromStorage().then(user => {
+            this.user = user;
+        });
     }
 
 

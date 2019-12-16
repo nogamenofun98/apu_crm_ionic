@@ -2,7 +2,14 @@
 // http://ionicframework.com/docs/theming/
 
 /** Ionic CSS Variables **/
+.create-modal .modal-wrapper {
+  min-width: 70%;
+}
 
+.label-title {
+  font-weight: bold;
+  font-size: 5em;
+}
 
 :root {
   /** primary **/

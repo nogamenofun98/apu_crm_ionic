@@ -1,4 +1,4 @@
-/* tslint:disable:max-line-length object-literal-key-quotes */
+/* tslint:disable:max-line-length object-literal-key-quotes variable-name */
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {HttpHeaders} from '@angular/common/http';
@@ -51,16 +51,16 @@ export class CreateRolePage implements OnInit {
     create(form: FormGroup) {
         this.alertService.presentLoading().then(loading => {
             const loadingObject = loading;
-            const role = (form.get('role_full').value === true) ? 'full' : (form.get('role_view').value === true) ? 'view' : 'deny';
-            const area = (form.get('area_full').value === true) ? 'full' : (form.get('area_view').value === true) ? 'view' : 'deny';
-            const user = (form.get('user_full').value === true) ? 'full' : (form.get('user_view').value === true) ? 'view' : 'deny';
-            const company = (form.get('company_full').value === true) ? 'full' : (form.get('company_view').value === true) ? 'view' : 'deny';
-            const employee = (form.get('employee_full').value === true) ? 'full' : (form.get('employee_view').value === true) ? 'view' : 'deny';
-            const report = (form.get('report_full').value === true) ? 'full' : (form.get('report_view').value === true) ? 'view' : 'deny';
-            const email = (form.get('email_full').value === true) ? 'full' : (form.get('email_view').value === true) ? 'view' : 'deny';
+            const roles = (form.get('role_full').value === true) ? 'full' : (form.get('role_view').value === true) ? 'view' : 'deny';
+            const areas = (form.get('area_full').value === true) ? 'full' : (form.get('area_view').value === true) ? 'view' : 'deny';
+            const users = (form.get('user_full').value === true) ? 'full' : (form.get('user_view').value === true) ? 'view' : 'deny';
+            const companies = (form.get('company_full').value === true) ? 'full' : (form.get('company_view').value === true) ? 'view' : 'deny';
+            const employees = (form.get('employee_full').value === true) ? 'full' : (form.get('employee_view').value === true) ? 'view' : 'deny';
+            const reports = (form.get('report_full').value === true) ? 'full' : (form.get('report_view').value === true) ? 'view' : 'deny';
+            const emails = (form.get('email_full').value === true) ? 'full' : (form.get('email_view').value === true) ? 'view' : 'deny';
             const body = {
                 user_role_description: form.get('user_role_description').value,
-                user_role_json: {role, area, user, company, employee, report, email}
+                user_role_json: {roles, areas, users, companies, employees, reports, emails}
             };
             const headers = new HttpHeaders({
                 'Access-Control-Allow-Origin': '*',

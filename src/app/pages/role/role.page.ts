@@ -59,6 +59,7 @@ export class RolePage implements OnInit {
     async showCreate() {
         const createModal = await this.modalController.create({
             component: CreateRolePage,
+            cssClass: 'create-modal',
             componentProps: {
                 modalController: this.modalController,
             }

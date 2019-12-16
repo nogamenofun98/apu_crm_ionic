@@ -4,7 +4,7 @@
     <form (ngSubmit)="login(LoginForm)" [formGroup]="LoginForm">
         <ion-item>
             <ion-label position="floating">Username</ion-label>
-            <ion-input autocomplete="true" autofocus="false" formControlName="username" type="text"></ion-input>
+            <ion-input autocomplete="true" formControlName="username" type="text"></ion-input>
         </ion-item>
         <div *ngIf="LoginForm.controls.username.invalid && (LoginForm.controls.username.dirty || LoginForm.controls.username.touched)"
              class="alert alert-danger">

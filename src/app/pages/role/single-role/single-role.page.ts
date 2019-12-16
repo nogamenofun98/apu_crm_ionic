@@ -15,7 +15,7 @@ import {HttpHeaders} from '@angular/common/http';
 })
 export class SingleRolePage implements OnInit {
     isMD: any;
-    id: string;
+    private id: string;
     item: any;
     isEdit: boolean;
     editForm: any;
@@ -72,7 +72,7 @@ export class SingleRolePage implements OnInit {
         this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
             alert.onDidDismiss().then(confirm => {
                 if (confirm.role === 'success') {
-                    this.httpRequestService.delete('roles/' + this.id).then(data => {
+                    this.httpRequestService.delete('roles/' + encodeURIComponent(this.id)).then(data => {
                         this.alertService.presentToast(data.message, 'success', 1500, false);
                         this.navCtrl.navigateBack('/roles');
                     }).catch(err => console.error(err))
@@ -83,7 +83,7 @@ export class SingleRolePage implements OnInit {
     }
 
     private getItem(id: string) {
-        this.httpRequestService.read('roles/' + id).then((data) => {
+        this.httpRequestService.read('roles/' + encodeURIComponent(id)).then((data) => {
             this.item = data.data_response;
             this.getUserFromItem(); // get user detail after they fetch the response
             this.editForm = this.formBuilder.group({
@@ -91,22 +91,25 @@ export class SingleRolePage implements OnInit {
                     Validators.required
                 ])],
                 // user_view: [this.item.user_role_json.user === 'view'],
-                role_view: [this.item.user_role_json.role === 'view'],
-                role_full: [this.item.user_role_json.role === 'full'],
-                area_view: [this.item.user_role_json.area === 'view'],
-                area_full: [this.item.user_role_json.area === 'full'],
-                user_view: [this.item.user_role_json.user === 'view'],
-                user_full: [this.item.user_role_json.user === 'full'],
-                company_view: [this.item.user_role_json.company === 'view'],
-                company_full: [this.item.user_role_json.company === 'full'],
-                employee_view: [this.item.user_role_json.employee === 'view'],
-                employee_full: [this.item.user_role_json.employee === 'full'],
-                report_view: [this.item.user_role_json.report === 'view'],
-                report_full: [this.item.user_role_json.report === 'full'],
-                email_view: [this.item.user_role_json.email === 'view'],
-                email_full: [this.item.user_role_json.email === 'full'],
+                role_view: [this.item.user_role_json.roles === 'view'],
+                role_full: [this.item.user_role_json.roles === 'full'],
+                area_view: [this.item.user_role_json.areas === 'view'],
+                area_full: [this.item.user_role_json.areas === 'full'],
+                user_view: [this.item.user_role_json.users === 'view'],
+                user_full: [this.item.user_role_json.users === 'full'],
+                company_view: [this.item.user_role_json.companies === 'view'],
+                company_full: [this.item.user_role_json.companies === 'full'],
+                employee_view: [this.item.user_role_json.employees === 'view'],
+                employee_full: [this.item.user_role_json.employees === 'full'],
+                report_view: [this.item.user_role_json.reports === 'view'],
+                report_full: [this.item.user_role_json.reports === 'full'],
+                email_view: [this.item.user_role_json.emails === 'view'],
+                email_full: [this.item.user_role_json.emails === 'full'],
             });
-        }).catch(err => console.error(err))
+        }).catch(err => {
+            console.error(err);
+            this.navCtrl.navigateBack('/roles');
+        })
         ;
     }
 
@@ -117,7 +120,7 @@ export class SingleRolePage implements OnInit {
             return;
         }
         userIds.forEach(id => {
-            this.httpRequestService.read('users/' + id).then(data => {
+            this.httpRequestService.read('users/' + encodeURIComponent(id)).then(data => {
                 this.users.push(data.data_response);
             }).catch(err => console.error(err))
             ;

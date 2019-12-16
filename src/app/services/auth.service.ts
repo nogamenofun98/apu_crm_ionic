@@ -45,7 +45,7 @@ export class AuthService {
         return this.http.delete(this.env.CAS_URL + 'cas/v1/tickets/' + tgt, {headers: this.headers, responseType: 'text'})
             .pipe(
                 tap(data => {
-                    this.storage.remove('tgt');
+                    this.storage.clear();
                     this.isLoggedIn = false;
                     delete this.tgt;
                     return data;
@@ -53,7 +53,7 @@ export class AuthService {
             );
     }
 
-    getUser() {
+    getUserFromAPI() {
         // const params = new HttpParams()
         //     .set('service', this.env.SERVICE_URL)
         //     .set('tgt', this.tgt);
@@ -64,9 +64,24 @@ export class AuthService {
             .pipe(
                 tap(user => {
                     // console.log(user.data_response);
+                    this.storage.set('user', user.data_response);
                     return user.data_response;
                 })
             );
+    }
+
+    getUserFromStorage() {
+        return from(this.storage.get('user')).toPromise().then(user => {
+            if (user == null) {
+                return from(this.getUserFromAPI()).toPromise().then(data => {
+                    // console.error('auth:', data);
+                    return data.data_response;
+                });
+            } else {
+                // console.error('auth:', user);
+                return user;
+            }
+        });
     }
 
     getTGT(): Observable<any> {
@@ -142,7 +157,7 @@ export class AuthService {
     }
 
     getRoleJson(roleId) {
-        return this.httpRequestService.read('roles/' + roleId).then(data => {
+        return this.httpRequestService.read('roles/' + encodeURIComponent(roleId)).then(data => {
             this.storage.set('roleJson', data.data_response.user_role_json);
             return data.data_response.user_role_json;
         });

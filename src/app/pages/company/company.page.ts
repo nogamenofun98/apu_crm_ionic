@@ -5,14 +5,15 @@ import {ModalController, NavController} from '@ionic/angular';
 import {EnvService} from '../../services/env.service';
 import {AuthService} from '../../services/auth.service';
 import {HttpRequestService} from '../../services/http-request.service';
+import {CreateCompanyPage} from './create-company/create-company.page';
 
 @Component({
-    selector: 'app-user',
-    templateUrl: './user.page.html',
-    styleUrls: ['./user.page.scss'],
+    selector: 'app-company',
+    templateUrl: './company.page.html',
+    styleUrls: ['./company.page.scss'],
 })
-export class UserPage implements OnInit {
-    searchString: string;
+export class CompanyPage implements OnInit {
+    searchString: any;
     items: any;
 
     constructor(private http: HttpClient,
@@ -31,8 +32,24 @@ export class UserPage implements OnInit {
         this.getAll();
     }
 
+    async showCreate() {
+        const createModal = await this.modalController.create({
+            component: CreateCompanyPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+            }
+        });
+        createModal.onDidDismiss().then((isOk) => {
+            if (isOk.data) {
+                this.getAll();
+            }
+        });
+        return await createModal.present();
+    }
+
     select(id: any) {
-        this.navCtrl.navigateForward('/users/' + id);
+        this.navCtrl.navigateForward('/companies/' + id);
     }
 
     fakeCount(fakeCount: number) {
@@ -40,19 +57,11 @@ export class UserPage implements OnInit {
     }
 
     private getAll() {
-        this.httpRequestService.read('users').then(data => {
+        this.httpRequestService.read('companies').then(data => {
             this.items = data.data_response;
             for (const item of this.items) {
-                if (item.user_role !== null) {
-                    this.httpRequestService.read('roles/' + encodeURIComponent(item.user_role)).then(role => {
-                        item.role = role.data_response.user_role_description;
-                    }).catch(err => console.error(err))
-                    ;
-                } else {
-                    item.role = '';
-                }
-                if (item.user_handle_industry !== null) {
-                    this.httpRequestService.read('industry-areas/' + encodeURIComponent(item.user_handle_industry)).then(area => {
+                if (item.company_industry !== null) {
+                    this.httpRequestService.read('industry-areas/' + encodeURIComponent(item.company_industry)).then(area => {
                         item.industry = area.data_response.industry_name;
                     }).catch(err => console.error(err))
                     ;

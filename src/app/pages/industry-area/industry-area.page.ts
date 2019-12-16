@@ -35,6 +35,7 @@ export class IndustryAreaPage implements OnInit {
     async showCreate() {
         const createModal = await this.modalController.create({
             component: CreateAreaPage,
+            cssClass: 'create-modal',
             componentProps: {
                 modalController: this.modalController,
             }

@@ -39,6 +39,16 @@ const routes: Routes = [
             loadChildren: './pages/user/single-user/single-user.module#SingleUserPageModule',
             canActivate: [AuthGuard]
         },
+        {
+            path: 'companies',
+            loadChildren: './pages/company/company.module#CompanyPageModule',
+            canActivate: [AuthGuard]
+        },
+        {
+            path: 'companies/:id',
+            loadChildren: './pages/company/single-company/single-company.module#SingleCompanyPageModule',
+            canActivate: [AuthGuard]
+        },
         {path: 'denied', component: UnauthorisedComponent},
         {path: '**', redirectTo: '/'},
 
