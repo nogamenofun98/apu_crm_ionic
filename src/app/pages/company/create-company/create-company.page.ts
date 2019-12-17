@@ -111,9 +111,10 @@ export class CreateCompanyPage implements OnInit {
             });
             this.httpRequestService.create('companies', JSON.stringify(body), headers).then(data => {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
+            }).catch(err => console.error(err)).finally(() => {
                 loadingObject.dismiss();
                 this.modalController.dismiss(true);
-            }).catch(err => console.error(err))
+            })
             ;
         });
     }

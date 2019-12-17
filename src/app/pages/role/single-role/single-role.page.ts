@@ -19,7 +19,7 @@ export class SingleRolePage implements OnInit {
     item: any;
     isEdit: boolean;
     editForm: any;
-    users: any[] = [];
+    users: any[];
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -34,6 +34,7 @@ export class SingleRolePage implements OnInit {
     ngOnInit() {
         this.item = null;
         this.route.paramMap.subscribe(params => {
+            this.users = [];
             this.id = params.get('id');
             this.getItem(this.id);
         });
@@ -62,8 +63,8 @@ export class SingleRolePage implements OnInit {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.id);
-                loadingObject.dismiss();
-            }).catch(err => console.error(err))
+
+            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
             ;
         });
     }

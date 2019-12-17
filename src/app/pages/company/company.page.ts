@@ -6,6 +6,7 @@ import {EnvService} from '../../services/env.service';
 import {AuthService} from '../../services/auth.service';
 import {HttpRequestService} from '../../services/http-request.service';
 import {CreateCompanyPage} from './create-company/create-company.page';
+import {UploadCompanyPage} from './upload-company/upload-company.page';
 
 @Component({
     selector: 'app-company',
@@ -71,5 +72,21 @@ export class CompanyPage implements OnInit {
             }
         }).catch(err => console.error(err))
         ;
+    }
+
+    async showImport() {
+        const createModal = await this.modalController.create({
+            component: UploadCompanyPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+            }
+        });
+        createModal.onDidDismiss().then((isOk) => {
+            if (isOk.data) {
+                this.getAll();
+            }
+        });
+        return await createModal.present();
     }
 }

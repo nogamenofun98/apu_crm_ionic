@@ -16,8 +16,8 @@ export class SingleUserPage implements OnInit {
     item: any;
     isMD: boolean;
     id: any;
-    roleList: any[] = [];
-    industryList: any[] = [];
+    roleList: any[];
+    industryList: any[];
     isEdit: boolean;
     editForm: FormGroup;
 
@@ -34,28 +34,14 @@ export class SingleUserPage implements OnInit {
     ngOnInit() {
         this.item = null;
         this.route.paramMap.subscribe(params => {
-            this.id = params.get('id');
-            this.getItem(this.id);
-            this.prepareChoice();
+            this.industryList = [];
+            this.roleList = [];
+            this.prepareChoice().then(() => {
+                this.id = params.get('id');
+                this.getItem(this.id);
+            });
         });
     }
-
-    // delete() {
-    //     this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
-    //         alert.onDidDismiss().then(confirm => {
-    //             if (confirm.role === 'success') {
-    //                 this.httpRequestService.delete('users/' + this.id).then(data => {
-    //                     if (data instanceof HttpErrorResponse) {
-    //                         this.alertService.presentToast(data.message, 'danger');
-    //                         return;
-    //                     }
-    //                     this.alertService.presentToast(data.message, 'success', 1500, false);
-    //                     this.navCtrl.navigateBack('/users');
-    //                 });
-    //             }
-    //         });
-    //     });
-    // }
 
     submitForm() {
         this.alertService.presentLoading().then(loading => {
@@ -73,8 +59,7 @@ export class SingleUserPage implements OnInit {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.id);
-                loadingObject.dismiss();
-            }).catch(err => console.error(err))
+            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
             ;
         });
     }
@@ -147,14 +132,15 @@ export class SingleUserPage implements OnInit {
         ;
     }
 
-    private prepareChoice() {
-        this.httpRequestService.read('roles').then(data => {
+    private async prepareChoice() {
+        await this.httpRequestService.read('roles').then(data => {
             this.roleList = data.data_response;
         }).catch(err => console.error(err))
         ;
-        this.httpRequestService.read('industry-areas').then(data => {
+        await this.httpRequestService.read('industry-areas').then(data => {
             this.industryList = data.data_response;
         }).catch(err => console.error(err))
         ;
+
     }
 }

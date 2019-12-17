@@ -136,8 +136,7 @@ export class SingleCompanyPage implements OnInit {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.editForm.get('company_reg_num').value);
-                loadingObject.dismiss();
-            }).catch(err => console.error(err))
+            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
             ;
         });
     }

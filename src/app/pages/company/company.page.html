@@ -12,11 +12,29 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-    <ion-fab horizontal="end" slot="fixed" vertical="bottom">
-        <ion-fab-button (click)="showCreate()" class="ion-float-end" color="primary">
-            <ion-icon name="add"></ion-icon>
-        </ion-fab-button>
-    </ion-fab>
+    <!--    <ion-fab horizontal="end" slot="fixed" vertical="bottom">-->
+    <!--        <ion-fab-button (click)="showCreate()" class="ion-float-end" color="primary">-->
+    <!--            <ion-icon name="add"></ion-icon>-->
+    <!--        </ion-fab-button>-->
+    <!--    </ion-fab>-->
+    <div>
+        <ion-fab horizontal="end" vertical="bottom">
+            <ion-fab-button>
+                <ion-icon name="menu"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-list side="top">
+                <ion-fab-button (click)="showCreate()" color="primary"><!-- delete -->
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+                <ion-label>Create</ion-label>
+                <ion-fab-button (click)="showImport()" color="secondary"><!-- delete -->
+                    <ion-icon name="attach"></ion-icon>
+                </ion-fab-button>
+                <ion-label>Import</ion-label>
+            </ion-fab-list>
+        </ion-fab>
+    </div>
+
     <div *ngIf="items">
         <ion-virtual-scroll [items]="items | companyFilter: searchString">
             <ion-item (click)="select(item.company_reg_num)" *virtualItem="let item" button="true" type="button">

@@ -9,6 +9,7 @@ import {CompanyPageRoutingModule} from './company-routing.module';
 import {CompanyPage} from './company.page';
 import {CompanyFilterPipe} from '../../pipes/company/company-filter.pipe';
 import {CreateCompanyPage} from './create-company/create-company.page';
+import {UploadCompanyPage} from './upload-company/upload-company.page';
 
 @NgModule({
     imports: [
@@ -18,8 +19,8 @@ import {CreateCompanyPage} from './create-company/create-company.page';
         CompanyPageRoutingModule,
         ReactiveFormsModule
     ],
-    declarations: [CompanyPage, CompanyFilterPipe, CreateCompanyPage],
-    entryComponents: [CreateCompanyPage]
+    declarations: [CompanyPage, CompanyFilterPipe, CreateCompanyPage, UploadCompanyPage],
+    entryComponents: [CreateCompanyPage, UploadCompanyPage]
 })
 export class CompanyPageModule {
 }

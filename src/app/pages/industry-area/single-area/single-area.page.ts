@@ -67,8 +67,7 @@ export class SingleAreaPage implements OnInit {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.isEdit = false;
                 this.getItem(this.id);
-                loadingObject.dismiss();
-            }).catch(err => console.error(err))
+            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
             ;
         });
     }

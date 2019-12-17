@@ -1,0 +1,33 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-grid>
+            <ion-row>
+                <ion-col class="ion-align-self-center" size-md="6" size-xs="5">
+                    <ion-title>CRM - Import Company</ion-title>
+                </ion-col>
+                <ion-col size-md="5">
+                </ion-col>
+                <ion-col size-md="1" size-xs="4">
+                    <ion-button (click)="dismissModal()" class="ion-float-end" color="danger">X</ion-button>
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-button (click)="downloadTemplate()" color="primary">Download CSV Template</ion-button>
+    <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm" enctype="multipart/form-data">
+        <ion-item>
+            <ion-label>Select CSV file:</ion-label>
+            <ion-input (change)="fileChanged($event)" accept=".csv" formControlName="csv" required="true"
+                       type="file"></ion-input>
+        </ion-item>
+        <div *ngIf="createForm.controls.csv.invalid && (createForm.controls.csv.dirty || createForm.controls.csv.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.csv.errors?.required">CSV file is required</div>
+        </div>
+        <ion-button color="primary" expand="full" type="submit">Import</ion-button>
+    </form>
+</ion-content>

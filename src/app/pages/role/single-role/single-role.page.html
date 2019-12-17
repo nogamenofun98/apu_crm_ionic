@@ -24,15 +24,19 @@
                     <ion-fab-button (click)="delete()" color="danger"><!-- delete -->
                         <ion-icon name="trash"></ion-icon>
                     </ion-fab-button>
+                    <ion-label>Delete</ion-label>
                     <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary"><!-- edit -->
                         <ion-icon name="create"></ion-icon>
                     </ion-fab-button>
+                    <ion-label *ngIf="!isEdit">Edit</ion-label>
                     <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
                         <ion-icon name="close-circle-outline"></ion-icon>
                     </ion-fab-button>
+                    <ion-label *ngIf="isEdit" style="text-align: center">Cancel Edit</ion-label>
                     <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
                         <ion-icon name="send"></ion-icon>
                     </ion-fab-button>
+                    <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
 
                 </ion-fab-list>
             </ion-fab>
@@ -222,7 +226,10 @@
                             <ion-col>
                                 <ion-list *ngFor="let user of users">
                                     <ion-item>
-                                        <ion-label>{{user.user_full_name}}</ion-label>
+                                        <ion-chip routerLink="/users/{{user.user_id}}">
+                                            <ion-icon color="dark" name="contact"></ion-icon>
+                                            <ion-label>{{user.user_full_name}}</ion-label>
+                                        </ion-chip>
                                     </ion-item>
                                 </ion-list>
                             </ion-col>

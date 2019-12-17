@@ -24,17 +24,20 @@
                     <ion-fab-button (click)="delete()" *ngIf="!item.is_read_only" color="danger"><!-- delete -->
                         <ion-icon name="trash"></ion-icon>
                     </ion-fab-button>
+                    <ion-label *ngIf="!item.is_read_only">Delete</ion-label>
                     <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit && !item.is_read_only" color="primary">
                         <!-- edit -->
                         <ion-icon name="create"></ion-icon>
                     </ion-fab-button>
+                    <ion-label *ngIf="!isEdit && !item.is_read_only">Edit</ion-label>
                     <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
                         <ion-icon name="close-circle-outline"></ion-icon>
                     </ion-fab-button>
+                    <ion-label *ngIf="isEdit" style="text-align: center">Cancel Edit</ion-label>
                     <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
                         <ion-icon name="send"></ion-icon>
                     </ion-fab-button>
-
+                    <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
                 </ion-fab-list>
             </ion-fab>
         </div>
