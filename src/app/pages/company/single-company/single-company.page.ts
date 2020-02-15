@@ -171,31 +171,24 @@ export class SingleCompanyPage implements OnInit {
                 company_size: [this.item.company_size, Validators.compose([
                     Validators.required, Validators.min(1)
                 ])],
-                company_industry_id: [this.item.company_industry_id, Validators.compose([
+                company_industry_id: [this.item.company_industry, Validators.compose([
                     Validators.required
                 ])],
                 company_desc: [this.item.company_desc, Validators.compose([
                     Validators.required
                 ])],
-                company_address: [this.item.company_address, Validators.compose([
-                    Validators.required
-                ])],
+                company_address: [this.item.company_address, Validators.compose([])],
                 company_postcode: [this.item.company_postcode, Validators.compose([
-                    Validators.required, Validators.pattern('^[0-9]{1,6}$')
+                    Validators.pattern('^[0-9]{1,6}$')
                 ])],
-                company_city: [this.item.company_city, Validators.compose([
-                    Validators.required
-                ])],
-                company_state: [this.item.company_state, Validators.compose([
-                    Validators.required
-                ])],
-                company_country: [this.item.company_country, Validators.compose([
-                    Validators.required
-                ])],
+                company_city: [this.item.company_city, Validators.compose([])],
+                company_state: [this.item.company_state, Validators.compose([])],
+                company_country: [this.item.company_country, Validators.compose([])],
                 company_office_contact_num: [this.item.company_office_contact_num, Validators.compose([
                     Validators.required, Validators.pattern('^(\\+?6?0)[0-9]{1,2}-*[0-9]{7,8}$')
                 ])],
             });
+            // this.editForm.get('company_industry_id').setValue(this.item.company_industry);
             this.getUserIndustryArea();
         }).catch(err => {
             console.error(err);

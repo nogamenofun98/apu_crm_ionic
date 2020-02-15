@@ -4,17 +4,18 @@ import {CommonModule} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {IonicModule} from '@ionic/angular';
 import {DisableControlDirective} from '../../directives/disable-control/disable-control.directive';
+import {SearchFilterPipe} from '../../pipes/searchFilter/search-filter.pipe';
 
 
 @NgModule({
-    declarations: [LoginPage, DisableControlDirective],
+    declarations: [LoginPage, DisableControlDirective, SearchFilterPipe],
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
         ReactiveFormsModule,
     ],
-    exports: [LoginPage, DisableControlDirective],
+    exports: [LoginPage, DisableControlDirective, SearchFilterPipe],
     entryComponents: [LoginPage],
 })
 export class SharedComponentsModule {

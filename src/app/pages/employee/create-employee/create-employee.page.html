@@ -1,0 +1,159 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-grid>
+            <ion-row>
+                <ion-col class="ion-align-self-center" size-md="6" size-xs="5">
+                    <ion-title>CRM - Create New Employee</ion-title>
+                </ion-col>
+                <ion-col size-md="5">
+                </ion-col>
+                <ion-col size-md="1" size-xs="4">
+                    <ion-button (click)="dismissModal()" class="ion-float-end" color="danger">X</ion-button>
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm" autocomplete="off">
+        <ion-item>
+            <ion-label position="floating">Employee Full Name:</ion-label>
+            <ion-input formControlName="employee_full_name" required="true" type="text"></ion-input>
+        </ion-item>
+        <div *ngIf="createForm.controls.employee_full_name.invalid && (createForm.controls.employee_full_name.dirty || createForm.controls.employee_full_name.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.employee_full_name.errors?.required">Full Name is required!</div>
+        </div>
+
+        <ion-item>
+            <ion-label position="floating">Employee Email:</ion-label>
+            <ion-input formControlName="employee_email" type="email"></ion-input>
+        </ion-item>
+        <div *ngIf="createForm.controls.employee_email.invalid && (createForm.controls.employee_email.dirty || createForm.controls.employee_email.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.employee_email.errors?.email">Email format must be correct!</div>
+        </div>
+
+        <ion-item>
+            <ion-label position="floating">APU alumnus?:</ion-label>
+            <ion-select formControlName="employee_alumnus" required="true">
+                <ion-select-option [value]="true">True</ion-select-option>
+                <ion-select-option [value]="false">False</ion-select-option>
+            </ion-select>
+        </ion-item>
+        <div *ngIf="createForm.controls.employee_alumnus.invalid && (createForm.controls.employee_alumnus.dirty || createForm.controls.employee_alumnus.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.employee_alumnus.errors?.required">APU alumnus must set either true or
+                false!
+            </div>
+        </div>
+
+        <ion-item>
+            <ion-label position="floating">APU Intake Code:</ion-label>
+            <ion-input formControlName="employee_intake_code" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Graduated Date:</ion-label>
+            <ion-input formControlName="employee_grad_time" type="date"></ion-input>
+        </ion-item>
+
+        <ng-container *ngIf="isManageAll">
+            <ion-item>
+                <ion-label>Industry Area:</ion-label>
+                <ion-select (ionChange)="enableCompanyField()" formControlName="employee_industry_id">
+                    <ng-container *ngFor="let val of industryList">
+                        <ion-select-option *ngIf="val.is_read_only==false" [value]="val.industry_id">
+                            {{val.industry_name}}
+                        </ion-select-option>
+                    </ng-container>
+                </ion-select>
+            </ion-item>
+        </ng-container>
+        <ng-container *ngIf="!isManageAll">
+            <ion-item>
+                <ion-label position="floating">Industry Area:</ion-label>
+                <ion-input disabled="true" type="text" value="{{industryItem?.name}}"></ion-input>
+            </ion-item>
+        </ng-container>
+
+        <ion-item>
+            <ion-label position="floating">Current Working Company (Reg ID):</ion-label>
+            <ion-input (ionChange)="getCompany()" debounce="500" formControlName="employee_current_company_Id"
+                       type="text"></ion-input>
+            <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
+
+
+            <ion-icon *ngIf="!isChecking && !createForm.controls.employee_current_company_Id.invalid" color="success"
+                      name="checkmark-circle-outline" slot="end"></ion-icon>
+            <ion-icon *ngIf="!isChecking && createForm.controls.employee_current_company_Id.errors?.notFound"
+                      color="danger"
+                      name="close-circle-outline" slot="end"></ion-icon>
+        </ion-item>
+        <div *ngIf="createForm.controls.employee_current_company_Id.invalid && (createForm.controls.employee_current_company_Id.dirty || createForm.controls.employee_current_company_Id.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.employee_current_company_Id.errors?.notFound">Registration Number not
+                found or not under selected industry area
+            </div>
+        </div>
+        <ion-item>
+            <ion-label position="floating">Designation:</ion-label>
+            <ion-input formControlName="current_job_designation" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label position="floating">Department:</ion-label>
+            <ion-input formControlName="current_job_department" type="text"></ion-input>
+        </ion-item>
+        <ion-item>
+            <ion-label>Hired Date:</ion-label>
+            <ion-input formControlName="current_job_hired_date" type="date"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Employee Address:</ion-label>
+            <ion-input formControlName="employee_address" type="text"></ion-input>
+        </ion-item>
+
+
+        <ion-item>
+            <ion-label position="floating">Postcode:</ion-label>
+            <ion-input formControlName="employee_postcode" type="text"></ion-input>
+        </ion-item>
+        <div *ngIf="createForm.controls.employee_postcode.invalid && (createForm.controls.employee_postcode.dirty || createForm.controls.employee_postcode.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.employee_postcode.errors?.pattern">Postcode Format is wrong</div>
+        </div>
+
+        <ion-item>
+            <ion-label position="floating">City:</ion-label>
+            <ion-input formControlName="employee_city" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">State:</ion-label>
+            <ion-input formControlName="employee_state" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Country:</ion-label>
+            <ion-input formControlName="employee_country" type="text"></ion-input>
+        </ion-item>
+
+        <ion-item>
+            <ion-label position="floating">Employee Phone Number:</ion-label>
+            <ion-input formControlName="employee_contact_num"
+                       type="tel"></ion-input>
+        </ion-item>
+        <div *ngIf="createForm.controls.employee_contact_num.invalid && (createForm.controls.employee_contact_num.dirty || createForm.controls.employee_contact_num.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.employee_contact_num.errors?.pattern">Employee Phone Number Format is
+                wrong
+            </div>
+        </div>
+
+        <ion-button color="primary" expand="full" type="submit">Create</ion-button>
+    </form>
+</ion-content>

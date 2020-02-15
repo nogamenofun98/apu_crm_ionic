@@ -7,9 +7,9 @@ import {IonicModule} from '@ionic/angular';
 import {CompanyPageRoutingModule} from './company-routing.module';
 
 import {CompanyPage} from './company.page';
-import {CompanyFilterPipe} from '../../pipes/company/company-filter.pipe';
 import {CreateCompanyPage} from './create-company/create-company.page';
 import {UploadCompanyPage} from './upload-company/upload-company.page';
+import {SharedComponentsModule} from '../sharedModules/SharedModules';
 
 @NgModule({
     imports: [
@@ -17,9 +17,10 @@ import {UploadCompanyPage} from './upload-company/upload-company.page';
         FormsModule,
         IonicModule,
         CompanyPageRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        SharedComponentsModule,
     ],
-    declarations: [CompanyPage, CompanyFilterPipe, CreateCompanyPage, UploadCompanyPage],
+    declarations: [CompanyPage, CreateCompanyPage, UploadCompanyPage],
     entryComponents: [CreateCompanyPage, UploadCompanyPage]
 })
 export class CompanyPageModule {

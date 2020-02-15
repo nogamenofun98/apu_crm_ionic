@@ -4,23 +4,23 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 
 import {IonicModule} from '@ionic/angular';
 
-import {RolePageRoutingModule} from './role-routing.module';
+import {EmployeePageRoutingModule} from './employee-routing.module';
 
-import {RolePage} from './role.page';
-import {CreateRolePage} from './create-role/create-role.page';
+import {EmployeePage} from './employee.page';
 import {SharedComponentsModule} from '../sharedModules/SharedModules';
+import {CreateEmployeePage} from './create-employee/create-employee.page';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
-        RolePageRoutingModule,
+        EmployeePageRoutingModule,
         ReactiveFormsModule,
         SharedComponentsModule,
     ],
-    declarations: [RolePage, CreateRolePage],
-    entryComponents: [CreateRolePage]
+    declarations: [EmployeePage, CreateEmployeePage],
+    entryComponents: [CreateEmployeePage]
 })
-export class RolePageModule {
+export class EmployeePageModule {
 }

@@ -20,7 +20,7 @@
 
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
         <ion-item>
-            <ion-label position="floating">Company Registration Number</ion-label>
+            <ion-label position="floating">Company Registration Number:</ion-label>
             <ion-input (ionChange)="checkRegNum()" debounce="500" formControlName="company_reg_num" required="true"
                        type="text"></ion-input>
             <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
@@ -36,7 +36,7 @@
         </div>
 
         <ion-item>
-            <ion-label position="floating">Company Name</ion-label>
+            <ion-label position="floating">Company Name:</ion-label>
             <ion-input formControlName="company_name" required="true" type="text"></ion-input>
         </ion-item>
         <div *ngIf="createForm.controls.company_name.invalid && (createForm.controls.company_name.dirty || createForm.controls.company_name.touched)"
@@ -45,7 +45,7 @@
         </div>
 
         <ion-item>
-            <ion-label position="floating">Company Size</ion-label>
+            <ion-label position="floating">Company Size:</ion-label>
             <ion-input formControlName="company_size" min="1" required="true"
                        type="number"></ion-input>
         </ion-item>
@@ -77,7 +77,7 @@
         </ng-container>
 
         <ion-item>
-            <ion-label position="floating">Company Description</ion-label>
+            <ion-label position="floating">Company Description:</ion-label>
             <ion-input formControlName="company_desc" required="true" type="text"></ion-input>
         </ion-item>
         <div *ngIf="createForm.controls.company_desc.invalid && (createForm.controls.company_desc.dirty || createForm.controls.company_desc.touched)"
@@ -86,53 +86,36 @@
         </div>
 
         <ion-item>
-            <ion-label position="floating">Company Address</ion-label>
-            <ion-input formControlName="company_address" required="true" type="text"></ion-input>
+            <ion-label position="floating">Company Address:</ion-label>
+            <ion-input formControlName="company_address" type="text"></ion-input>
         </ion-item>
-        <div *ngIf="createForm.controls.company_address.invalid && (createForm.controls.company_address.dirty || createForm.controls.company_address.touched)"
-             class="alert alert-danger">
-            <div *ngIf="createForm.controls.company_address.errors?.required">Company Address is required</div>
-        </div>
 
         <ion-item>
-            <ion-label position="floating">Company Postcode</ion-label>
-            <ion-input formControlName="company_postcode" required="true" type="text"></ion-input>
+            <ion-label position="floating">Postcode:</ion-label>
+            <ion-input formControlName="company_postcode" type="text"></ion-input>
         </ion-item>
         <div *ngIf="createForm.controls.company_postcode.invalid && (createForm.controls.company_postcode.dirty || createForm.controls.company_postcode.touched)"
              class="alert alert-danger">
-            <div *ngIf="createForm.controls.company_postcode.errors?.required">Company Postcode is required</div>
-            <div *ngIf="createForm.controls.company_postcode.errors?.pattern">Company Postcode Format is wrong</div>
+            <div *ngIf="createForm.controls.company_postcode.errors?.pattern">Postcode Format is wrong</div>
         </div>
 
         <ion-item>
-            <ion-label position="floating">Company City</ion-label>
-            <ion-input formControlName="company_city" required="true" type="text"></ion-input>
+            <ion-label position="floating">City:</ion-label>
+            <ion-input formControlName="company_city" type="text"></ion-input>
         </ion-item>
-        <div *ngIf="createForm.controls.company_city.invalid && (createForm.controls.company_city.dirty || createForm.controls.company_city.touched)"
-             class="alert alert-danger">
-            <div *ngIf="createForm.controls.company_city.errors?.required">Company City is required</div>
-        </div>
 
         <ion-item>
-            <ion-label position="floating">Company State</ion-label>
-            <ion-input formControlName="company_state" required="true" type="text"></ion-input>
+            <ion-label position="floating">State:</ion-label>
+            <ion-input formControlName="company_state" type="text"></ion-input>
         </ion-item>
-        <div *ngIf="createForm.controls.company_state.invalid && (createForm.controls.company_state.dirty || createForm.controls.company_state.touched)"
-             class="alert alert-danger">
-            <div *ngIf="createForm.controls.company_state.errors?.required">Company State is required</div>
-        </div>
 
         <ion-item>
-            <ion-label position="floating">Company Country</ion-label>
-            <ion-input formControlName="company_country" required="true" type="text"></ion-input>
+            <ion-label position="floating">Country:</ion-label>
+            <ion-input formControlName="company_country" type="text"></ion-input>
         </ion-item>
-        <div *ngIf="createForm.controls.company_country.invalid && (createForm.controls.company_country.dirty || createForm.controls.company_country.touched)"
-             class="alert alert-danger">
-            <div *ngIf="createForm.controls.company_country.errors?.required">Company Country is required</div>
-        </div>
 
         <ion-item>
-            <ion-label position="floating">Company Phone Number</ion-label>
+            <ion-label position="floating">Company Phone Number:</ion-label>
             <ion-input formControlName="company_office_contact_num" required="true"
                        type="tel"></ion-input>
         </ion-item>

@@ -19,7 +19,7 @@
     </ion-fab>
     <!--<pre>{{areas | json}}</pre>-->
     <div *ngIf="roles">
-        <ion-virtual-scroll [items]="roles | userRoleFilter: searchString">
+        <ion-virtual-scroll [items]="roles | searchFilter: searchString">
             <ion-item (click)="select(role.user_role_id)" *virtualItem="let role" button="true" type="button">
                 <ion-grid>
                     <ion-row>

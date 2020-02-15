@@ -3,7 +3,7 @@
         <ion-buttons slot="start">
             <ion-menu-button></ion-menu-button>
         </ion-buttons>
-        <ion-title>CRM - User</ion-title>
+        <ion-title>CRM - Employee</ion-title>
     </ion-toolbar>
     <ion-toolbar>
         <ion-searchbar [(ngModel)]="searchString" autocomplete="true"
@@ -12,50 +12,58 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-    <!--  <ion-fab horizontal="end" slot="fixed" vertical="bottom">-->
-    <!--    <ion-fab-button (click)="showCreate()" class="ion-float-end" color="primary">-->
-    <!--      <ion-icon name="add"></ion-icon>-->
-    <!--    </ion-fab-button>-->
-    <!--  </ion-fab>-->
+    <div>
+        <ion-fab horizontal="end" vertical="bottom">
+            <ion-fab-button>
+                <ion-icon name="menu"></ion-icon>
+            </ion-fab-button>
+            <ion-fab-list side="top">
+                <ion-fab-button (click)="showCreate()" color="primary"><!-- delete -->
+                    <ion-icon name="add"></ion-icon>
+                </ion-fab-button>
+                <ion-label>Create</ion-label>
+            </ion-fab-list>
+        </ion-fab>
+    </div>
+
     <div *ngIf="items">
         <ion-virtual-scroll [items]="items | searchFilter: searchString">
-            <ion-item (click)="select(item.user_id)" *virtualItem="let item" button="true" type="button">
+            <ion-item (click)="select(item.employee_id)" *virtualItem="let item" button="true" type="button">
                 <ion-grid>
                     <ion-row>
                         <ion-col size-md="10" size-xs="8">
                             <ion-label>
-                                <h3>Name: {{ item.user_full_name }}</h3>
+                                <h3>Employee Name: {{ item.employee_full_name }}</h3>
                             </ion-label>
                         </ion-col>
                         <ion-col class="ion-align-items-start" size-md="2" size-xs="4">
                             <ion-label class="ion-text-left ion-text-wrap">
-                                <p>ID: {{item.user_id}}</p>
+                                <p>Employee ID: {{item.employee_id}}</p>
                             </ion-label>
                         </ion-col>
                     </ion-row>
                     <ion-row>
-                        <!--                        <ion-col size-md="10" size-xs="8">-->
-                        <!--                            <ion-label>-->
-                        <!--                                <p>Username: {{item.username}}</p>-->
-                        <!--                            </ion-label>-->
-                        <!--                        </ion-col>-->
-                        <!--                        <ion-col size-md="10" size-xs="8">-->
-                        <!--                            <ion-label>-->
-                        <!--                                <p>Email: {{item.user_email}}</p>-->
-                        <!--                            </ion-label>-->
-                        <!--                        </ion-col>-->
-                        <ion-col size-md="10" size-xs="8">
+                        <ion-col size="auto">
                             <ion-label>
-                                <p>Role: {{item.role}}</p>
-                                <ion-skeleton-text *ngIf="item.role == undefined" animated
+                                <h3>Email: {{ (item.employee_email) ? item.employee_email : "-" }}</h3>
+                            </ion-label>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <ion-label>
+                                <h3>Contact
+                                    Number: {{ (item.employee_contact_num) ? item.employee_contact_num : "-" }}</h3>
+                            </ion-label>
+                        </ion-col>
+                        <ion-col size="auto">
+                            <ion-label>
+                                <p>Industry Area: {{(item.industry) ? item.industry : "-"}} </p>
+                                <ion-skeleton-text *ngIf="item.industry == undefined" animated
                                                    style="width: 20%;"></ion-skeleton-text>
                             </ion-label>
                         </ion-col>
-                        <ion-col size-md="10" size-xs="8">
+                        <ion-col size="auto">
                             <ion-label>
-                                <p>Industry Area: {{item.industry}} </p>
-                                <ion-skeleton-text *ngIf="item.industry == undefined" animated
-                                                   style="width: 20%;"></ion-skeleton-text>
+                                <h3>APU Alumni: {{ (item.employee_alumnus) ? "Yes" : "False" }}</h3>
                             </ion-label>
                         </ion-col>
 
@@ -69,17 +77,24 @@
             <ion-item *ngFor="let i of fakeCount(10)" button="true" type="button">
                 <ion-grid>
                     <ion-row>
-                        <ion-col class="ion-align-items-start" size-md="10" size-xs="8">
+                        <ion-col size-md="10" size-xs="8">
                             <ion-label>
                                 <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
-                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
                             </ion-label>
                         </ion-col>
                         <ion-col class="ion-align-items-start" size-md="2" size-xs="4">
-                            <ion-note class="ion-text-left">
+                            <ion-label class="ion-text-left ion-text-wrap">
                                 <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
-                            </ion-note>
+                            </ion-label>
                         </ion-col>
+                    </ion-row>
+                    <ion-row>
+                        <ion-col size-md="10" size-xs="8">
+                            <ion-label>
+                                <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
+                            </ion-label>
+                        </ion-col>
+
                     </ion-row>
                 </ion-grid>
             </ion-item>

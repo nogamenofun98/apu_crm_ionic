@@ -1,0 +1,396 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>CRM - Employee</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+    <ion-segment [(ngModel)]="section">
+        <ion-segment-button value="profile">
+            User Info
+        </ion-segment-button>
+        <ion-segment-button value="job">
+            Working Records
+        </ion-segment-button>
+    </ion-segment>
+    <ng-container [ngSwitch]="section">
+        <ng-container *ngSwitchCase="'profile'">
+            <div *ngIf="item">
+                <ion-card>
+                    <ion-fab *ngIf="isMD" horizontal="end" slot="floating" vertical="top">
+                        <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
+                            <ion-icon name="menu"></ion-icon>
+                        </ion-fab-button>
+                    </ion-fab>
+                    <div>
+                        <ion-fab *ngIf="!isMD" horizontal="end" vertical="top">
+                            <ion-fab-button>
+                                <ion-icon name="menu"></ion-icon>
+                            </ion-fab-button>
+                            <ion-fab-list side="bottom">
+                                <ion-fab-button (click)="delete()" color="danger"><!-- delete -->
+                                    <ion-icon name="trash"></ion-icon>
+                                </ion-fab-button>
+                                <ion-label>Delete</ion-label>
+                                <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary">
+                                    <!-- edit -->
+                                    <ion-icon name="create"></ion-icon>
+                                </ion-fab-button>
+                                <ion-label *ngIf="!isEdit">Edit</ion-label>
+                                <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger">
+                                    <!-- cancel edit -->
+                                    <ion-icon name="close-circle-outline"></ion-icon>
+                                </ion-fab-button>
+                                <ion-label *ngIf="isEdit" style="text-align: center">Cancel Edit</ion-label>
+                                <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success">
+                                    <!-- submit edit -->
+                                    <ion-icon name="send"></ion-icon>
+                                </ion-fab-button>
+                                <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
+
+                            </ion-fab-list>
+                        </ion-fab>
+                    </div>
+                    <form [formGroup]="editForm">
+                        <ion-card-header>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-card-title>Employee:</ion-card-title>
+                                        <ion-item>
+                                            <ion-label *ngIf="!isEdit">{{item.employee_full_name}}</ion-label>
+                                            <ion-input *ngIf="isEdit" [appDisableControl]="!isEdit"
+                                                       color="primary" formControlName="employee_full_name"
+                                                       required="true"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.employee_full_name.invalid && (editForm.controls.employee_full_name.dirty || editForm.controls.employee_full_name.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.employee_full_name.errors?.required">Full Name
+                                                is
+                                                required
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Employee Email:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit" formControlName="employee_email"
+                                                       type="email"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.employee_email.invalid && (editForm.controls.employee_email.dirty || editForm.controls.employee_email.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.employee_email.errors?.email">Email format
+                                                must be
+                                                correct!
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">APU alumnus?:</ion-label>
+                                            <ion-select [appDisableControl]="!isEdit" formControlName="employee_alumnus"
+                                                        required="true">
+                                                <ion-select-option [value]="true">True</ion-select-option>
+                                                <ion-select-option [value]="false">False</ion-select-option>
+                                            </ion-select>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.employee_alumnus.invalid && (editForm.controls.employee_alumnus.dirty || editForm.controls.employee_alumnus.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.employee_alumnus.errors?.required">APU alumnus
+                                                must
+                                                set either true or
+                                                false!
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">APU Intake Code:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_intake_code"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Graduated Date:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_grad_time"
+                                                       type="date"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+
+
+                                <ion-row>
+                                    <ion-col>
+                                        <ng-container *ngIf="isManageAll">
+                                            <ion-item>
+                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-select [appDisableControl]="!isEdit"
+                                                            formControlName="employee_industry_id" required="true">
+                                                    <ng-container *ngFor="let val of industryList">
+                                                        <ion-select-option *ngIf="val.is_read_only==false"
+                                                                           [value]="val.industry_id">
+                                                            {{val.industry_name}}
+                                                        </ion-select-option>
+                                                    </ng-container>
+                                                </ion-select>
+                                            </ion-item>
+                                            <div *ngIf="editForm.controls.employee_industry_id.invalid && (editForm.controls.employee_industry_id.dirty || editForm.controls.employee_industry_id.touched)"
+                                                 class="alert alert-danger">
+                                                <div *ngIf="editForm.controls.employee_industry_id.errors?.required">
+                                                    Industry
+                                                    Area is required
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="!isManageAll">
+                                            <ion-item>
+                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-input disabled="true" type="text"
+                                                           value="{{empIndustryArea}}"></ion-input>
+                                            </ion-item>
+                                        </ng-container>
+                                    </ion-col>
+                                </ion-row>
+
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Employee Address:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit" formControlName="employee_address"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Postcode:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_postcode"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.employee_postcode.invalid && (editForm.controls.employee_postcode.dirty || editForm.controls.employee_postcode.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.employee_postcode.errors?.pattern">Postcode
+                                                Format is wrong
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">City:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_city" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">State:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_state" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Country:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_country"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Employee Contact Number:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="employee_contact_num" required="true"
+                                                       type="tel"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.employee_contact_num.invalid && (editForm.controls.employee_contact_num.dirty || editForm.controls.employee_contact_num.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.employee_contact_num.errors?.pattern">Company
+                                                Phone Number Format is
+                                                wrong
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-card-content>
+                    </form>
+                </ion-card>
+            </div>
+
+            <div *ngIf="!item">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-card-title>Employee:</ion-card-title>
+                                    <ion-item>
+                                        <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-item>
+                                        <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+        </ng-container>
+
+        <ng-container *ngSwitchCase="'job'">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>Working Company:</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <form (ngSubmit)="jobForm.valid && createJob()" [formGroup]="jobForm" autocomplete="off">
+                        <ng-container *ngIf="empIndustryArea">
+                            <ion-item>
+                                <ion-label position="floating">Industry Area:</ion-label>
+                                <ion-input disabled="true" type="text"
+                                           value="{{empIndustryArea}}"></ion-input>
+                            </ion-item>
+
+                            <ion-item>
+                                <ion-label position="floating">Current Working Company (Reg ID):</ion-label>
+                                <ion-input (ionChange)="getCompany()" debounce="500"
+                                           formControlName="employee_company_Id"
+                                           type="text"></ion-input>
+                                <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
+                                <ion-icon *ngIf="!isChecking && !jobForm.controls.employee_company_Id.invalid"
+                                          color="success"
+                                          name="checkmark-circle-outline" slot="end"></ion-icon>
+                                <ion-icon
+                                        *ngIf="!isChecking && jobForm.controls.employee_company_Id.errors?.notFound"
+                                        color="danger"
+                                        name="close-circle-outline" slot="end"></ion-icon>
+                            </ion-item>
+                            <div *ngIf="jobForm.controls.employee_company_Id.invalid && (jobForm.controls.employee_company_Id.dirty || jobForm.controls.employee_company_Id.touched)"
+                                 class="alert alert-danger">
+                                <div *ngIf="jobForm.controls.employee_company_Id.errors?.notFound">Registration
+                                    Number not
+                                    found or not under selected industry area
+                                </div>
+                            </div>
+                            <ion-item>
+                                <ion-label position="floating">Designation:</ion-label>
+                                <ion-input formControlName="job_designation" type="text"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label position="floating">Department:</ion-label>
+                                <ion-input formControlName="job_department" type="text"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>Hired Date:</ion-label>
+                                <ion-input formControlName="job_hired_date" type="date"></ion-input>
+                            </ion-item>
+                            <ion-item>
+                                <ion-label>Current Job:</ion-label>
+                                <ion-toggle formControlName="is_current_job"></ion-toggle>
+                            </ion-item>
+                            <ion-button color="primary" expand="full" type="submit">Submit</ion-button>
+                        </ng-container>
+                        <ng-container *ngIf="!empIndustryArea">
+                            <ion-item>
+                                <ion-label position="floating">Industry Area:</ion-label>
+                                <ion-input disabled="true" type="text"
+                                           value="Please assign an industry area first before add job to user!"></ion-input>
+                            </ion-item>
+                        </ng-container>
+
+                    </form>
+                    <div *ngIf="jobItems">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="auto">
+                                    <ion-label>Working Job List:</ion-label>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-list *ngFor="let job of jobItems">
+                                        <ion-item>
+                                            <ion-label>
+                                                <ion-chip routerLink="/companies/{{job.company}}">
+                                                    <ion-icon color="dark" name="business"></ion-icon>
+                                                    <ion-label>{{job.company}}</ion-label>
+                                                </ion-chip>
+                                                Designation: {{job.designation}}, Department: {{job.department}}, Hired
+                                                Time: {{job.hired_time | date: 'dd/MM/yyyy'}}
+                                                {{(job.is_current_job) ? "(Current Job)" : ""}}
+                                            </ion-label>
+                                            <ion-chip (click)="deleteJob(job.company)">
+                                                <ion-icon color="danger" name="trash"></ion-icon>
+                                                <ion-label>Delete</ion-label>
+                                            </ion-chip>
+                                        </ion-item>
+                                    </ion-list>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                    <div *ngIf="!jobItems">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="auto">
+                                    Working Job List:
+                                </ion-col>
+                                <ion-col>
+                                    <ion-list *ngFor="let job of jobItems">
+                                        <ion-item>
+                                            <ion-label>
+                                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                            </ion-label>
+                                        </ion-item>
+                                    </ion-list>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+
+
+        </ng-container>
+    </ng-container>
+</ion-content>

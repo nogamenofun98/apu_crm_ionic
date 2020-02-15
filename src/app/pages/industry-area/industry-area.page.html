@@ -19,7 +19,7 @@
     </ion-fab>
     <!--<pre>{{areas | json}}</pre>-->
     <div *ngIf="items">
-        <ion-virtual-scroll [items]="items | industryAreaFilter: searchString">
+        <ion-virtual-scroll [items]="items | searchFilter: searchString">
             <ion-item (click)="select(item.industry_id)" *virtualItem="let item" button="true" type="button">
                 <ion-grid>
                     <ion-row>

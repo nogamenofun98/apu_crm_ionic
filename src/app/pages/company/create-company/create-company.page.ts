@@ -40,21 +40,13 @@ export class CreateCompanyPage implements OnInit {
             company_desc: ['', Validators.compose([
                 Validators.required
             ])],
-            company_address: ['', Validators.compose([
-                Validators.required
-            ])],
+            company_address: ['', Validators.compose([])],
             company_postcode: ['', Validators.compose([
-                Validators.required, Validators.pattern('^[0-9]{1,6}$')
+                Validators.pattern('^[0-9]{1,6}$')
             ])],
-            company_city: ['', Validators.compose([
-                Validators.required
-            ])],
-            company_state: ['', Validators.compose([
-                Validators.required
-            ])],
-            company_country: ['', Validators.compose([
-                Validators.required
-            ])],
+            company_city: ['', Validators.compose([])],
+            company_state: ['', Validators.compose([])],
+            company_country: ['', Validators.compose([])],
             company_office_contact_num: ['', Validators.compose([
                 Validators.required, Validators.pattern('^(\\+?6?0)[0-9]{1,2}-*[0-9]{7,8}$')
             ])],

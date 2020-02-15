@@ -7,8 +7,8 @@ import {IonicModule} from '@ionic/angular';
 import {IndustryAreaPageRoutingModule} from './industry-area-routing.module';
 
 import {IndustryAreaPage} from './industry-area.page';
-import {IndustryAreaFilterPipe} from '../../pipes/industryArea/industry-area-filter.pipe';
 import {CreateAreaPage} from './create-area/create-area.page';
+import {SharedComponentsModule} from '../sharedModules/SharedModules';
 
 @NgModule({
     imports: [
@@ -16,9 +16,10 @@ import {CreateAreaPage} from './create-area/create-area.page';
         FormsModule,
         IonicModule,
         IndustryAreaPageRoutingModule,
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        SharedComponentsModule,
     ],
-    declarations: [IndustryAreaPage, IndustryAreaFilterPipe, CreateAreaPage],
+    declarations: [IndustryAreaPage, CreateAreaPage],
     entryComponents: [CreateAreaPage]
 })
 export class IndustryAreaPageModule {

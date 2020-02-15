@@ -1,0 +1,77 @@
+import {Component, OnInit} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {AlertService} from '../../services/alert.service';
+import {ModalController, NavController} from '@ionic/angular';
+import {EnvService} from '../../services/env.service';
+import {AuthService} from '../../services/auth.service';
+import {HttpRequestService} from '../../services/http-request.service';
+import {CreateEmployeePage} from './create-employee/create-employee.page';
+
+@Component({
+    selector: 'app-employee',
+    templateUrl: './employee.page.html',
+    styleUrls: ['./employee.page.scss'],
+})
+export class EmployeePage implements OnInit {
+
+    searchString: any;
+    items: any;
+
+    constructor(private http: HttpClient,
+                private alertService: AlertService,
+                private modalController: ModalController,
+                private navCtrl: NavController,
+                private env: EnvService,
+                private authService: AuthService, private httpRequestService: HttpRequestService) {
+    }
+
+    ngOnInit() {
+    }
+
+    ionViewWillEnter() {
+        this.items = null;
+        this.getAll();
+    }
+
+    async showCreate() {
+        const createModal = await this.modalController.create({
+            component: CreateEmployeePage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+            }
+        });
+        createModal.onDidDismiss().then((isOk) => {
+            if (isOk.data) {
+                this.getAll();
+            }
+        });
+        return await createModal.present();
+    }
+
+    select(id: any) {
+        this.navCtrl.navigateForward('/employees/' + id);
+    }
+
+    fakeCount(fakeCount: number) {
+        return Array(fakeCount);
+    }
+
+    private getAll() {
+        this.httpRequestService.read('employees').then(data => {
+            this.items = data.data_response;
+            for (const item of this.items) {
+                if (item.employee_industry !== null) {
+                    this.httpRequestService.read('industry-areas/' + encodeURIComponent(item.employee_industry)).then(area => {
+                        item.industry = area.data_response.industry_name;
+                    }).catch(err => console.error(err))
+                    ;
+                } else {
+                    item.industry = '';
+                }
+            }
+        }).catch(err => console.error(err))
+        ;
+    }
+
+}

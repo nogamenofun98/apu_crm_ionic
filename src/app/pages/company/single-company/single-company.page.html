@@ -162,31 +162,22 @@
                                 <ion-item>
                                     <ion-label position="floating">Company Address:</ion-label>
                                     <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_address" required="true"
+                                               formControlName="company_address"
                                                type="text"></ion-input>
                                 </ion-item>
-                                <div *ngIf="editForm.controls.company_address.invalid && (editForm.controls.company_address.dirty || editForm.controls.company_address.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_address.errors?.required">Company Address is
-                                        required
-                                    </div>
-                                </div>
                             </ion-col>
                         </ion-row>
                         <ion-row>
                             <ion-col>
                                 <ion-item>
-                                    <ion-label position="floating">Company Postcode:</ion-label>
+                                    <ion-label position="floating">Postcode:</ion-label>
                                     <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_postcode" required="true"
+                                               formControlName="company_postcode"
                                                type="text"></ion-input>
                                 </ion-item>
                                 <div *ngIf="editForm.controls.company_postcode.invalid && (editForm.controls.company_postcode.dirty || editForm.controls.company_postcode.touched)"
                                      class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_postcode.errors?.required">Company Postcode
-                                        is required
-                                    </div>
-                                    <div *ngIf="editForm.controls.company_postcode.errors?.pattern">Company Postcode
+                                    <div *ngIf="editForm.controls.company_postcode.errors?.pattern">Postcode
                                         Format is wrong
                                     </div>
                                 </div>
@@ -195,47 +186,29 @@
                         <ion-row>
                             <ion-col>
                                 <ion-item>
-                                    <ion-label position="floating">Company City:</ion-label>
+                                    <ion-label position="floating">City:</ion-label>
                                     <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_city" required="true" type="text"></ion-input>
+                                               formControlName="company_city" type="text"></ion-input>
                                 </ion-item>
-                                <div *ngIf="editForm.controls.company_city.invalid && (editForm.controls.company_city.dirty || editForm.controls.company_city.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_city.errors?.required">Company City is
-                                        required
-                                    </div>
-                                </div>
                             </ion-col>
                         </ion-row>
                         <ion-row>
                             <ion-col>
                                 <ion-item>
-                                    <ion-label position="floating">Company State:</ion-label>
+                                    <ion-label position="floating">State:</ion-label>
                                     <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_state" required="true" type="text"></ion-input>
+                                               formControlName="company_state" type="text"></ion-input>
                                 </ion-item>
-                                <div *ngIf="editForm.controls.company_state.invalid && (editForm.controls.company_state.dirty || editForm.controls.company_state.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_state.errors?.required">Company State is
-                                        required
-                                    </div>
-                                </div>
                             </ion-col>
                         </ion-row>
                         <ion-row>
                             <ion-col>
                                 <ion-item>
-                                    <ion-label position="floating">Company Country:</ion-label>
+                                    <ion-label position="floating">Country:</ion-label>
                                     <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_country" required="true"
+                                               formControlName="company_country"
                                                type="text"></ion-input>
                                 </ion-item>
-                                <div *ngIf="editForm.controls.company_country.invalid && (editForm.controls.company_country.dirty || editForm.controls.company_country.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_country.errors?.required">Company Country is
-                                        required
-                                    </div>
-                                </div>
                             </ion-col>
                         </ion-row>
                         <ion-row>

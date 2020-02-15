@@ -7,16 +7,17 @@ import {IonicModule} from '@ionic/angular';
 import {UserPageRoutingModule} from './user-routing.module';
 
 import {UserPage} from './user.page';
-import {UserFilterPipe} from '../../pipes/user/user-filter.pipe';
+import {SharedComponentsModule} from '../sharedModules/SharedModules';
 
 @NgModule({
     imports: [
         CommonModule,
         FormsModule,
         IonicModule,
-        UserPageRoutingModule
+        UserPageRoutingModule,
+        SharedComponentsModule,
     ],
-    declarations: [UserPage, UserFilterPipe]
+    declarations: [UserPage]
 })
 export class UserPageModule {
 }
