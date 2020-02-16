@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AlertService} from '../../services/alert.service';
 import {ModalController, NavController} from '@ionic/angular';
 import {EnvService} from '../../services/env.service';
@@ -7,6 +7,8 @@ import {AuthService} from '../../services/auth.service';
 import {HttpRequestService} from '../../services/http-request.service';
 import {CreateCompanyPage} from './create-company/create-company.page';
 import {UploadCompanyPage} from './upload-company/upload-company.page';
+import {saveAs} from 'file-saver';
+import {map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-company',
@@ -88,5 +90,19 @@ export class CompanyPage implements OnInit {
             }
         });
         return await createModal.present();
+    }
+
+    export() {
+        const headers = new HttpHeaders({
+            'Access-Control-Allow-Origin': '*',
+        });
+        this.http.get(this.env.API_URL + 'companies/export', {headers, observe: 'response', responseType: 'blob'}).pipe(map((res: any) => {
+            return new Blob([res.body], {type: 'application/vnd.ms.excel'});
+
+        })).subscribe((res: any) => {
+            const date = new Date();
+            const file = new File([res], 'companies_' + date.getDate() + (date.getMonth() + 1) + date.getFullYear() + '.xlsx', {type: 'application/vnd.ms.excel'});
+            saveAs(file);
+        });
     }
 }

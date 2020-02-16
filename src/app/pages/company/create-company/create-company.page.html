@@ -21,7 +21,7 @@
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
         <ion-item>
             <ion-label position="floating">Company Registration Number:</ion-label>
-            <ion-input (ionChange)="checkRegNum()" debounce="500" formControlName="company_reg_num" required="true"
+            <ion-input (ionChange)="checkRegNum()" debounce="100" formControlName="company_reg_num" required="true"
                        type="text"></ion-input>
             <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
             <ion-icon *ngIf="!isChecking && !createForm.controls.company_reg_num.invalid" color="success"

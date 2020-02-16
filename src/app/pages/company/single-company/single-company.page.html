@@ -8,261 +8,363 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <div *ngIf="item">
-        <ion-fab *ngIf="isMD" horizontal="end" slot="floating" vertical="top">
-            <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
-                <!--                <ion-fab-button class="ion-float-end" color="primary" size="small">-->
-                <ion-icon name="menu"></ion-icon>
-            </ion-fab-button>
-        </ion-fab>
-        <div>
-            <ion-fab *ngIf="!isMD" horizontal="end" vertical="top">
-                <ion-fab-button>
-                    <ion-icon name="menu"></ion-icon>
-                </ion-fab-button>
-                <ion-fab-list side="bottom">
-                    <ion-fab-button (click)="delete()" color="danger"><!-- delete -->
-                        <ion-icon name="trash"></ion-icon>
-                    </ion-fab-button>
-                    <ion-label>Delete</ion-label>
-                    <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary">
-                        <!-- edit -->
-                        <ion-icon name="create"></ion-icon>
-                    </ion-fab-button>
-                    <ion-label *ngIf="!isEdit">Edit</ion-label>
-                    <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
-                        <ion-icon name="close-circle-outline"></ion-icon>
-                    </ion-fab-button>
-                    <ion-label *ngIf="isEdit" style="text-align: center">Cancel Edit</ion-label>
-                    <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
-                        <ion-icon name="send"></ion-icon>
-                    </ion-fab-button>
-                    <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
+    <ion-segment [(ngModel)]="section">
+        <ion-segment-button value="profile">
+            Company Info
+        </ion-segment-button>
+        <ion-segment-button value="contact">
+            Contacts
+        </ion-segment-button>
+    </ion-segment>
 
-                </ion-fab-list>
-            </ion-fab>
-        </div>
+    <ng-container [ngSwitch]="section">
+        <ng-container *ngSwitchCase="'profile'">
+            <div *ngIf="item">
+                <ion-fab *ngIf="isMD" horizontal="end" slot="floating" vertical="top">
+                    <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
+                        <!--                <ion-fab-button class="ion-float-end" color="primary" size="small">-->
+                        <ion-icon name="menu"></ion-icon>
+                    </ion-fab-button>
+                </ion-fab>
+                <div>
+                    <ion-fab *ngIf="!isMD" horizontal="end" vertical="top">
+                        <ion-fab-button>
+                            <ion-icon name="menu"></ion-icon>
+                        </ion-fab-button>
+                        <ion-fab-list side="bottom">
+                            <ion-fab-button (click)="delete()" color="danger"><!-- delete -->
+                                <ion-icon name="trash"></ion-icon>
+                            </ion-fab-button>
+                            <ion-label>Delete</ion-label>
+                            <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary">
+                                <!-- edit -->
+                                <ion-icon name="create"></ion-icon>
+                            </ion-fab-button>
+                            <ion-label *ngIf="!isEdit">Edit</ion-label>
+                            <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
+                                <ion-icon name="close-circle-outline"></ion-icon>
+                            </ion-fab-button>
+                            <ion-label *ngIf="isEdit" style="text-align: center">Cancel Edit</ion-label>
+                            <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
+                                <ion-icon name="send"></ion-icon>
+                            </ion-fab-button>
+                            <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
 
-        <ion-card>
-            <form [formGroup]="editForm">
+                        </ion-fab-list>
+                    </ion-fab>
+                </div>
+
+                <ion-card>
+                    <form [formGroup]="editForm">
+                        <ion-card-header>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-card-title>Company:</ion-card-title>
+                                        <ion-item>
+                                            <ion-label *ngIf="!isEdit">{{item.company_name}}</ion-label>
+                                            <ion-input *ngIf="isEdit" [appDisableControl]="!isEdit"
+                                                       color="primary" formControlName="company_name" required="true"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.company_name.invalid && (editForm.controls.company_name.dirty || editForm.controls.company_name.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.company_name.errors?.required">Company Name is
+                                                required
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+
+                        </ion-card-header>
+                        <ion-card-content>
+                            <ion-grid>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Company Registration Number:</ion-label>
+                                            <ion-input (ionChange)="checkRegNum()"
+                                                       [appDisableControl]="!isEdit" debounce="100"
+                                                       formControlName="company_reg_num"
+                                                       required="true" type="text"></ion-input>
+                                            <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
+                                            <ion-icon *ngIf="!isChecking && !editForm.controls.company_reg_num.invalid"
+                                                      color="success" name="checkmark-circle-outline"
+                                                      slot="end"></ion-icon>
+                                            <ion-icon
+                                                    *ngIf="!isChecking && editForm.controls.company_reg_num.errors?.duplicated"
+                                                    color="danger" name="close-circle-outline" slot="end"></ion-icon>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.company_reg_num.invalid && (editForm.controls.company_reg_num.dirty || editForm.controls.company_reg_num.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.company_reg_num.errors?.required">Registration
+                                                Number
+                                                is required
+                                            </div>
+                                            <div *ngIf="editForm.controls.company_reg_num.errors?.duplicated">
+                                                Registration
+                                                Number is duplicated
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Company Size:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_size" min="1" required="true"
+                                                       type="number"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.company_size.invalid && (editForm.controls.company_size.dirty || editForm.controls.company_size.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.company_size.errors?.required">Company Size is
+                                                required
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ng-container *ngIf="isManageAll">
+                                            <ion-item>
+                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-select [appDisableControl]="!isEdit"
+                                                            formControlName="company_industry_id" required="true">
+                                                    <ng-container *ngFor="let val of industryList">
+                                                        <ion-select-option *ngIf="val.is_read_only==false"
+                                                                           [value]="val.industry_id">
+                                                            {{val.industry_name}}
+                                                        </ion-select-option>
+                                                    </ng-container>
+                                                </ion-select>
+                                            </ion-item>
+                                            <div *ngIf="editForm.controls.company_industry_id.invalid && (editForm.controls.company_industry_id.dirty || editForm.controls.company_industry_id.touched)"
+                                                 class="alert alert-danger">
+                                                <div *ngIf="editForm.controls.company_industry_id.errors?.required">
+                                                    Industry
+                                                    Area is required
+                                                </div>
+                                            </div>
+                                        </ng-container>
+                                        <ng-container *ngIf="!isManageAll">
+                                            <ion-item>
+                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-input disabled="true" type="text"
+                                                           value="{{industryItem?.name}}"></ion-input>
+                                            </ion-item>
+                                        </ng-container>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Company Description:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_desc" required="true"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.company_desc.invalid && (editForm.controls.company_desc.dirty || editForm.controls.company_desc.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.company_desc.errors?.required">Company
+                                                Description
+                                                is required
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Company Address:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_address"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Postcode:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_postcode"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.company_postcode.invalid && (editForm.controls.company_postcode.dirty || editForm.controls.company_postcode.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.company_postcode.errors?.pattern">Postcode
+                                                Format is wrong
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">City:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_city" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">State:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_state" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Country:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_country"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Company Phone Number:</ion-label>
+                                            <ion-input [appDisableControl]="!isEdit"
+                                                       formControlName="company_office_contact_num" required="true"
+                                                       type="tel"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="editForm.controls.company_office_contact_num.invalid && (editForm.controls.company_office_contact_num.dirty || editForm.controls.company_office_contact_num.touched)"
+                                             class="alert alert-danger">
+                                            <div *ngIf="editForm.controls.company_office_contact_num.errors?.required">
+                                                Company
+                                                Phone Number is
+                                                required
+                                            </div>
+                                            <div *ngIf="editForm.controls.company_office_contact_num.errors?.pattern">
+                                                Company
+                                                Phone Number Format is
+                                                wrong
+                                            </div>
+                                        </div>
+                                    </ion-col>
+                                </ion-row>
+                            </ion-grid>
+                        </ion-card-content>
+                    </form>
+                </ion-card>
+            </div>
+
+            <div *ngIf="!item">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-card-title>Company:</ion-card-title>
+                                    <ion-item>
+                                        <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ion-item>
+                                        <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </ion-card-content>
+                </ion-card>
+            </div>
+
+        </ng-container>
+
+
+        <ng-container *ngSwitchCase="'contact'">
+            <ion-card>
                 <ion-card-header>
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col>
-                                <ion-card-title>Company:</ion-card-title>
-                                <ion-item>
-                                    <ion-label *ngIf="!isEdit">{{item.company_name}}</ion-label>
-                                    <ion-input *ngIf="isEdit" [appDisableControl]="!isEdit"
-                                               color="primary" formControlName="company_name" required="true"
-                                               type="text"></ion-input>
-                                </ion-item>
-                                <div *ngIf="editForm.controls.company_name.invalid && (editForm.controls.company_name.dirty || editForm.controls.company_name.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_name.errors?.required">Company Name is
-                                        required
-                                    </div>
-                                </div>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-
+                    <ion-card-title>Add Contact:</ion-card-title>
                 </ion-card-header>
                 <ion-card-content>
-                    <ion-grid>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Company Registration Number:</ion-label>
-                                    <ion-input (ionChange)="checkRegNum()"
-                                               [appDisableControl]="!isEdit" debounce="500"
-                                               formControlName="company_reg_num"
-                                               required="true" type="text"></ion-input>
-                                    <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
-                                    <ion-icon *ngIf="!isChecking && !editForm.controls.company_reg_num.invalid"
-                                              color="success" name="checkmark-circle-outline" slot="end"></ion-icon>
-                                    <ion-icon
-                                            *ngIf="!isChecking && editForm.controls.company_reg_num.errors?.duplicated"
-                                            color="danger" name="close-circle-outline" slot="end"></ion-icon>
-                                </ion-item>
-                                <div *ngIf="editForm.controls.company_reg_num.invalid && (editForm.controls.company_reg_num.dirty || editForm.controls.company_reg_num.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_reg_num.errors?.required">Registration Number
-                                        is required
-                                    </div>
-                                    <div *ngIf="editForm.controls.company_reg_num.errors?.duplicated">Registration
-                                        Number is duplicated
-                                    </div>
-                                </div>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Company Size:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_size" min="1" required="true"
-                                               type="number"></ion-input>
-                                </ion-item>
-                                <div *ngIf="editForm.controls.company_size.invalid && (editForm.controls.company_size.dirty || editForm.controls.company_size.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_size.errors?.required">Company Size is
-                                        required
-                                    </div>
-                                </div>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ng-container *ngIf="isManageAll">
-                                    <ion-item>
-                                        <ion-label position="floating">Industry Area:</ion-label>
-                                        <ion-select [appDisableControl]="!isEdit"
-                                                    formControlName="company_industry_id" required="true">
-                                            <ng-container *ngFor="let val of industryList">
-                                                <ion-select-option *ngIf="val.is_read_only==false"
-                                                                   [value]="val.industry_id">
-                                                    {{val.industry_name}}
-                                                </ion-select-option>
-                                            </ng-container>
-                                        </ion-select>
-                                    </ion-item>
-                                    <div *ngIf="editForm.controls.company_industry_id.invalid && (editForm.controls.company_industry_id.dirty || editForm.controls.company_industry_id.touched)"
-                                         class="alert alert-danger">
-                                        <div *ngIf="editForm.controls.company_industry_id.errors?.required">Industry
-                                            Area is required
-                                        </div>
-                                    </div>
-                                </ng-container>
-                                <ng-container *ngIf="!isManageAll">
-                                    <ion-item>
-                                        <ion-label position="floating">Industry Area:</ion-label>
-                                        <ion-input disabled="true" type="text"
-                                                   value="{{industryItem?.name}}"></ion-input>
-                                    </ion-item>
-                                </ng-container>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Company Description:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_desc" required="true" type="text"></ion-input>
-                                </ion-item>
-                                <div *ngIf="editForm.controls.company_desc.invalid && (editForm.controls.company_desc.dirty || editForm.controls.company_desc.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_desc.errors?.required">Company Description
-                                        is required
-                                    </div>
-                                </div>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Company Address:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_address"
-                                               type="text"></ion-input>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Postcode:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_postcode"
-                                               type="text"></ion-input>
-                                </ion-item>
-                                <div *ngIf="editForm.controls.company_postcode.invalid && (editForm.controls.company_postcode.dirty || editForm.controls.company_postcode.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_postcode.errors?.pattern">Postcode
-                                        Format is wrong
-                                    </div>
-                                </div>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">City:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_city" type="text"></ion-input>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">State:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_state" type="text"></ion-input>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Country:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_country"
-                                               type="text"></ion-input>
-                                </ion-item>
-                            </ion-col>
-                        </ion-row>
-                        <ion-row>
-                            <ion-col>
-                                <ion-item>
-                                    <ion-label position="floating">Company Phone Number:</ion-label>
-                                    <ion-input [appDisableControl]="!isEdit"
-                                               formControlName="company_office_contact_num" required="true"
-                                               type="tel"></ion-input>
-                                </ion-item>
-                                <div *ngIf="editForm.controls.company_office_contact_num.invalid && (editForm.controls.company_office_contact_num.dirty || editForm.controls.company_office_contact_num.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.company_office_contact_num.errors?.required">Company
-                                        Phone Number is
-                                        required
-                                    </div>
-                                    <div *ngIf="editForm.controls.company_office_contact_num.errors?.pattern">Company
-                                        Phone Number Format is
-                                        wrong
-                                    </div>
-                                </div>
-                            </ion-col>
-                        </ion-row>
-                    </ion-grid>
-                </ion-card-content>
-            </form>
-        </ion-card>
-    </div>
+                    <form (ngSubmit)="contactForm.valid && createContact()" [formGroup]="contactForm"
+                          autocomplete="off">
+                        <ion-item>
+                            <ion-label position="floating">Employee ID:</ion-label>
+                            <ion-input (ionChange)="getEmployee()" debounce="100"
+                                       formControlName="employee_id"
+                                       type="text"></ion-input>
+                            <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
+                            <ion-icon *ngIf="!isChecking && !contactForm.controls.employee_id.invalid"
+                                      color="success"
+                                      name="checkmark-circle-outline" slot="end"></ion-icon>
+                            <ion-icon
+                                    *ngIf="!isChecking && contactForm.controls.employee_id.errors?.notFound"
+                                    color="danger"
+                                    name="close-circle-outline" slot="end"></ion-icon>
+                        </ion-item>
+                        <div *ngIf="contactForm.controls.employee_id.invalid && (contactForm.controls.employee_id.dirty || contactForm.controls.employee_id.touched)"
+                             class="alert alert-danger">
+                            <div *ngIf="contactForm.controls.employee_id.errors?.notFound">Employee not found
+                            </div>
+                        </div>
+                        <ion-button color="primary" expand="full" type="submit">Submit</ion-button>
 
-    <div *ngIf="!item">
-        <ion-card>
-            <ion-card-header>
-                <ion-grid>
-                    <ion-row>
-                        <ion-col>
-                            <ion-card-title>Company:</ion-card-title>
-                            <ion-item>
-                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-card-header>
-            <ion-card-content>
-                <ion-grid>
-                    <ion-row>
-                        <ion-col>
-                            <ion-item>
-                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
-                            </ion-item>
-                        </ion-col>
-                    </ion-row>
-                </ion-grid>
-            </ion-card-content>
-        </ion-card>
-    </div>
+                    </form>
+                    <div *ngIf="contactItems || contactItems == null">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="auto">
+                                    <ion-label>Contact List:</ion-label>
+                                </ion-col>
+                                <ion-col>
+                                    <ion-list *ngFor="let contact of contactItems">
+                                        <ion-item>
+                                            <ion-label>
+                                                <ion-chip routerLink="/employees/{{contact.id}}">
+                                                    <ion-icon color="dark" name="business"></ion-icon>
+                                                    <ion-label>{{contact.name}}</ion-label>
+                                                </ion-chip>
+                                            </ion-label>
+                                            <ion-chip (click)="deleteContact(contact.id)">
+                                                <ion-icon color="danger" name="trash"></ion-icon>
+                                                <ion-label>Delete</ion-label>
+                                            </ion-chip>
+                                        </ion-item>
+                                    </ion-list>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                    <div *ngIf="!contactItems && !contactItems == null">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="auto">
+                                    Contact List:
+                                </ion-col>
+                                <ion-col>
+                                    <ion-list>
+                                        <ion-item>
+                                            <ion-label>
+                                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                            </ion-label>
+                                        </ion-item>
+                                    </ion-list>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ng-container>
+    </ng-container>
+
+
 </ion-content>

@@ -295,7 +295,7 @@
 
                             <ion-item>
                                 <ion-label position="floating">Current Working Company (Reg ID):</ion-label>
-                                <ion-input (ionChange)="getCompany()" debounce="500"
+                                <ion-input (ionChange)="getCompany()" debounce="100"
                                            formControlName="employee_company_Id"
                                            type="text"></ion-input>
                                 <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
@@ -376,7 +376,7 @@
                                     Working Job List:
                                 </ion-col>
                                 <ion-col>
-                                    <ion-list *ngFor="let job of jobItems">
+                                    <ion-list>
                                         <ion-item>
                                             <ion-label>
                                                 <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>

@@ -23,6 +23,9 @@ export class SingleCompanyPage implements OnInit {
     isManageAll = false;
     industryItem = {id: '', name: ''};
     private id: string;
+    section: any;
+    contactItems = [];
+    contactForm: FormGroup;
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -32,10 +35,14 @@ export class SingleCompanyPage implements OnInit {
                 private formBuilder: FormBuilder,
                 private httpRequestService: HttpRequestService, private authService: AuthService) {
         this.isMD = this.env.isMD;
+        this.contactForm = this.formBuilder.group({
+            employee_id: ['', Validators.compose([Validators.required])],
+        });
     }
 
     ngOnInit() {
         this.item = null;
+        this.section = 'profile';
         this.route.paramMap.subscribe(params => {
             this.id = params.get('id');
             this.getItem(this.id);
@@ -158,6 +165,81 @@ export class SingleCompanyPage implements OnInit {
         }
     }
 
+    createContact() {
+        this.alertService.presentLoading().then(loading => {
+            const loadingObject = loading;
+            const headers = new HttpHeaders({
+                'Access-Control-Allow-Origin': '*',
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            });
+            this.httpRequestService.create('companies/' + encodeURIComponent(this.id) + '/contacts/' + this.contactForm.get('employee_id').value, JSON.stringify(null), headers).then(data => {
+                this.alertService.presentToast(data.message, 'success', 1500, false);
+                this.getItem(this.id);
+            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+            ;
+        });
+        return false;
+    }
+
+    private prepareChoice() {
+        this.httpRequestService.read('industry-areas').then(data => {
+            this.industryList = data.data_response;
+        }).catch(err => console.error(err))
+        ;
+    }
+
+    private getUserIndustryArea() {
+        this.authService.getUserFromStorage().then(user => {
+            const industryId = user.user_handle_industry;
+            if (industryId !== null) {
+                this.httpRequestService.read('industry-areas/' + encodeURIComponent(industryId)).then(data => {
+                    if (data.data_response.is_read_only && data.data_response.industry_name === 'All') {
+                        this.isManageAll = true;
+                    } else {
+                        this.editForm.get('company_industry_id').setValue(data.data_response.industry_id);
+                        this.industryItem.name = data.data_response.industry_name;
+                    }
+                });
+            }
+        });
+    }
+
+    getEmployee() {
+        const employeeId = this.contactForm.get('employee_id').value;
+        if (employeeId !== '') {
+            this.contactForm.get('employee_id').setErrors({asd: true}); // prevent the form submit before the http req comes back
+            this.isChecking = true;
+            this.httpRequestService.read('employees/check-emp/' + encodeURIComponent(employeeId)).then(data => {
+                const result = data.data_response;
+                if (data.hasOwnProperty('data_response')) {
+                    this.contactForm.get('employee_id').setErrors(null);
+                } else {
+                    this.contactForm.get('employee_id').setErrors({notFound: true});
+                }
+            }).catch(() => {
+                this.contactForm.get('employee_id').setErrors({notFound: true});
+            }).finally(() => {
+                this.isChecking = false;
+            });
+        }
+    }
+
+    deleteContact(id: any) {
+        this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
+            alert.onDidDismiss().then(confirm => {
+                if (confirm.role === 'success') {
+                    this.httpRequestService.delete('companies/' + encodeURIComponent(this.id) + '/contacts/' + id).then(data => {
+                        this.alertService.presentToast(data.message, 'success', 1500, false);
+                        this.getItem(this.id);
+                    }).catch(err => {
+                        console.error(err);
+                    });
+                }
+            });
+        });
+    }
+
     private getItem(id: string) {
         this.httpRequestService.read('companies/' + encodeURIComponent(id)).then((data) => {
             this.item = data.data_response;
@@ -190,6 +272,7 @@ export class SingleCompanyPage implements OnInit {
             });
             // this.editForm.get('company_industry_id').setValue(this.item.company_industry);
             this.getUserIndustryArea();
+            this.getContactList(this.id);
         }).catch(err => {
             console.error(err);
             this.navCtrl.navigateBack('/companies');
@@ -197,26 +280,18 @@ export class SingleCompanyPage implements OnInit {
         ;
     }
 
-    private prepareChoice() {
-        this.httpRequestService.read('industry-areas').then(data => {
-            this.industryList = data.data_response;
-        }).catch(err => console.error(err))
-        ;
-    }
-
-    private getUserIndustryArea() {
-        this.authService.getUserFromStorage().then(user => {
-            const industryId = user.user_handle_industry;
-            if (industryId !== null) {
-                this.httpRequestService.read('industry-areas/' + encodeURIComponent(industryId)).then(data => {
-                    if (data.data_response.is_read_only && data.data_response.industry_name === 'All') {
-                        this.isManageAll = true;
-                    } else {
-                        this.editForm.get('company_industry_id').setValue(data.data_response.industry_id);
-                        this.industryItem.name = data.data_response.industry_name;
-                    }
-                });
-            }
+    private getContactList(id: any) {
+        this.contactItems = [];
+        const contacts = this.item.contacts;
+        if (contacts.length === 0) {
+            this.contactItems = null;
+        }
+        contacts.forEach(contact => {
+            this.httpRequestService.read('employees/' + contact).then(data => {
+                const result = data.data_response;
+                const item = {id: result.employee_id, name: result.employee_full_name};
+                this.contactItems.push(item);
+            });
         });
     }
 }

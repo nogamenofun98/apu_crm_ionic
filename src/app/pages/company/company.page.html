@@ -12,11 +12,6 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-    <!--    <ion-fab horizontal="end" slot="fixed" vertical="bottom">-->
-    <!--        <ion-fab-button (click)="showCreate()" class="ion-float-end" color="primary">-->
-    <!--            <ion-icon name="add"></ion-icon>-->
-    <!--        </ion-fab-button>-->
-    <!--    </ion-fab>-->
     <div>
         <ion-fab horizontal="end" vertical="bottom">
             <ion-fab-button>
@@ -27,10 +22,14 @@
                     <ion-icon name="add"></ion-icon>
                 </ion-fab-button>
                 <ion-label>Create</ion-label>
-                <ion-fab-button (click)="showImport()" color="secondary"><!-- delete -->
+                <ion-fab-button (click)="showImport()" color="secondary"><!-- import -->
                     <ion-icon name="attach"></ion-icon>
                 </ion-fab-button>
                 <ion-label>Import</ion-label>
+                <ion-fab-button (click)="export()" color="success"><!-- export -->
+                    <ion-icon name="attach"></ion-icon>
+                </ion-fab-button>
+                <ion-label>Export</ion-label>
             </ion-fab-list>
         </ion-fab>
     </div>
