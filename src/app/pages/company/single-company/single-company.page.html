@@ -297,22 +297,22 @@
                     <form (ngSubmit)="contactForm.valid && createContact()" [formGroup]="contactForm"
                           autocomplete="off">
                         <ion-item>
-                            <ion-label position="floating">Employee ID:</ion-label>
+                            <ion-label position="floating">Employee Email:</ion-label>
                             <ion-input (ionChange)="getEmployee()" debounce="100"
-                                       formControlName="employee_id"
+                                       formControlName="employee_email"
                                        type="text"></ion-input>
                             <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
-                            <ion-icon *ngIf="!isChecking && !contactForm.controls.employee_id.invalid"
+                            <ion-icon *ngIf="!isChecking && !contactForm.controls.employee_email.invalid"
                                       color="success"
                                       name="checkmark-circle-outline" slot="end"></ion-icon>
                             <ion-icon
-                                    *ngIf="!isChecking && contactForm.controls.employee_id.errors?.notFound"
+                                    *ngIf="!isChecking && contactForm.controls.employee_email.errors?.notFound"
                                     color="danger"
                                     name="close-circle-outline" slot="end"></ion-icon>
                         </ion-item>
-                        <div *ngIf="contactForm.controls.employee_id.invalid && (contactForm.controls.employee_id.dirty || contactForm.controls.employee_id.touched)"
+                        <div *ngIf="contactForm.controls.employee_email.invalid && (contactForm.controls.employee_email.dirty || contactForm.controls.employee_email.touched)"
                              class="alert alert-danger">
-                            <div *ngIf="contactForm.controls.employee_id.errors?.notFound">Employee not found
+                            <div *ngIf="contactForm.controls.employee_email.errors?.notFound">Employee not found
                             </div>
                         </div>
                         <ion-button color="primary" expand="full" type="submit">Submit</ion-button>

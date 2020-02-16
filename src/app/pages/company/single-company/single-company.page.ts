@@ -26,6 +26,7 @@ export class SingleCompanyPage implements OnInit {
     section: any;
     contactItems = [];
     contactForm: FormGroup;
+    employeeId = '';
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -36,7 +37,7 @@ export class SingleCompanyPage implements OnInit {
                 private httpRequestService: HttpRequestService, private authService: AuthService) {
         this.isMD = this.env.isMD;
         this.contactForm = this.formBuilder.group({
-            employee_id: ['', Validators.compose([Validators.required])],
+            employee_email: ['', Validators.compose([Validators.required])],
         });
     }
 
@@ -173,7 +174,7 @@ export class SingleCompanyPage implements OnInit {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
             });
-            this.httpRequestService.create('companies/' + encodeURIComponent(this.id) + '/contacts/' + this.contactForm.get('employee_id').value, JSON.stringify(null), headers).then(data => {
+            this.httpRequestService.create('companies/' + encodeURIComponent(this.id) + '/contacts/' + this.employeeId, JSON.stringify(null), headers).then(data => {
                 this.alertService.presentToast(data.message, 'success', 1500, false);
                 this.getItem(this.id);
             }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
@@ -206,19 +207,20 @@ export class SingleCompanyPage implements OnInit {
     }
 
     getEmployee() {
-        const employeeId = this.contactForm.get('employee_id').value;
+        const employeeId = this.contactForm.get('employee_email').value;
         if (employeeId !== '') {
-            this.contactForm.get('employee_id').setErrors({asd: true}); // prevent the form submit before the http req comes back
+            this.contactForm.get('employee_email').setErrors({asd: true}); // prevent the form submit before the http req comes back
             this.isChecking = true;
             this.httpRequestService.read('employees/check-emp/' + encodeURIComponent(employeeId)).then(data => {
                 const result = data.data_response;
                 if (data.hasOwnProperty('data_response')) {
-                    this.contactForm.get('employee_id').setErrors(null);
+                    this.contactForm.get('employee_email').setErrors(null);
+                    this.employeeId = result.employee_id;
                 } else {
-                    this.contactForm.get('employee_id').setErrors({notFound: true});
+                    this.contactForm.get('employee_email').setErrors({notFound: true});
                 }
             }).catch(() => {
-                this.contactForm.get('employee_id').setErrors({notFound: true});
+                this.contactForm.get('employee_email').setErrors({notFound: true});
             }).finally(() => {
                 this.isChecking = false;
             });
