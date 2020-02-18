@@ -1,0 +1,199 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+        </ion-buttons>
+        <ion-title>CRM - Conversation</ion-title>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+
+    <div *ngIf="item">
+        <ion-fab *ngIf="isMD" horizontal="end" slot="floating" vertical="top">
+            <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
+                <!--                <ion-fab-button class="ion-float-end" color="primary" size="small">-->
+                <ion-icon name="menu"></ion-icon>
+            </ion-fab-button>
+        </ion-fab>
+        <div>
+            <ion-fab *ngIf="!isMD" horizontal="end" vertical="top">
+                <ion-fab-button>
+                    <ion-icon name="menu"></ion-icon>
+                </ion-fab-button>
+                <ion-fab-list side="bottom">
+                    <ion-fab-button (click)="isEdit = true" *ngIf="!isEdit" color="primary">
+                        <!-- edit -->
+                        <ion-icon name="create"></ion-icon>
+                    </ion-fab-button>
+                    <ion-label *ngIf="!isEdit">Edit</ion-label>
+                    <ion-fab-button (click)="isEdit = false" *ngIf="isEdit" color="danger"><!-- cancel edit -->
+                        <ion-icon name="close-circle-outline"></ion-icon>
+                    </ion-fab-button>
+                    <ion-label *ngIf="isEdit" style="text-align: center">Cancel Edit</ion-label>
+                    <ion-fab-button (click)="submitForm()" *ngIf="isEdit" color="success"><!-- submit edit -->
+                        <ion-icon name="send"></ion-icon>
+                    </ion-fab-button>
+                    <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
+
+                </ion-fab-list>
+            </ion-fab>
+        </div>
+
+        <ion-card>
+
+            <ion-card-header>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-card-title>Conversation to: {{item.target_name}}</ion-card-title>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-label color="dark">Tracking Link: {{trackImgUrl}} </ion-label>
+                            <ion-input (ionChange)="generateUrl()" [(ngModel)]="url" color="primary"
+                                       placeholder="Enter redirect url here..."></ion-input>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+                <form [formGroup]="editForm">
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label
+                                            position="floating">{{(source == "company") ? "Company Reg Num" : "Employee Email"}}
+                                        :
+                                    </ion-label>
+                                    <ion-input (ionChange)="checkExist()" [appDisableControl]="!isEdit" debounce="150"
+                                               formControlName="target_id"
+                                               required="true"
+                                               type="text"></ion-input>
+                                    <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
+                                    <ion-icon *ngIf="!isChecking && !editForm.controls.target_id.invalid"
+                                              color="success"
+                                              name="checkmark-circle-outline" slot="end"></ion-icon>
+                                    <ion-icon *ngIf="!isChecking && editForm.controls.target_id.errors?.notFound"
+                                              color="danger"
+                                              name="close-circle-outline" slot="end"></ion-icon>
+                                </ion-item>
+                                <div *ngIf="editForm.controls.target_id.invalid && (editForm.controls.target_id.dirty || editForm.controls.target_id.touched)"
+                                     class="alert alert-danger">
+                                    <div *ngIf="editForm.controls.target_id.errors?.required">Target is required</div>
+                                    <div *ngIf="editForm.controls.target_id.errors?.notFound">Target not found or not
+                                        under selected industry area
+                                    </div>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label position="floating">Conversation:</ion-label>
+                                    <ion-textarea [appDisableControl]="!isEdit" formControlName="conversation"
+                                                  placeholder="Enter conversation here..." rows="8"
+                                                  spellcheck="true"></ion-textarea>
+                                </ion-item>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col>
+                                <ion-item>
+                                    <ion-label>Status:</ion-label>
+                                    <ion-select [appDisableControl]="!isEdit" class="large-select"
+                                                formControlName="status_id" interface="action-sheet"
+                                                required="true">
+                                        <ng-container *ngFor="let val of statusList">
+                                            <ion-select-option [value]="val.status_id">
+                                                {{val.status_name}}
+                                            </ion-select-option>
+                                        </ng-container>
+                                    </ion-select>
+                                </ion-item>
+                                <div *ngIf="editForm.controls.status_id.invalid && (editForm.controls.status_id.dirty || editForm.controls.status_id.touched)"
+                                     class="alert alert-danger">
+                                    <div *ngIf="editForm.controls.status_id.errors?.required">Status is required</div>
+                                </div>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-label>
+                                    <p>Last open time: {{item.open_time}}</p>
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-label>
+                                    <h3>Status: {{item.status_name}}</h3>
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-label>
+                                    <h3>Total amount of open: {{item.sum_open}}</h3>
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-label>
+                                    <p>Updated by: {{item.user_full_name}}</p>
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                        <ion-row>
+                            <ion-col size="auto">
+                                <ion-label>
+                                    <p>Updated at: {{item.updated_time}} </p>
+                                </ion-label>
+                            </ion-col>
+                        </ion-row>
+                    </ion-grid>
+                </form>
+            </ion-card-content>
+
+        </ion-card>
+    </div>
+
+    <div *ngIf="!item">
+        <ion-card>
+            <ion-card-header>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-card-title>Conversation:</ion-card-title>
+                            <ion-item>
+                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-header>
+            <ion-card-content>
+                <ion-grid>
+                    <ion-row>
+                        <ion-col>
+                            <ion-item>
+                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                            </ion-item>
+                        </ion-col>
+                    </ion-row>
+                </ion-grid>
+            </ion-card-content>
+        </ion-card>
+    </div>
+
+
+</ion-content>

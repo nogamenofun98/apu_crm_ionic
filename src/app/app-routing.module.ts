@@ -59,6 +59,16 @@ const routes: Routes = [
             loadChildren: './pages/employee/single-employee/single-employee.module#SingleEmployeePageModule',
             canActivate: [AuthGuard]
         },
+        {
+            path: 'conversations',
+            loadChildren: './pages/conversation/conversation.module#ConversationPageModule',
+            canActivate: [AuthGuard]
+        },
+        {
+            path: 'conversations/:source/:id',
+            loadChildren: './pages/conversation/single-conversation/single-conversation.module#SingleConversationPageModule',
+            canActivate: [AuthGuard]
+        },
         {path: 'denied', component: UnauthorisedComponent},
         {path: '**', redirectTo: '/'},
     ]

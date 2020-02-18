@@ -206,7 +206,7 @@ export class SingleEmployeePage implements OnInit {
             this.httpRequestService.read('companies/check-comp-reg-num/' + encodeURIComponent(regNum)).then(data => {
                 const result = data.data_response;
                 if (data.hasOwnProperty('data_response')) {
-                    if (result.company_industry === this.editForm.get('employee_industry_id').value) {
+                    if (result.company_industry === this.editForm.get('employee_industry_id').value) { // check comp is same area as employee or not
                         this.jobForm.get('employee_company_Id').setErrors(null);
                     } else {
                         // company not belong to the area

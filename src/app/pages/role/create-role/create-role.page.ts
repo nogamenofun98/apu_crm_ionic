@@ -36,8 +36,8 @@ export class CreateRolePage implements OnInit {
             employee_full: [''],
             report_view: [''],
             report_full: [''],
-            email_view: [''],
-            email_full: [''],
+            conversation_view: [''],
+            conversation_full: [''],
         });
     }
 
@@ -57,10 +57,10 @@ export class CreateRolePage implements OnInit {
             const companies = (form.get('company_full').value === true) ? 'full' : (form.get('company_view').value === true) ? 'view' : 'deny';
             const employees = (form.get('employee_full').value === true) ? 'full' : (form.get('employee_view').value === true) ? 'view' : 'deny';
             const reports = (form.get('report_full').value === true) ? 'full' : (form.get('report_view').value === true) ? 'view' : 'deny';
-            const emails = (form.get('email_full').value === true) ? 'full' : (form.get('email_view').value === true) ? 'view' : 'deny';
+            const conversations = (form.get('conversation_full').value === true) ? 'full' : (form.get('conversation_view').value === true) ? 'view' : 'deny';
             const body = {
                 user_role_description: form.get('user_role_description').value,
-                user_role_json: {roles, areas, users, companies, employees, reports, emails}
+                user_role_json: {roles, areas, users, companies, employees, reports, conversations}
             };
             const headers = new HttpHeaders({
                 'Access-Control-Allow-Origin': '*',

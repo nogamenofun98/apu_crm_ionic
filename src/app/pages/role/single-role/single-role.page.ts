@@ -43,16 +43,16 @@ export class SingleRolePage implements OnInit {
     submitForm() {
         this.alertService.presentLoading().then(loading => {
             const loadingObject = loading;
-            const role = (this.editForm.get('role_full').value === true) ? 'full' : (this.editForm.get('role_view').value === true) ? 'view' : 'deny';
-            const area = (this.editForm.get('area_full').value === true) ? 'full' : (this.editForm.get('area_view').value === true) ? 'view' : 'deny';
-            const user = (this.editForm.get('user_full').value === true) ? 'full' : (this.editForm.get('user_view').value === true) ? 'view' : 'deny';
-            const company = (this.editForm.get('company_full').value === true) ? 'full' : (this.editForm.get('company_view').value === true) ? 'view' : 'deny';
-            const employee = (this.editForm.get('employee_full').value === true) ? 'full' : (this.editForm.get('employee_view').value === true) ? 'view' : 'deny';
-            const report = (this.editForm.get('report_full').value === true) ? 'full' : (this.editForm.get('report_view').value === true) ? 'view' : 'deny';
-            const email = (this.editForm.get('email_full').value === true) ? 'full' : (this.editForm.get('email_view').value === true) ? 'view' : 'deny';
+            const roles = (this.editForm.get('role_full').value === true) ? 'full' : (this.editForm.get('role_view').value === true) ? 'view' : 'deny';
+            const areas = (this.editForm.get('area_full').value === true) ? 'full' : (this.editForm.get('area_view').value === true) ? 'view' : 'deny';
+            const users = (this.editForm.get('user_full').value === true) ? 'full' : (this.editForm.get('user_view').value === true) ? 'view' : 'deny';
+            const companies = (this.editForm.get('company_full').value === true) ? 'full' : (this.editForm.get('company_view').value === true) ? 'view' : 'deny';
+            const employees = (this.editForm.get('employee_full').value === true) ? 'full' : (this.editForm.get('employee_view').value === true) ? 'view' : 'deny';
+            const reports = (this.editForm.get('report_full').value === true) ? 'full' : (this.editForm.get('report_view').value === true) ? 'view' : 'deny';
+            const conversations = (this.editForm.get('conversation_full').value === true) ? 'full' : (this.editForm.get('conversation_view').value === true) ? 'view' : 'deny';
             const body = {
                 user_role_description: this.editForm.get('user_role_description').value,
-                user_role_json: {role, area, user, company, employee, report, email}
+                user_role_json: {roles, areas, users, companies, employees, reports, conversations}
             };
             const headers = new HttpHeaders({
                 'Access-Control-Allow-Origin': '*',
@@ -104,8 +104,8 @@ export class SingleRolePage implements OnInit {
                 employee_full: [this.item.user_role_json.employees === 'full'],
                 report_view: [this.item.user_role_json.reports === 'view'],
                 report_full: [this.item.user_role_json.reports === 'full'],
-                email_view: [this.item.user_role_json.emails === 'view'],
-                email_full: [this.item.user_role_json.emails === 'full'],
+                conversation_view: [this.item.user_role_json.conversations === 'view'],
+                conversation_full: [this.item.user_role_json.conversations === 'full'],
             });
         }).catch(err => {
             console.error(err);
@@ -115,6 +115,7 @@ export class SingleRolePage implements OnInit {
     }
 
     private getUserFromItem() {
+        this.users = [];
         const userIds: any[] = this.item.users;
         if (this.item.users.length === 0) {
             this.users = null;

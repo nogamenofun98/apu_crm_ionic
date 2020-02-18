@@ -295,7 +295,7 @@
 
                             <ion-item>
                                 <ion-label position="floating">Current Working Company (Reg ID):</ion-label>
-                                <ion-input (ionChange)="getCompany()" debounce="100"
+                                <ion-input (ionChange)="getCompany()" debounce="150"
                                            formControlName="employee_company_Id"
                                            type="text"></ion-input>
                                 <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>

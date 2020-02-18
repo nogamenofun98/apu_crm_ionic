@@ -44,6 +44,11 @@ export class AppComponent {
             url: '/employees',
             icon: 'list'
         },
+        {
+            title: 'Conversation',
+            url: '/conversations',
+            icon: 'list'
+        },
     ];
 
     constructor(

@@ -1,0 +1,64 @@
+<ion-header>
+    <ion-toolbar>
+        <ion-grid>
+            <ion-row>
+                <ion-col class="ion-align-self-center" size-md="6" size-xs="5">
+                    <ion-title>CRM - Create New Conversation</ion-title>
+                </ion-col>
+                <ion-col size-md="5">
+                </ion-col>
+                <ion-col size-md="1" size-xs="4">
+                    <ion-button (click)="dismissModal()" class="ion-float-end" color="danger">X</ion-button>
+
+                </ion-col>
+            </ion-row>
+        </ion-grid>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+
+    <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
+        <ion-item>
+            <ion-label position="floating">{{(source == "company") ? "Company Reg Num" : "Employee Email"}}:</ion-label>
+            <ion-input (ionChange)="checkExist()" debounce="150" formControlName="target_id" required="true"
+                       type="text"></ion-input>
+            <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
+            <ion-icon *ngIf="!isChecking && !createForm.controls.target_id.invalid" color="success"
+                      name="checkmark-circle-outline" slot="end"></ion-icon>
+            <ion-icon *ngIf="!isChecking && createForm.controls.target_id.errors?.notFound" color="danger"
+                      name="close-circle-outline" slot="end"></ion-icon>
+        </ion-item>
+        <div *ngIf="createForm.controls.target_id.invalid && (createForm.controls.target_id.dirty || createForm.controls.target_id.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.target_id.errors?.required">Target is required</div>
+            <div *ngIf="createForm.controls.target_id.errors?.notFound">Target not found or not under selected industry
+                area
+            </div>
+        </div>
+
+        <ion-item>
+            <ion-label position="floating">Conversation:</ion-label>
+            <ion-textarea formControlName="conversation" placeholder="Enter conversation here..." rows="8"
+                          spellcheck="true"></ion-textarea>
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Status:</ion-label>
+            <ion-select class="large-select" formControlName="status_id" interface="action-sheet" required="true">
+                <ng-container *ngFor="let val of statusList">
+                    <ion-select-option [value]="val.status_id">
+                        {{val.status_name}}
+                    </ion-select-option>
+                </ng-container>
+            </ion-select>
+        </ion-item>
+        <div *ngIf="createForm.controls.status_id.invalid && (createForm.controls.status_id.dirty || createForm.controls.status_id.touched)"
+             class="alert alert-danger">
+            <div *ngIf="createForm.controls.status_id.errors?.required">Status is required</div>
+        </div>
+
+
+        <ion-button color="primary" expand="full" type="submit">Create</ion-button>
+    </form>
+</ion-content>

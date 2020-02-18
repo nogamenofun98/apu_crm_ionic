@@ -85,7 +85,7 @@
                                         <ion-item>
                                             <ion-label position="floating">Company Registration Number:</ion-label>
                                             <ion-input (ionChange)="checkRegNum()"
-                                                       [appDisableControl]="!isEdit" debounce="100"
+                                                       [appDisableControl]="!isEdit" debounce="150"
                                                        formControlName="company_reg_num"
                                                        required="true" type="text"></ion-input>
                                             <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
@@ -298,7 +298,7 @@
                           autocomplete="off">
                         <ion-item>
                             <ion-label position="floating">Employee Email:</ion-label>
-                            <ion-input (ionChange)="getEmployee()" debounce="100"
+                            <ion-input (ionChange)="getEmployee()" debounce="150"
                                        formControlName="employee_email"
                                        type="text"></ion-input>
                             <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
