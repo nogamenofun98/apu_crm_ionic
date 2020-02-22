@@ -14,6 +14,7 @@ import {HttpRequestService} from '../../services/http-request.service';
 export class UserPage implements OnInit {
     searchString: string;
     items: any;
+    noRecord: boolean;
 
     constructor(private http: HttpClient,
                 private alertService: AlertService,
@@ -42,6 +43,7 @@ export class UserPage implements OnInit {
     private getAll() {
         this.httpRequestService.read('users').then(data => {
             this.items = data.data_response;
+            (this.items.length === 0) ? this.noRecord = true : this.noRecord = false;
             for (const item of this.items) {
                 if (item.user_role !== null) {
                     this.httpRequestService.read('roles/' + encodeURIComponent(item.user_role)).then(role => {

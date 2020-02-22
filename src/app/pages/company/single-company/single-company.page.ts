@@ -27,6 +27,7 @@ export class SingleCompanyPage implements OnInit {
     contactItems = [];
     contactForm: FormGroup;
     employeeId = '';
+    noRecord: boolean;
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -295,5 +296,7 @@ export class SingleCompanyPage implements OnInit {
                 this.contactItems.push(item);
             });
         });
+        (this.contactItems == null) ? this.noRecord = true : this.noRecord = false;
+
     }
 }

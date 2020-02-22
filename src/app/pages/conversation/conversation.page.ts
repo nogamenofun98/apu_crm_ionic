@@ -19,6 +19,7 @@ export class ConversationPage implements OnInit {
     searchString: any;
     section: any;
     items: any;
+    noRecord: boolean;
 
     constructor(private http: HttpClient,
                 private alertService: AlertService,
@@ -84,6 +85,7 @@ export class ConversationPage implements OnInit {
         this.items = null;
         this.httpRequestService.read('conversations/' + this.section).then(data => {
             this.items = data.data_response;
+            (this.items.length === 0) ? this.noRecord = true : this.noRecord = false;
         }).catch(err => console.error(err))
         ;
     }

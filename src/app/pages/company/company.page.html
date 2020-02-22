@@ -12,27 +12,26 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-    <div>
-        <ion-fab horizontal="end" vertical="bottom">
-            <ion-fab-button>
-                <ion-icon name="menu"></ion-icon>
+
+    <ion-fab horizontal="end" slot="fixed" style="margin-right: 10px" vertical="bottom">
+        <ion-fab-button>
+            <ion-icon name="menu"></ion-icon>
+        </ion-fab-button>
+        <ion-fab-list side="top">
+            <ion-fab-button (click)="showCreate()" color="primary"><!-- delete -->
+                <ion-icon name="add"></ion-icon>
             </ion-fab-button>
-            <ion-fab-list side="top">
-                <ion-fab-button (click)="showCreate()" color="primary"><!-- delete -->
-                    <ion-icon name="add"></ion-icon>
-                </ion-fab-button>
-                <ion-label>Create</ion-label>
-                <ion-fab-button (click)="showImport()" color="secondary"><!-- import -->
-                    <ion-icon name="attach"></ion-icon>
-                </ion-fab-button>
-                <ion-label>Import</ion-label>
-                <ion-fab-button (click)="export()" color="success"><!-- export -->
-                    <ion-icon name="attach"></ion-icon>
-                </ion-fab-button>
-                <ion-label>Export</ion-label>
-            </ion-fab-list>
-        </ion-fab>
-    </div>
+            <ion-label>Create</ion-label>
+            <ion-fab-button (click)="showImport()" color="secondary"><!-- import -->
+                <ion-icon name="attach"></ion-icon>
+            </ion-fab-button>
+            <ion-label>Import</ion-label>
+            <ion-fab-button (click)="export()" color="success"><!-- export -->
+                <ion-icon name="attach"></ion-icon>
+            </ion-fab-button>
+            <ion-label>Export</ion-label>
+        </ion-fab-list>
+    </ion-fab>
 
     <div *ngIf="items">
         <ion-virtual-scroll [items]="items | searchFilter: searchString">
@@ -69,6 +68,9 @@
             </ion-item>
         </ion-virtual-scroll>
     </div>
+    <ng-container *ngIf="noRecord">
+        <h4>No record found.</h4>
+    </ng-container>
     <div *ngIf="!items">
         <ion-list>
             <ion-item *ngFor="let i of fakeCount(10)" button="true" type="button">

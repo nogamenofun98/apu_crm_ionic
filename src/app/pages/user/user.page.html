@@ -12,11 +12,6 @@
     </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
-    <!--  <ion-fab horizontal="end" slot="fixed" vertical="bottom">-->
-    <!--    <ion-fab-button (click)="showCreate()" class="ion-float-end" color="primary">-->
-    <!--      <ion-icon name="add"></ion-icon>-->
-    <!--    </ion-fab-button>-->
-    <!--  </ion-fab>-->
     <div *ngIf="items">
         <ion-virtual-scroll [items]="items | searchFilter: searchString">
             <ion-item (click)="select(item.user_id)" *virtualItem="let item" button="true" type="button">
@@ -64,6 +59,9 @@
             </ion-item>
         </ion-virtual-scroll>
     </div>
+    <ng-container *ngIf="noRecord">
+        <h4>No record found.</h4>
+    </ng-container>
     <div *ngIf="!items">
         <ion-list>
             <ion-item *ngFor="let i of fakeCount(10)" button="true" type="button">

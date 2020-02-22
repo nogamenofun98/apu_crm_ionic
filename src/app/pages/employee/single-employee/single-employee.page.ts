@@ -28,6 +28,7 @@ export class SingleEmployeePage implements OnInit {
     industryItem = {id: '', name: ''};
     section: any;
     private id: string;
+    noRecord: boolean;
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -291,6 +292,8 @@ export class SingleEmployeePage implements OnInit {
     private getJobsList(id) {
         this.httpRequestService.read('employees/' + encodeURIComponent(id) + '/jobs').then(data => {
             this.jobItems = data.data_response;
+            (this.jobItems.length === 0) ? this.noRecord = true : this.noRecord = false;
+
         }).catch(err => {
             console.error(err);
         });

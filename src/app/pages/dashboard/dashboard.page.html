@@ -9,6 +9,229 @@
 
 <ion-content class="ion-padding">
     <div *ngIf="user != undefined">
-        Welcome {{ user["user_full_Name"]  }}, your ID is : {{  user["username"] }}
+        <p style="margin-left: 10px">Welcome {{ user["user_full_Name"]  }}, your ID is : {{  user["username"] }}</p>
     </div>
+    <ion-segment [(ngModel)]="section">
+        <ion-segment-button value="home">Home</ion-segment-button>
+        <ion-segment-button value="cloud">Word Cloud</ion-segment-button>
+    </ion-segment>
+
+    <ng-container [ngSwitch]="section">
+        <ng-container *ngSwitchCase="'home'">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        <h4>List of unemployed under current industry area:</h4>
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <div id="unassigned_employee">
+                        <ng-container *ngIf="unassignedEmployees">
+                            <ion-virtual-scroll [items]="unassignedEmployees"
+                                                style="max-height: 300px;overflow-x: auto;">
+                                <ion-item *virtualItem="let item" routerLink="/employees/{{item.employee_id}}">
+                                    <ion-icon name="person"></ion-icon>
+                                    <ion-label style="margin-left: 2px"> {{item.employee_full_name}}</ion-label>
+                                </ion-item>
+                            </ion-virtual-scroll>
+                        </ng-container>
+                        <ng-container *ngIf="noRecord">
+                            <h4>No record found.</h4>
+                        </ng-container>
+                        <ng-container *ngIf="!unassignedEmployees">
+                            <ion-list>
+                                <ion-item>
+                                    <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
+                                </ion-item>
+                                <ion-item>
+                                    <ion-skeleton-text animated style="width: 20%;"></ion-skeleton-text>
+                                </ion-item>
+                            </ion-list>
+                        </ng-container>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+            <div id="report">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-title>
+                            <h4>Report:</h4>
+                        </ion-card-title>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col size="auto">
+                                    <ion-button (click)="source = 'conversation'">Top Number of Conversation
+                                    </ion-button>
+                                </ion-col>
+                                <ion-col size="auto">
+                                    <ion-button (click)="source = 'alumni'">Top Company with Alumni</ion-button>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                        <ion-grid>
+                            <form (ngSubmit)="createForm.valid && getGraph(createForm)" *ngIf="source"
+                                  [formGroup]="createForm">
+                                <ng-container *ngIf="source==='conversation'">
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Type</ion-label>
+                                                <ion-select class="test" formControlName="conversationType">
+                                                    <ion-select-option value="count">Top Conversation
+                                                    </ion-select-option>
+                                                    <ion-select-option value="track">Top Number of Open Link
+                                                    </ion-select-option>
+                                                </ion-select>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Entity</ion-label>
+                                                <ion-select formControlName="conversationEntity">
+                                                    <ion-select-option value="company">Company</ion-select-option>
+                                                    <ion-select-option value="employee-a">Employee Alumni
+                                                    </ion-select-option>
+                                                    <ion-select-option value="employee">Employee Non-Alumni
+                                                    </ion-select-option>
+                                                </ion-select>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-container>
+
+                                <ion-row>
+                                    <ion-col>
+                                        <ng-container *ngIf="isManageAll">
+                                            <ion-item>
+                                                <ion-label>Industry Area:</ion-label>
+                                                <ion-select formControlName="conversationArea">
+                                                    <ng-container *ngFor="let val of industryList">
+                                                        <ion-select-option *ngIf="val.is_read_only==false"
+                                                                           [value]="val.industry_id">
+                                                            {{val.industry_name}}
+                                                        </ion-select-option>
+                                                    </ng-container>
+                                                </ion-select>
+                                            </ion-item>
+                                            <ion-button (click)="this.createForm.get('conversationArea').setValue('')"
+                                                        float-right>Clear Area
+                                            </ion-button>
+                                        </ng-container>
+                                        <ng-container *ngIf="!isManageAll">
+                                            <ion-item>
+                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-input disabled="true" type="text"
+                                                           value="{{industryItem?.name}}"></ion-input>
+                                            </ion-item>
+                                        </ng-container>
+                                    </ion-col>
+                                </ion-row>
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Postcode:</ion-label>
+                                            <ion-input formControlName="conversationPostcode"
+                                                       type="text"></ion-input>
+                                        </ion-item>
+                                        <div *ngIf="postcodeError" class="alert alert-danger">
+                                            <div>Postcode Format is wrong</div>
+                                        </div>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">City:</ion-label>
+                                            <ion-input formControlName="conversationCity" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">State:</ion-label>
+                                            <ion-input formControlName="conversationState" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                    <ion-col>
+                                        <ion-item>
+                                            <ion-label position="floating">Country:</ion-label>
+                                            <ion-input formControlName="conversationCountry" type="text"></ion-input>
+                                        </ion-item>
+                                    </ion-col>
+                                </ion-row>
+                                <ng-container *ngIf="source==='conversation'">
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label position="floating">Status:</ion-label>
+                                                <ion-select class="large-select" formControlName="conversationStatus">
+                                                    <ng-container *ngFor="let val of statusList">
+                                                        <ion-select-option [value]="val.status_id">
+                                                            {{val.status_name}}
+                                                        </ion-select-option>
+                                                    </ng-container>
+                                                </ion-select>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                    <ion-row>
+                                        <ion-col>
+                                            <ion-item>
+                                                <ion-label>Month:</ion-label>
+                                                <ion-datetime displayFormat="YYYY-MMMM"
+                                                              formControlName="conversationDate"
+                                                              pickerFormat="MMMM YYYY"></ion-datetime>
+                                            </ion-item>
+                                        </ion-col>
+                                    </ion-row>
+                                </ng-container>
+
+                                <ion-row>
+                                    <ion-col>
+                                        <ion-button type="submit">Create Graph</ion-button>
+                                    </ion-col>
+                                </ion-row>
+
+                            </form>
+                        </ion-grid>
+                        <canvas #Chart style="max-width: 720px;max-height: 480px"></canvas>
+
+                    </ion-card-content>
+                </ion-card>
+            </div>
+        </ng-container>
+        <ng-container *ngSwitchCase="'cloud'">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>
+                        <h4>Word Cloud (Most frequent word in conversation):</h4>
+                    </ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <ion-grid>
+                        <ion-row>
+                            <ion-col size="1">
+                                <ion-button (click)="changeImage('Company')">Company</ion-button>
+                            </ion-col>
+                            <ion-col size="1">
+                                <ion-button (click)="changeImage('Employee')">Employee</ion-button>
+                            </ion-col>
+                            <ion-col size="5"></ion-col>
+                            <ion-col size="5"></ion-col>
+                        </ion-row>
+                    </ion-grid>
+                    <h5>{{(type) ? type + '\'s Word Cloud' : ''}}</h5>
+                    <ion-img *ngIf="imageLink" [src]="imageLink" style="max-width: 50%;max-height: 50%">
+                    </ion-img>
+                    <ion-skeleton-text *ngIf="type && !imageLink" animated style="width: 30%"></ion-skeleton-text>
+                </ion-card-content>
+            </ion-card>
+        </ng-container>
+    </ng-container>
+
+
 </ion-content>

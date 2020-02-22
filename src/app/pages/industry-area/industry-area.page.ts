@@ -15,6 +15,7 @@ import {CreateAreaPage} from './create-area/create-area.page';
 export class IndustryAreaPage implements OnInit {
     searchString: string;
     items: any;
+    noRecord: boolean;
 
     constructor(private http: HttpClient,
                 private alertService: AlertService,
@@ -59,6 +60,7 @@ export class IndustryAreaPage implements OnInit {
     private getAll() {
         this.httpRequestService.read('industry-areas').then(data => {
             this.items = data.data_response;
+            (this.items.length === 0) ? this.noRecord = true : this.noRecord = false;
         }).catch(err => console.error(err))
         ;
     }

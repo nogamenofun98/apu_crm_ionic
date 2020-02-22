@@ -18,6 +18,7 @@ import {map} from 'rxjs/operators';
 export class CompanyPage implements OnInit {
     searchString: any;
     items: any;
+    noRecord: boolean;
 
     constructor(private http: HttpClient,
                 private alertService: AlertService,
@@ -62,6 +63,7 @@ export class CompanyPage implements OnInit {
     private getAll() {
         this.httpRequestService.read('companies').then(data => {
             this.items = data.data_response;
+            (this.items.length === 0) ? this.noRecord = true : this.noRecord = false;
             for (const item of this.items) {
                 if (item.company_industry !== null) {
                     this.httpRequestService.read('industry-areas/' + encodeURIComponent(item.company_industry)).then(area => {

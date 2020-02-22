@@ -348,6 +348,9 @@
                                     <ion-label>Working Job List:</ion-label>
                                 </ion-col>
                                 <ion-col>
+                                    <ng-container *ngIf="noRecord">
+                                        <h4>No record found.</h4>
+                                    </ng-container>
                                     <ion-list *ngFor="let job of jobItems">
                                         <ion-item>
                                             <ion-label>

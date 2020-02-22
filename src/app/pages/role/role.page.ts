@@ -17,6 +17,7 @@ export class RolePage implements OnInit {
 
     roles: any;
     searchString: string;
+    noRecord: boolean;
 
     constructor(private http: HttpClient,
                 private alertService: AlertService,
@@ -41,6 +42,8 @@ export class RolePage implements OnInit {
     getAll() {
         this.httpRequestService.read('roles').then(data => {
             this.roles = data.data_response;
+            (this.roles.length === 0) ? this.noRecord = true : this.noRecord = false;
+
             for (const item of this.roles) {
                 let permissions = '';
                 const sum = Object.keys(item.user_role_json);
