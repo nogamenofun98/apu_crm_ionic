@@ -178,13 +178,8 @@ export class SingleConversationPage implements OnInit {
         this.httpRequestService.read('conversations/' + this.source + '/' + encodeURIComponent(id)).then((data) => {
             this.item = data.data_response;
             this.targetId = this.item.target_id; // target id
-            if (this.source === 'employee') {
-                this.httpRequestService.read('employees/' + this.targetId).then((employee) => {
-                    this.editForm.get('target_id').setValue(employee.data_response.employee_email);
-                });
-            }
             this.editForm = this.formBuilder.group({
-                target_id: ['', Validators.compose([
+                target_id: [this.item.target_id, Validators.compose([
                     Validators.required
                 ])],
                 conversation: [this.item.conversation, Validators.compose([])],
@@ -192,6 +187,11 @@ export class SingleConversationPage implements OnInit {
                     Validators.required
                 ])],
             });
+            if (this.source === 'employee') {
+                this.httpRequestService.read('employees/' + this.targetId).then((employee) => {
+                    this.editForm.get('target_id').setValue(employee.data_response.employee_email);
+                });
+            }
             this.getUserIndustryArea();
         }).catch(err => {
             console.error(err);
