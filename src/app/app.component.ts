@@ -90,20 +90,4 @@ export class AppComponent {
         });
     }
 
-    willclose() {
-        console.error('willclose');
-    }
-
-    didclose() {
-        console.error('didclose');
-    }
-
-    willopen() {
-        console.error('willopen');
-    }
-
-    didopen() {
-        console.error('didopen');
-    }
-
 }

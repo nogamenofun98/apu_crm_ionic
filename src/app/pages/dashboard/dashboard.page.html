@@ -74,14 +74,28 @@
                             </ion-row>
                         </ion-grid>
                         <ion-grid>
-                            <form (ngSubmit)="createForm.valid && getGraph(createForm)" *ngIf="source"
+                            <ion-row *ngIf="source">
+                                <ion-col>
+                                    <ion-item>
+                                        <ion-label>Chart:</ion-label>
+                                        <ion-select (ionChange)='createChart()' [(ngModel)]="chartType">
+                                            <ion-select-option value="bar">Bar</ion-select-option>
+                                            <ion-select-option value="pie">Pie</ion-select-option>
+                                            <ion-select-option value="doughnut">Doughnut</ion-select-option>
+                                            <ion-select-option value="polarArea">Polar Area</ion-select-option>
+                                            <!--                                            <ion-select-option value="line">Line</ion-select-option>-->
+                                        </ion-select>
+                                    </ion-item>
+                                </ion-col>
+                            </ion-row>
+                            <form (ngSubmit)="createForm.valid && getData(createForm)" *ngIf="source"
                                   [formGroup]="createForm">
                                 <ng-container *ngIf="source==='conversation'">
                                     <ion-row>
                                         <ion-col>
                                             <ion-item>
                                                 <ion-label>Type</ion-label>
-                                                <ion-select class="test" formControlName="conversationType">
+                                                <ion-select formControlName="conversationType">
                                                     <ion-select-option value="count">Top Conversation
                                                     </ion-select-option>
                                                     <ion-select-option value="track">Top Number of Open Link

@@ -18,6 +18,8 @@ export class DashboardPage implements OnInit {
     @ViewChild('Chart', {static: false}) Chart;
 
     chartObject: any;
+    chartType: any;
+    private keys = [];
     user: any;
     section: any;
     unassignedEmployees: any;
@@ -31,6 +33,7 @@ export class DashboardPage implements OnInit {
     postcodeError: boolean;
     createForm: FormGroup;
     private statusList: any;
+    private values = [];
 
     constructor(private httpRequestService: HttpRequestService,
                 private env: EnvService,
@@ -56,6 +59,7 @@ export class DashboardPage implements OnInit {
 
     ngOnInit() {
         this.section = 'home';
+        this.chartType = 'bar';
         this.getUnassignedEmployee();
         this.prepareChoice();
         this.getUserIndustryArea();
@@ -78,14 +82,38 @@ export class DashboardPage implements OnInit {
         });
     }
 
-    getGraph(createForm: FormGroup) {
-        let keys = [];
-        let values = [];
+    createChart() {
         if (this.chartObject) {
             if (typeof this.chartObject.destroy === 'function') {
                 this.chartObject.destroy();
             }
         }
+        this.chartObject = new Chart(this.Chart.nativeElement, {
+            type: this.chartType,
+            data: {
+                labels: this.keys,
+                datasets: [{
+                    label: 'Count',
+                    data: this.values,
+                    backgroundColor: ['rgba(255,255,0,0.5)', 'rgba(255,0,255,0.5)', 'rgba(128,128,128,0.5)', 'rgba(255,0,0,0.5)', 'rgba(0,255,0,0.5)', 'rgba(0,128,0,0.5)', 'rgba(0,0,255,0.5)', 'rgba(128,0,0,0.5)', 'rgba(128,0,128,0.5)', 'rgba(0,255,255,0.5)'],
+                    borderColor: ['rgba(255,255,0,1)', 'rgba(255,0,255,1)', 'rgba(128,128,128,1)', 'rgba(255,0,0,1)', 'rgba(0,255,0,1)', 'rgba(0,128,0,1)', 'rgba(0,0,255,1)', 'rgba(128,0,0,1)', 'rgba(128,0,128,1)', 'rgba(0,255,255,1)'],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    getData(createForm: FormGroup) {
+
         this.alertService.presentLoading().then(loading => {
             const loadingObject = loading;
             const body = {
@@ -107,39 +135,19 @@ export class DashboardPage implements OnInit {
             });
             this.httpRequestService.create('dashboards/report', JSON.stringify(body), headers).then(data => {
                 // tslint:disable-next-line:forin
+                this.keys = [];
+                this.values = [];
                 data.data_response.forEach((item) => {
-                    keys.push(item.name);
-                    values.push(item.number);
+                    this.keys.push(item.name);
+                    this.values.push(item.number);
                 });
-                this.chartObject = new Chart(this.Chart.nativeElement, {
-                    type: 'bar',
-                    data: {
-                        labels: keys,
-                        datasets: [{
-                            label: 'Count',
-                            data: values,
-                            backgroundColor: 'rgb(38, 194, 129)',
-                            borderColor: 'rgb(38, 194, 129)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        }
-                    }
-                });
+                this.createChart();
+
             }).catch(err => console.error(err)).finally(() => {
                 loadingObject.dismiss();
             })
             ;
         });
-        keys = [];
-        values = [];
         return false;
     }
 
