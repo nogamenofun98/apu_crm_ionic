@@ -306,7 +306,7 @@ export class SingleCompanyPage implements OnInit {
     private getEmployeeList(id: any) {
         this.httpRequestService.read('companies/' + id + '/employee-list').then((data) => {
             this.employeeItems = data.data_response;
-            (this.employeeItems == null) ? this.noEmployeeRecord = true : this.noEmployeeRecord = false;
+            (this.employeeItems.length === 0) ? this.noEmployeeRecord = true : this.noEmployeeRecord = false;
         });
     }
 }
