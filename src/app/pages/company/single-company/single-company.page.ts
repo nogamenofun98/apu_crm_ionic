@@ -28,6 +28,8 @@ export class SingleCompanyPage implements OnInit {
     contactForm: FormGroup;
     employeeId = '';
     noRecord: boolean;
+    employeeItems = [];
+    noEmployeeRecord: boolean;
 
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
@@ -276,6 +278,7 @@ export class SingleCompanyPage implements OnInit {
             // this.editForm.get('company_industry_id').setValue(this.item.company_industry);
             this.getUserIndustryArea();
             this.getContactList(this.id);
+            this.getEmployeeList(this.id);
         }).catch(err => {
             console.error(err);
             this.navCtrl.navigateBack('/companies');
@@ -298,5 +301,12 @@ export class SingleCompanyPage implements OnInit {
         });
         (this.contactItems == null) ? this.noRecord = true : this.noRecord = false;
 
+    }
+
+    private getEmployeeList(id: any) {
+        this.httpRequestService.read('companies/' + id + '/employee-list').then((data) => {
+            this.employeeItems = data.data_response;
+            (this.employeeItems == null) ? this.noEmployeeRecord = true : this.noEmployeeRecord = false;
+        });
     }
 }

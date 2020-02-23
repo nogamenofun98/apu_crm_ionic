@@ -22,32 +22,32 @@ export class AppComponent {
         {
             title: 'Industry Area',
             url: '/industry-areas',
-            icon: 'list'
+            icon: 'compass'
         },
         {
             title: 'User Role',
             url: '/roles',
-            icon: 'list'
+            icon: 'eye'
         },
         {
             title: 'User',
             url: '/users',
-            icon: 'list'
+            icon: 'people'
         },
         {
             title: 'Company',
             url: '/companies',
-            icon: 'list'
+            icon: 'business'
         },
         {
             title: 'Employee',
             url: '/employees',
-            icon: 'list'
+            icon: 'briefcase'
         },
         {
             title: 'Conversation',
             url: '/conversations',
-            icon: 'list'
+            icon: 'mail'
         },
     ];
 

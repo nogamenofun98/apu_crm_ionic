@@ -15,6 +15,9 @@
         <ion-segment-button value="contact">
             Contacts
         </ion-segment-button>
+        <ion-segment-button value="employee">
+            Employees
+        </ion-segment-button>
     </ion-segment>
 
     <ng-container [ngSwitch]="section">
@@ -286,8 +289,6 @@
             </div>
 
         </ng-container>
-
-
         <ng-container *ngSwitchCase="'contact'">
             <ion-card>
                 <ion-card-header>
@@ -332,7 +333,7 @@
                                         <ion-item>
                                             <ion-label>
                                                 <ion-chip routerLink="/employees/{{contact.id}}">
-                                                    <ion-icon color="dark" name="business"></ion-icon>
+                                                    <ion-icon color="dark" name="person"></ion-icon>
                                                     <ion-label>{{contact.name}}</ion-label>
                                                 </ion-chip>
                                             </ion-label>
@@ -352,6 +353,56 @@
                                 <ion-col size="auto">
                                     Contact List:
                                 </ion-col>
+                                <ion-col>
+                                    <ion-list>
+                                        <ion-item>
+                                            <ion-label>
+                                                <ion-skeleton-text animated style="width: 30%;"></ion-skeleton-text>
+                                            </ion-label>
+                                        </ion-item>
+                                    </ion-list>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                </ion-card-content>
+            </ion-card>
+        </ng-container>
+        <ng-container *ngSwitchCase="'employee'">
+            <ion-card>
+                <ion-card-header>
+                    <ion-card-title>List of Employees:</ion-card-title>
+                </ion-card-header>
+                <ion-card-content>
+                    <div *ngIf="employeeItems || employeeItems == null">
+                        <ion-grid>
+                            <ion-row>
+                                <ion-col>
+                                    <ng-container *ngIf="noEmployeeRecord">
+                                        <h4>No record found.</h4>
+                                    </ng-container>
+                                    <ion-list *ngFor="let employee of employeeItems">
+                                        <ion-item>
+                                            <ion-label>
+                                                <ion-chip routerLink="/employees/{{employee.employee_id}}">
+                                                    <ion-icon color="dark" name="person"></ion-icon>
+                                                    <ion-label>{{employee.full_name}}</ion-label>
+                                                </ion-chip>
+                                                <ion-text>
+                                                    Designation: {{employee.designation}},
+                                                    Department: {{employee.department}}, Hired
+                                                    Time: {{employee.hired_time | date: 'dd/MM/yyyy'}}
+                                                </ion-text>
+                                            </ion-label>
+                                        </ion-item>
+                                    </ion-list>
+                                </ion-col>
+                            </ion-row>
+                        </ion-grid>
+                    </div>
+                    <div *ngIf="!employeeItems && !employeeItems == null">
+                        <ion-grid>
+                            <ion-row>
                                 <ion-col>
                                     <ion-list>
                                         <ion-item>
