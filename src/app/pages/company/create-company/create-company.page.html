@@ -20,7 +20,7 @@
 
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
         <ion-item>
-            <ion-label position="floating">Company Registration Number:</ion-label>
+            <ion-label position="floating">Company Registration Number*:</ion-label>
             <ion-input (ionChange)="checkRegNum()" debounce="150" formControlName="company_reg_num" required="true"
                        type="text"></ion-input>
             <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
@@ -36,7 +36,7 @@
         </div>
 
         <ion-item>
-            <ion-label position="floating">Company Name:</ion-label>
+            <ion-label position="floating">Company Name*:</ion-label>
             <ion-input formControlName="company_name" required="true" type="text"></ion-input>
         </ion-item>
         <div *ngIf="createForm.controls.company_name.invalid && (createForm.controls.company_name.dirty || createForm.controls.company_name.touched)"
@@ -45,7 +45,7 @@
         </div>
 
         <ion-item>
-            <ion-label position="floating">Company Size:</ion-label>
+            <ion-label position="floating">Company Size*:</ion-label>
             <ion-input formControlName="company_size" min="1" required="true"
                        type="number"></ion-input>
         </ion-item>
@@ -55,7 +55,7 @@
         </div>
         <ng-container *ngIf="isManageAll">
             <ion-item>
-                <ion-label>Industry Area:</ion-label>
+                <ion-label>Industry Area*:</ion-label>
                 <ion-select formControlName="company_industry_id" required="true">
                     <ng-container *ngFor="let val of industryList">
                         <ion-select-option *ngIf="val.is_read_only==false" [value]="val.industry_id">
@@ -71,13 +71,13 @@
         </ng-container>
         <ng-container *ngIf="!isManageAll">
             <ion-item>
-                <ion-label position="floating">Industry Area:</ion-label>
+                <ion-label position="floating">Industry Area*:</ion-label>
                 <ion-input disabled="true" type="text" value="{{industryItem?.name}}"></ion-input>
             </ion-item>
         </ng-container>
 
         <ion-item>
-            <ion-label position="floating">Company Description:</ion-label>
+            <ion-label position="floating">Company Description*:</ion-label>
             <ion-input formControlName="company_desc" required="true" type="text"></ion-input>
         </ion-item>
         <div *ngIf="createForm.controls.company_desc.invalid && (createForm.controls.company_desc.dirty || createForm.controls.company_desc.touched)"
@@ -115,7 +115,7 @@
         </ion-item>
 
         <ion-item>
-            <ion-label position="floating">Company Phone Number:</ion-label>
+            <ion-label position="floating">Company Phone Number*:</ion-label>
             <ion-input formControlName="company_office_contact_num" required="true"
                        type="tel"></ion-input>
         </ion-item>

@@ -48,7 +48,7 @@
                     <ion-grid>
                         <ion-row>
                             <ion-col>
-                                <ion-card-title>Area:</ion-card-title>
+                                <ion-card-title>Area*:</ion-card-title>
                                 <ion-item>
                                     <ion-label *ngIf="!isEdit">{{item.industry_name}}</ion-label>
                                     <ion-input *ngIf="isEdit"
@@ -56,6 +56,10 @@
                                                color="primary" formControlName="industry_name"
                                                type="text"></ion-input>
                                 </ion-item>
+                                <div *ngIf="editForm.controls.industry_name.invalid && (editForm.controls.industry_name.dirty || editForm.controls.industry_name.touched)"
+                                     class="alert alert-danger">
+                                    <div *ngIf="editForm.controls.industry_name.errors?.required">Name is required</div>
+                                </div>
                             </ion-col>
                         </ion-row>
                     </ion-grid>

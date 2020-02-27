@@ -59,7 +59,7 @@
                             <ion-grid>
                                 <ion-row>
                                     <ion-col>
-                                        <ion-card-title>Employee:</ion-card-title>
+                                        <ion-card-title>Employee*:</ion-card-title>
                                         <ion-item>
                                             <ion-label *ngIf="!isEdit">{{item.employee_full_name}}</ion-label>
                                             <ion-input *ngIf="isEdit" [appDisableControl]="!isEdit"
@@ -100,7 +100,7 @@
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-label position="floating">APU alumnus?:</ion-label>
+                                            <ion-label position="floating">APU alumnus*:</ion-label>
                                             <ion-select [appDisableControl]="!isEdit" formControlName="employee_alumnus"
                                                         required="true">
                                                 <ion-select-option [value]="true">True</ion-select-option>
@@ -131,7 +131,7 @@
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-label position="floating">Graduated Date:</ion-label>
+                                            <ion-label>Graduated Date:</ion-label>
                                             <ion-input [appDisableControl]="!isEdit"
                                                        formControlName="employee_grad_time"
                                                        type="date"></ion-input>
@@ -144,7 +144,7 @@
                                     <ion-col>
                                         <ng-container *ngIf="isManageAll">
                                             <ion-item>
-                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-label position="floating">Industry Area*:</ion-label>
                                                 <ion-select [appDisableControl]="!isEdit"
                                                             formControlName="employee_industry_id" required="true">
                                                     <ng-container *ngFor="let val of industryList">
@@ -232,7 +232,7 @@
                                         <ion-item>
                                             <ion-label position="floating">Employee Contact Number:</ion-label>
                                             <ion-input [appDisableControl]="!isEdit"
-                                                       formControlName="employee_contact_num" required="true"
+                                                       formControlName="employee_contact_num"
                                                        type="tel"></ion-input>
                                         </ion-item>
                                         <div *ngIf="editForm.controls.employee_contact_num.invalid && (editForm.controls.employee_contact_num.dirty || editForm.controls.employee_contact_num.touched)"

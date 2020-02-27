@@ -63,7 +63,7 @@
                             <ion-grid>
                                 <ion-row>
                                     <ion-col>
-                                        <ion-card-title>Company:</ion-card-title>
+                                        <ion-card-title>Company*:</ion-card-title>
                                         <ion-item>
                                             <ion-label *ngIf="!isEdit">{{item.company_name}}</ion-label>
                                             <ion-input *ngIf="isEdit" [appDisableControl]="!isEdit"
@@ -86,7 +86,7 @@
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-label position="floating">Company Registration Number:</ion-label>
+                                            <ion-label position="floating">Company Registration Number*:</ion-label>
                                             <ion-input (ionChange)="checkRegNum()"
                                                        [appDisableControl]="!isEdit" debounce="150"
                                                        formControlName="company_reg_num"
@@ -115,7 +115,7 @@
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-label position="floating">Company Size:</ion-label>
+                                            <ion-label position="floating">Company Size*:</ion-label>
                                             <ion-input [appDisableControl]="!isEdit"
                                                        formControlName="company_size" min="1" required="true"
                                                        type="number"></ion-input>
@@ -132,7 +132,7 @@
                                     <ion-col>
                                         <ng-container *ngIf="isManageAll">
                                             <ion-item>
-                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-label position="floating">Industry Area*:</ion-label>
                                                 <ion-select [appDisableControl]="!isEdit"
                                                             formControlName="company_industry_id" required="true">
                                                     <ng-container *ngFor="let val of industryList">
@@ -153,7 +153,7 @@
                                         </ng-container>
                                         <ng-container *ngIf="!isManageAll">
                                             <ion-item>
-                                                <ion-label position="floating">Industry Area:</ion-label>
+                                                <ion-label position="floating">Industry Area*:</ion-label>
                                                 <ion-input disabled="true" type="text"
                                                            value="{{industryItem?.name}}"></ion-input>
                                             </ion-item>
@@ -163,7 +163,7 @@
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-label position="floating">Company Description:</ion-label>
+                                            <ion-label position="floating">Company Description*:</ion-label>
                                             <ion-input [appDisableControl]="!isEdit"
                                                        formControlName="company_desc" required="true"
                                                        type="text"></ion-input>
@@ -234,7 +234,7 @@
                                 <ion-row>
                                     <ion-col>
                                         <ion-item>
-                                            <ion-label position="floating">Company Phone Number:</ion-label>
+                                            <ion-label position="floating">Company Phone Number*:</ion-label>
                                             <ion-input [appDisableControl]="!isEdit"
                                                        formControlName="company_office_contact_num" required="true"
                                                        type="tel"></ion-input>

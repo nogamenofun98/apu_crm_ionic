@@ -44,24 +44,26 @@ export class SingleUserPage implements OnInit {
     }
 
     submitForm() {
-        this.alertService.presentLoading().then(loading => {
-            const loadingObject = loading;
-            const body = {
-                user_role: this.editForm.get('user_role').value,
-                user_handle_industry: this.editForm.get('user_handle_industry').value,
-            };
-            const headers = new HttpHeaders({
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+        if (this.editForm.valid) {
+            this.alertService.presentLoading().then(loading => {
+                const loadingObject = loading;
+                const body = {
+                    user_role: this.editForm.get('user_role').value,
+                    user_handle_industry: this.editForm.get('user_handle_industry').value,
+                };
+                const headers = new HttpHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                });
+                this.httpRequestService.update('users/' + this.id, JSON.stringify(body), headers).then(data => {
+                    this.alertService.presentToast(data.message, 'success', 1500, false);
+                    this.isEdit = false;
+                    this.getItem(this.id);
+                }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+                ;
             });
-            this.httpRequestService.update('users/' + this.id, JSON.stringify(body), headers).then(data => {
-                this.alertService.presentToast(data.message, 'success', 1500, false);
-                this.isEdit = false;
-                this.getItem(this.id);
-            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
-            ;
-        });
+        }
     }
 
     async showMenu() {

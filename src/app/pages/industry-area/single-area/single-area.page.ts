@@ -52,24 +52,26 @@ export class SingleAreaPage implements OnInit {
     }
 
     submitForm() {
-        this.alertService.presentLoading().then(loading => {
-            const loadingObject = loading;
-            const body = {
-                industry_name: this.editForm.get('industry_name').value,
-                industry_desc: this.editForm.get('industry_desc').value,
-            };
-            const headers = new HttpHeaders({
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+        if (this.editForm.valid) {
+            this.alertService.presentLoading().then(loading => {
+                const loadingObject = loading;
+                const body = {
+                    industry_name: this.editForm.get('industry_name').value,
+                    industry_desc: this.editForm.get('industry_desc').value,
+                };
+                const headers = new HttpHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                });
+                this.httpRequestService.update('industry-areas/' + this.id, JSON.stringify(body), headers).then(data => {
+                    this.alertService.presentToast(data.message, 'success', 1500, false);
+                    this.isEdit = false;
+                    this.getItem(this.id);
+                }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+                ;
             });
-            this.httpRequestService.update('industry-areas/' + this.id, JSON.stringify(body), headers).then(data => {
-                this.alertService.presentToast(data.message, 'success', 1500, false);
-                this.isEdit = false;
-                this.getItem(this.id);
-            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
-            ;
-        });
+        }
     }
 
     private getItem(id: string) {

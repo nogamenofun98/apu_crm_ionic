@@ -20,8 +20,8 @@
 
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
         <ion-item>
-            <ion-label position="floating">Role Description</ion-label>
-            <ion-input formControlName="user_role_description" type="text"></ion-input>
+            <ion-label position="floating">Role Description*:</ion-label>
+            <ion-input formControlName="user_role_description" required="true" type="text"></ion-input>
 
         </ion-item>
         <div *ngIf="createForm.controls.user_role_description.invalid && (createForm.controls.user_role_description.dirty || createForm.controls.user_role_description.touched)"
@@ -133,12 +133,12 @@
                             <ion-label class="label-title">Report Module</ion-label>
                         </ion-item>
                     </ion-col>
-                    <ion-col>
-                        <ion-item>
-                            <ion-label>View only</ion-label>
-                            <ion-toggle checked="false" formControlName="report_view"></ion-toggle>
-                        </ion-item>
-                    </ion-col>
+                    <!--                    <ion-col>-->
+                    <!--                        <ion-item>-->
+                    <!--                            <ion-label>View only</ion-label>-->
+                    <!--                            <ion-toggle checked="false" formControlName="report_view"></ion-toggle>-->
+                    <!--                        </ion-item>-->
+                    <!--                    </ion-col>-->
                     <ion-col>
                         <ion-item>
                             <ion-label>Full access</ion-label>

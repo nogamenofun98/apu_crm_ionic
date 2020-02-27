@@ -123,33 +123,35 @@ export class SingleCompanyPage implements OnInit {
     }
 
     submitForm() {
-        this.alertService.presentLoading().then(loading => {
-            const loadingObject = loading;
-            const body = {
-                company_reg_num: this.editForm.get('company_reg_num').value,
-                company_name: this.editForm.get('company_name').value,
-                company_size: this.editForm.get('company_size').value,
-                company_industry_id: this.editForm.get('company_industry_id').value,
-                company_desc: this.editForm.get('company_desc').value,
-                company_address: this.editForm.get('company_address').value,
-                company_postcode: this.editForm.get('company_postcode').value,
-                company_city: this.editForm.get('company_city').value,
-                company_state: this.editForm.get('company_state').value,
-                company_country: this.editForm.get('company_country').value,
-                company_office_contact_num: this.editForm.get('company_office_contact_num').value,
-            };
-            const headers = new HttpHeaders({
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+        if (this.editForm.valid) {
+            this.alertService.presentLoading().then(loading => {
+                const loadingObject = loading;
+                const body = {
+                    company_reg_num: this.editForm.get('company_reg_num').value,
+                    company_name: this.editForm.get('company_name').value,
+                    company_size: this.editForm.get('company_size').value,
+                    company_industry_id: this.editForm.get('company_industry_id').value,
+                    company_desc: this.editForm.get('company_desc').value,
+                    company_address: this.editForm.get('company_address').value,
+                    company_postcode: this.editForm.get('company_postcode').value,
+                    company_city: this.editForm.get('company_city').value,
+                    company_state: this.editForm.get('company_state').value,
+                    company_country: this.editForm.get('company_country').value,
+                    company_office_contact_num: this.editForm.get('company_office_contact_num').value,
+                };
+                const headers = new HttpHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                });
+                this.httpRequestService.update('companies/' + this.id, JSON.stringify(body), headers).then(data => {
+                    this.alertService.presentToast(data.message, 'success', 1500, false);
+                    this.isEdit = false;
+                    this.getItem(this.editForm.get('company_reg_num').value);
+                }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+                ;
             });
-            this.httpRequestService.update('companies/' + this.id, JSON.stringify(body), headers).then(data => {
-                this.alertService.presentToast(data.message, 'success', 1500, false);
-                this.isEdit = false;
-                this.getItem(this.editForm.get('company_reg_num').value);
-            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
-            ;
-        });
+        }
     }
 
     checkRegNum() {

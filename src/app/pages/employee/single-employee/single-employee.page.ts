@@ -129,34 +129,36 @@ export class SingleEmployeePage implements OnInit {
     }
 
     submitForm() {
-        this.alertService.presentLoading().then(loading => {
-            const loadingObject = loading;
-            const body = {
-                employee_full_name: this.editForm.get('employee_full_name').value,
-                employee_email: this.editForm.get('employee_email').value,
-                employee_alumnus: this.editForm.get('employee_alumnus').value,
-                employee_intake_code: this.editForm.get('employee_intake_code').value,
-                employee_grad_time: this.editForm.get('employee_grad_time').value,
-                employee_industry_id: this.editForm.get('employee_industry_id').value,
-                employee_address: this.editForm.get('employee_address').value,
-                employee_postcode: this.editForm.get('employee_postcode').value,
-                employee_city: this.editForm.get('employee_city').value,
-                employee_state: this.editForm.get('employee_state').value,
-                employee_country: this.editForm.get('employee_country').value,
-                employee_contact_num: this.editForm.get('employee_contact_num').value,
-            };
-            const headers = new HttpHeaders({
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+        if (this.editForm.valid) {
+            this.alertService.presentLoading().then(loading => {
+                const loadingObject = loading;
+                const body = {
+                    employee_full_name: this.editForm.get('employee_full_name').value,
+                    employee_email: this.editForm.get('employee_email').value,
+                    employee_alumnus: this.editForm.get('employee_alumnus').value,
+                    employee_intake_code: this.editForm.get('employee_intake_code').value,
+                    employee_grad_time: this.editForm.get('employee_grad_time').value,
+                    employee_industry_id: this.editForm.get('employee_industry_id').value,
+                    employee_address: this.editForm.get('employee_address').value,
+                    employee_postcode: this.editForm.get('employee_postcode').value,
+                    employee_city: this.editForm.get('employee_city').value,
+                    employee_state: this.editForm.get('employee_state').value,
+                    employee_country: this.editForm.get('employee_country').value,
+                    employee_contact_num: this.editForm.get('employee_contact_num').value,
+                };
+                const headers = new HttpHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                });
+                this.httpRequestService.update('employees/' + this.id, JSON.stringify(body), headers).then(data => {
+                    this.alertService.presentToast(data.message, 'success', 1500, false);
+                    this.isEdit = false;
+                    this.getItem(this.id);
+                }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+                ;
             });
-            this.httpRequestService.update('employees/' + this.id, JSON.stringify(body), headers).then(data => {
-                this.alertService.presentToast(data.message, 'success', 1500, false);
-                this.isEdit = false;
-                this.getItem(this.id);
-            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
-            ;
-        });
+        }
     }
 
     createJob() {

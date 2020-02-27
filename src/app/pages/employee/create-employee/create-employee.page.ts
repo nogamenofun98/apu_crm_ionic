@@ -34,10 +34,6 @@ export class CreateEmployeePage implements OnInit {
             ])],
             employee_intake_code: ['', Validators.compose([])],
             employee_grad_time: ['', Validators.compose([])],
-            employee_current_company_Id: [{value: '', disabled: true}, Validators.compose([])],
-            current_job_designation: ['', Validators.compose([])],
-            current_job_department: ['', Validators.compose([])],
-            current_job_hired_date: ['', Validators.compose([])],
             employee_industry_id: ['', Validators.compose([])],
             employee_address: ['', Validators.compose([])],
             employee_postcode: ['', Validators.compose([
@@ -74,10 +70,6 @@ export class CreateEmployeePage implements OnInit {
                 employee_alumnus: form.get('employee_alumnus').value,
                 employee_intake_code: form.get('employee_intake_code').value,
                 employee_grad_time: form.get('employee_grad_time').value,
-                employee_current_company_Id: form.get('employee_current_company_Id').value,
-                current_job_designation: form.get('current_job_designation').value,
-                current_job_department: form.get('current_job_department').value,
-                current_job_hired_date: form.get('current_job_hired_date').value,
                 employee_industry_id: form.get('employee_industry_id').value,
                 employee_address: form.get('employee_address').value,
                 employee_postcode: form.get('employee_postcode').value,
@@ -125,32 +117,5 @@ export class CreateEmployeePage implements OnInit {
         this.httpRequestService.read('industry-areas').then(data => {
             this.industryList = data.data_response;
         }).catch(err => console.error(err));
-    }
-
-    private getCompany() {
-        const regNum = this.createForm.get('employee_current_company_Id').value;
-        if (regNum !== '') {
-            this.createForm.get('employee_current_company_Id').setErrors({asd: true}); // prevent the form submit before the http req comes back
-            this.isChecking = true;
-            this.httpRequestService.read('companies/check-comp-reg-num/' + encodeURIComponent(regNum)).then(data => {
-                const result = data.data_response;
-                if (data.hasOwnProperty('data_response')) {
-                    if (result.company_industry === this.createForm.get('employee_industry_id').value) {
-                        this.createForm.get('employee_current_company_Id').setErrors(null);
-                    } else {
-                        // company not belong to the area
-                        this.createForm.get('employee_current_company_Id').setErrors({notFound: true});
-                    }
-                } else {
-                    // meaning comp id not found
-                    this.createForm.get('employee_current_company_Id').setErrors({notFound: true});
-                }
-
-            }).catch(() => {
-                this.createForm.get('employee_current_company_Id').setErrors({notFound: true});
-            }).finally(() => {
-                this.isChecking = false;
-            });
-        }
     }
 }

@@ -20,8 +20,8 @@
 
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
         <ion-item>
-            <ion-label position="floating">Industry Area Name</ion-label>
-            <ion-input formControlName="industry_name" type="text"></ion-input>
+            <ion-label position="floating">Industry Area Name*:</ion-label>
+            <ion-input formControlName="industry_name" required="true" type="text"></ion-input>
 
         </ion-item>
         <div *ngIf="createForm.controls.industry_name.invalid && (createForm.controls.industry_name.dirty || createForm.controls.industry_name.touched)"

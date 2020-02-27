@@ -41,32 +41,34 @@ export class SingleRolePage implements OnInit {
     }
 
     submitForm() {
-        this.alertService.presentLoading().then(loading => {
-            const loadingObject = loading;
-            const roles = (this.editForm.get('role_full').value === true) ? 'full' : (this.editForm.get('role_view').value === true) ? 'view' : 'deny';
-            const areas = (this.editForm.get('area_full').value === true) ? 'full' : (this.editForm.get('area_view').value === true) ? 'view' : 'deny';
-            const users = (this.editForm.get('user_full').value === true) ? 'full' : (this.editForm.get('user_view').value === true) ? 'view' : 'deny';
-            const companies = (this.editForm.get('company_full').value === true) ? 'full' : (this.editForm.get('company_view').value === true) ? 'view' : 'deny';
-            const employees = (this.editForm.get('employee_full').value === true) ? 'full' : (this.editForm.get('employee_view').value === true) ? 'view' : 'deny';
-            const reports = (this.editForm.get('report_full').value === true) ? 'full' : (this.editForm.get('report_view').value === true) ? 'view' : 'deny';
-            const conversations = (this.editForm.get('conversation_full').value === true) ? 'full' : (this.editForm.get('conversation_view').value === true) ? 'view' : 'deny';
-            const body = {
-                user_role_description: this.editForm.get('user_role_description').value,
-                user_role_json: {roles, areas, users, companies, employees, reports, conversations}
-            };
-            const headers = new HttpHeaders({
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            });
-            this.httpRequestService.update('roles/' + this.id, JSON.stringify(body), headers).then(data => {
-                this.alertService.presentToast(data.message, 'success', 1500, false);
-                this.isEdit = false;
-                this.getItem(this.id);
+        if (this.editForm.valid) {
+            this.alertService.presentLoading().then(loading => {
+                const loadingObject = loading;
+                const roles = (this.editForm.get('role_full').value === true) ? 'full' : (this.editForm.get('role_view').value === true) ? 'view' : 'deny';
+                const areas = (this.editForm.get('area_full').value === true) ? 'full' : (this.editForm.get('area_view').value === true) ? 'view' : 'deny';
+                const users = (this.editForm.get('user_full').value === true) ? 'full' : (this.editForm.get('user_view').value === true) ? 'view' : 'deny';
+                const companies = (this.editForm.get('company_full').value === true) ? 'full' : (this.editForm.get('company_view').value === true) ? 'view' : 'deny';
+                const employees = (this.editForm.get('employee_full').value === true) ? 'full' : (this.editForm.get('employee_view').value === true) ? 'view' : 'deny';
+                const reports = (this.editForm.get('report_full').value === true) ? 'full' : (this.editForm.get('report_view').value === true) ? 'view' : 'deny';
+                const conversations = (this.editForm.get('conversation_full').value === true) ? 'full' : (this.editForm.get('conversation_view').value === true) ? 'view' : 'deny';
+                const body = {
+                    user_role_description: this.editForm.get('user_role_description').value,
+                    user_role_json: {roles, areas, users, companies, employees, reports, conversations}
+                };
+                const headers = new HttpHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                });
+                this.httpRequestService.update('roles/' + this.id, JSON.stringify(body), headers).then(data => {
+                    this.alertService.presentToast(data.message, 'success', 1500, false);
+                    this.isEdit = false;
+                    this.getItem(this.id);
 
-            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
-            ;
-        });
+                }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+                ;
+            });
+        }
     }
 
     async delete() {

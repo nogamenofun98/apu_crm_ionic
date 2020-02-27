@@ -92,25 +92,27 @@ export class SingleConversationPage implements OnInit {
     }
 
     submitForm() {
-        this.alertService.presentLoading().then(loading => {
-            const loadingObject = loading;
-            const body = {
-                target_id: this.targetId,
-                conversation: this.editForm.get('conversation').value,
-                status_id: this.editForm.get('status_id').value,
-            };
-            const headers = new HttpHeaders({
-                'Access-Control-Allow-Origin': '*',
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
+        if (this.editForm.valid) {
+            this.alertService.presentLoading().then(loading => {
+                const loadingObject = loading;
+                const body = {
+                    target_id: this.targetId,
+                    conversation: this.editForm.get('conversation').value,
+                    status_id: this.editForm.get('status_id').value,
+                };
+                const headers = new HttpHeaders({
+                    'Access-Control-Allow-Origin': '*',
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                });
+                this.httpRequestService.update('conversations/' + this.source + '/' + this.id, JSON.stringify(body), headers).then(data => {
+                    this.alertService.presentToast(data.message, 'success', 1500, false);
+                    this.isEdit = false;
+                    this.getItem(this.id);
+                }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
+                ;
             });
-            this.httpRequestService.update('conversations/' + this.source + '/' + this.id, JSON.stringify(body), headers).then(data => {
-                this.alertService.presentToast(data.message, 'success', 1500, false);
-                this.isEdit = false;
-                this.getItem(this.id);
-            }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
-            ;
-        });
+        }
     }
 
     checkExist() {

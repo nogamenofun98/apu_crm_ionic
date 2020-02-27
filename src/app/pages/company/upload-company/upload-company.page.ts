@@ -45,7 +45,6 @@ export class UploadCompanyPage implements OnInit {
                 'Accept': 'application/json',
             });
             this.http.post<any>(this.env.API_URL + 'companies/uploader', formData, {headers}).toPromise().then(data => {
-                console.error('data: ', data);
                 this.alertService.presentToast(data.message, 'success', 1500, false);
             }).catch(error => {
                 console.error(error);

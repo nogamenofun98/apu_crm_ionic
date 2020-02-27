@@ -20,7 +20,7 @@
 
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm" autocomplete="off">
         <ion-item>
-            <ion-label position="floating">Employee Full Name:</ion-label>
+            <ion-label position="floating">Employee Full Name*:</ion-label>
             <ion-input formControlName="employee_full_name" required="true" type="text"></ion-input>
         </ion-item>
         <div *ngIf="createForm.controls.employee_full_name.invalid && (createForm.controls.employee_full_name.dirty || createForm.controls.employee_full_name.touched)"
@@ -38,7 +38,7 @@
         </div>
 
         <ion-item>
-            <ion-label position="floating">APU alumnus?:</ion-label>
+            <ion-label position="floating">APU alumnus*:</ion-label>
             <ion-select formControlName="employee_alumnus" required="true">
                 <ion-select-option [value]="true">True</ion-select-option>
                 <ion-select-option [value]="false">False</ion-select-option>
@@ -79,26 +79,6 @@
                 <ion-input disabled="true" type="text" value="{{industryItem?.name}}"></ion-input>
             </ion-item>
         </ng-container>
-
-        <ion-item>
-            <ion-label position="floating">Current Working Company (Reg ID):</ion-label>
-            <ion-input (ionChange)="getCompany()" debounce="150" formControlName="employee_current_company_Id"
-                       type="text"></ion-input>
-            <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
-
-
-            <ion-icon *ngIf="!isChecking && !createForm.controls.employee_current_company_Id.invalid" color="success"
-                      name="checkmark-circle-outline" slot="end"></ion-icon>
-            <ion-icon *ngIf="!isChecking && createForm.controls.employee_current_company_Id.errors?.notFound"
-                      color="danger"
-                      name="close-circle-outline" slot="end"></ion-icon>
-        </ion-item>
-        <div *ngIf="createForm.controls.employee_current_company_Id.invalid && (createForm.controls.employee_current_company_Id.dirty || createForm.controls.employee_current_company_Id.touched)"
-             class="alert alert-danger">
-            <div *ngIf="createForm.controls.employee_current_company_Id.errors?.notFound">Registration Number not
-                found or not under selected industry area
-            </div>
-        </div>
         <ion-item>
             <ion-label position="floating">Designation:</ion-label>
             <ion-input formControlName="current_job_designation" type="text"></ion-input>
