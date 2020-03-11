@@ -67,30 +67,14 @@
                     <ion-grid>
                         <ion-row>
                             <ion-col>
+                                <ion-input formControlName="target_name" style="display: none" type="text"></ion-input>
                                 <ion-item>
-                                    <ion-label
-                                            position="floating">{{(source == "company") ? "Company Reg Num*" : "Employee Email*"}}
-                                        :
-                                    </ion-label>
-                                    <ion-input (ionChange)="checkExist()" [appDisableControl]="!isEdit" debounce="150"
-                                               formControlName="target_id"
-                                               required="true"
-                                               type="text"></ion-input>
-                                    <ion-spinner *ngIf="isChecking" name="crescent" slot="end"></ion-spinner>
-                                    <ion-icon *ngIf="!isChecking && !editForm.controls.target_id.invalid"
-                                              color="success"
-                                              name="checkmark-circle-outline" slot="end"></ion-icon>
-                                    <ion-icon *ngIf="!isChecking && editForm.controls.target_id.errors?.notFound"
-                                              color="danger"
-                                              name="close-circle-outline" slot="end"></ion-icon>
+                                    <ion-label>{{(source == "company") ? "Company Name*" : "Employee Name*"}}
+                                        : {{editForm.controls.target_name.value}}</ion-label>
+                                    <ion-button (click)="openSearch()" color="secondary" disabled="{{!isEdit}}"
+                                                size="default" type="button">Search
+                                    </ion-button>
                                 </ion-item>
-                                <div *ngIf="editForm.controls.target_id.invalid && (editForm.controls.target_id.dirty || editForm.controls.target_id.touched)"
-                                     class="alert alert-danger">
-                                    <div *ngIf="editForm.controls.target_id.errors?.required">Target is required</div>
-                                    <div *ngIf="editForm.controls.target_id.errors?.notFound">Target not found or not
-                                        under selected industry area
-                                    </div>
-                                </div>
                             </ion-col>
                         </ion-row>
                         <ion-row>

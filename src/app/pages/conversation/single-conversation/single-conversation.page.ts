@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {EnvService} from '../../../services/env.service';
-import {ActionSheetController, NavController} from '@ionic/angular';
+import {ActionSheetController, ModalController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpRequestService} from '../../../services/http-request.service';
 import {AuthService} from '../../../services/auth.service';
 import {HttpHeaders} from '@angular/common/http';
+import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @Component({
     selector: 'app-single-conversation',
@@ -31,6 +32,7 @@ export class SingleConversationPage implements OnInit {
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
                 private actionSheetController: ActionSheetController,
+                private modalController: ModalController,
                 private alertService: AlertService,
                 private navCtrl: NavController,
                 private formBuilder: FormBuilder,
@@ -117,9 +119,9 @@ export class SingleConversationPage implements OnInit {
     }
 
     checkExist() {
-        const targetId = this.editForm.get('target_id').value;
+        const targetId = this.editForm.get('target_name').value;
         if (targetId !== '') {
-            this.editForm.get('target_id').setErrors({asd: true}); // prevent the form submit before the http req comes back
+            this.editForm.get('target_name').setErrors({asd: true}); // prevent the form submit before the http req comes back
             this.isChecking = true;
             let url = '';
             if (this.source === 'company') {
@@ -132,26 +134,26 @@ export class SingleConversationPage implements OnInit {
                 if (data.hasOwnProperty('data_response')) {
                     if (this.source === 'company') {
                         if (this.industryArea.name === 'All' || result.company_industry === this.industryArea.id) { // check comp is same area as user or not
-                            this.editForm.get('target_id').setErrors(null);
+                            this.editForm.get('target_name').setErrors(null);
                         } else {
                             // company not belong to the area
-                            this.editForm.get('target_id').setErrors({notFound: true});
+                            this.editForm.get('target_name').setErrors({notFound: true});
                         }
                         this.targetId = result.company_reg_num;
                     } else {
                         if (this.industryArea.name === 'All' || result.employee_industry === this.industryArea.id) {
-                            this.editForm.get('target_id').setErrors(null);
+                            this.editForm.get('target_name').setErrors(null);
                         } else {
                             // company not belong to the area
-                            this.editForm.get('target_id').setErrors({notFound: true});
+                            this.editForm.get('target_name').setErrors({notFound: true});
                         }
                         this.targetId = result.employee_id;
                     }
                 } else {
-                    this.editForm.get('target_id').setErrors({notFound: true});
+                    this.editForm.get('target_name').setErrors({notFound: true});
                 }
             }).catch(() => {
-                this.editForm.get('target_id').setErrors({notFound: true});
+                this.editForm.get('target_name').setErrors({notFound: true});
             }).finally(() => {
                 this.isChecking = false;
             });
@@ -177,12 +179,35 @@ export class SingleConversationPage implements OnInit {
         });
     }
 
+    async openSearch() {
+        const createModal = await this.modalController.create({
+            component: SearchModalPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+                type: (this.source === 'company' ? 'companies' : 'employees'),
+            }
+        });
+        createModal.onDidDismiss().then((response) => {
+            if (response.data) {
+                if (this.source === 'company') {
+                    this.editForm.get('target_name').setValue(response.data.company_name);
+                    this.targetId = response.data.company_reg_num;
+                } else {
+                    this.editForm.get('target_name').setValue(response.data.employee_full_name);
+                    this.targetId = response.data.employee_id;
+                }
+            }
+        });
+        return await createModal.present();
+    }
+
     private getItem(id: string) {
         this.httpRequestService.read('conversations/' + this.source + '/' + encodeURIComponent(id)).then((data) => {
             this.item = data.data_response;
             this.targetId = this.item.target_id; // target id
             this.editForm = this.formBuilder.group({
-                target_id: [this.item.target_id, Validators.compose([
+                target_name: [this.item.target_name, Validators.compose([
                     Validators.required
                 ])],
                 conversation: [this.item.conversation, Validators.compose([])],
@@ -192,7 +217,7 @@ export class SingleConversationPage implements OnInit {
             });
             if (this.source === 'employee') {
                 this.httpRequestService.read('employees/' + this.targetId).then((employee) => {
-                    this.editForm.get('target_id').setValue(employee.data_response.employee_email);
+                    this.editForm.get('target_name').setValue(employee.data_response.employee_full_name);
                 });
             }
             this.getUserIndustryArea();
