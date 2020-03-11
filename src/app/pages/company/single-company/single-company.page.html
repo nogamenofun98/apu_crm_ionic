@@ -55,6 +55,10 @@
                         <ion-icon name="chatboxes"></ion-icon>
                     </ion-fab-button>
                     <ion-label style="text-align: center">New Chat</ion-label>
+                    <ion-fab-button (click)="export()" color="medium">
+                        <ion-icon name="cloud-download"></ion-icon>
+                    </ion-fab-button>
+                    <ion-label style="text-align: center;word-wrap: normal">Export Emp List</ion-label>
                 </ion-fab-list>
             </ion-fab>
         </div>
@@ -329,7 +333,7 @@
                 <ion-grid>
                     <ion-row>
                         <ion-col size="auto">
-                            <ion-label>Employee Contact List:</ion-label>
+                            <ion-label>Current Employee Contact List:</ion-label>
                         </ion-col>
                         <ion-col>
                             <ng-container *ngIf="noEmployeeRecord">

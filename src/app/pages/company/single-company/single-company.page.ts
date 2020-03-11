@@ -5,10 +5,12 @@ import {EnvService} from '../../../services/env.service';
 import {ActionSheetController, ModalController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpRequestService} from '../../../services/http-request.service';
-import {HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {AuthService} from '../../../services/auth.service';
 import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 import {CreateConversationPage} from '../../conversation/create-conversation/create-conversation.page';
+import {saveAs} from 'file-saver';
+import {map} from 'rxjs/operators';
 
 @Component({
     selector: 'app-single-company',
@@ -33,7 +35,8 @@ export class SingleCompanyPage implements OnInit {
     employeeItems = [];
     noEmployeeRecord: boolean;
 
-    constructor(private route: ActivatedRoute,
+    constructor(private http: HttpClient,
+                private route: ActivatedRoute,
                 private env: EnvService,
                 private actionSheetController: ActionSheetController,
                 private modalController: ModalController,
@@ -83,6 +86,13 @@ export class SingleCompanyPage implements OnInit {
                         this.newConversation();
                     }
                 },
+                {
+                    text: 'Export Employee List',
+                    icon: 'cloud-download',
+                    handler: () => {
+                        this.export();
+                    }
+                },
             ];
         } else {
             button = [
@@ -114,6 +124,13 @@ export class SingleCompanyPage implements OnInit {
                     icon: 'chatboxes',
                     handler: () => {
                         this.newConversation();
+                    }
+                },
+                {
+                    text: 'Export Employee List',
+                    icon: 'cloud-download',
+                    handler: () => {
+                        this.export();
                     }
                 },
             ];
@@ -228,27 +245,6 @@ export class SingleCompanyPage implements OnInit {
         });
     }
 
-    // getEmployee() {
-    //     const employeeId = this.contactForm.get('employee_email').value;
-    //     if (employeeId !== '') {
-    //         this.contactForm.get('employee_email').setErrors({asd: true}); // prevent the form submit before the http req comes back
-    //         this.isChecking = true;
-    //         this.httpRequestService.read('employees/check-emp/' + encodeURIComponent(employeeId)).then(data => {
-    //             const result = data.data_response;
-    //             if (data.hasOwnProperty('data_response')) {
-    //                 this.contactForm.get('employee_email').setErrors(null);
-    //                 this.employeeId = result.employee_id;
-    //             } else {
-    //                 this.contactForm.get('employee_email').setErrors({notFound: true});
-    //             }
-    //         }).catch(() => {
-    //             this.contactForm.get('employee_email').setErrors({notFound: true});
-    //         }).finally(() => {
-    //             this.isChecking = false;
-    //         });
-    //     }
-    // }
-
     deleteContact(id: any) {
         this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
             alert.onDidDismiss().then(confirm => {
@@ -360,5 +356,23 @@ export class SingleCompanyPage implements OnInit {
         createModal.onDidDismiss().then((isOk) => {
         });
         return await createModal.present();
+    }
+
+    export() {
+        const headers = new HttpHeaders({
+            'Access-Control-Allow-Origin': '*',
+        });
+        this.http.get(this.env.API_URL + 'companies/' + this.id + '/employee-list/download', {
+            headers,
+            observe: 'response',
+            responseType: 'blob'
+        }).pipe(map((res: any) => {
+            return new Blob([res.body], {type: 'application/vnd.ms.excel'});
+
+        })).subscribe((res: any) => {
+            const date = new Date();
+            const file = new File([res], this.id + '_' + date.getDate() + (date.getMonth() + 1) + date.getFullYear() + '.xlsx', {type: 'application/vnd.ms.excel'});
+            saveAs(file);
+        });
     }
 }
