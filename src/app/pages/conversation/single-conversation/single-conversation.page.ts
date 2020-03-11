@@ -108,7 +108,8 @@ export class SingleConversationPage implements OnInit {
                 this.httpRequestService.update('conversations/' + this.source + '/' + this.id, JSON.stringify(body), headers).then(data => {
                     this.alertService.presentToast(data.message, 'success', 1500, false);
                     this.isEdit = false;
-                    this.getItem(this.id);
+                    this.navCtrl.navigateBack('/conversations'); // because now changed to every edit is new conversation, so redirect to list instead
+                    // this.getItem(this.id);
                 }).catch(err => console.error(err)).finally(() => loadingObject.dismiss())
                 ;
             });

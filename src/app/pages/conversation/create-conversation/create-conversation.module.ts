@@ -7,6 +7,7 @@ import {IonicModule} from '@ionic/angular';
 import {CreateConversationPageRoutingModule} from './create-conversation-routing.module';
 
 import {CreateConversationPage} from './create-conversation.page';
+import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @NgModule({
     imports: [
@@ -16,7 +17,8 @@ import {CreateConversationPage} from './create-conversation.page';
         CreateConversationPageRoutingModule,
         ReactiveFormsModule
     ],
-    declarations: [CreateConversationPage]
+    declarations: [CreateConversationPage, SearchModalPage],
+    entryComponents: [SearchModalPage]
 })
 export class CreateConversationPageModule {
 }

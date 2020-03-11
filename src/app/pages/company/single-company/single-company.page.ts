@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {EnvService} from '../../../services/env.service';
-import {ActionSheetController, NavController} from '@ionic/angular';
+import {ActionSheetController, ModalController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpRequestService} from '../../../services/http-request.service';
 import {HttpHeaders} from '@angular/common/http';
 import {AuthService} from '../../../services/auth.service';
+import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @Component({
     selector: 'app-single-company',
@@ -34,6 +35,7 @@ export class SingleCompanyPage implements OnInit {
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
                 private actionSheetController: ActionSheetController,
+                private modalController: ModalController,
                 private alertService: AlertService,
                 private navCtrl: NavController,
                 private formBuilder: FormBuilder,
@@ -211,26 +213,26 @@ export class SingleCompanyPage implements OnInit {
         });
     }
 
-    getEmployee() {
-        const employeeId = this.contactForm.get('employee_email').value;
-        if (employeeId !== '') {
-            this.contactForm.get('employee_email').setErrors({asd: true}); // prevent the form submit before the http req comes back
-            this.isChecking = true;
-            this.httpRequestService.read('employees/check-emp/' + encodeURIComponent(employeeId)).then(data => {
-                const result = data.data_response;
-                if (data.hasOwnProperty('data_response')) {
-                    this.contactForm.get('employee_email').setErrors(null);
-                    this.employeeId = result.employee_id;
-                } else {
-                    this.contactForm.get('employee_email').setErrors({notFound: true});
-                }
-            }).catch(() => {
-                this.contactForm.get('employee_email').setErrors({notFound: true});
-            }).finally(() => {
-                this.isChecking = false;
-            });
-        }
-    }
+    // getEmployee() {
+    //     const employeeId = this.contactForm.get('employee_email').value;
+    //     if (employeeId !== '') {
+    //         this.contactForm.get('employee_email').setErrors({asd: true}); // prevent the form submit before the http req comes back
+    //         this.isChecking = true;
+    //         this.httpRequestService.read('employees/check-emp/' + encodeURIComponent(employeeId)).then(data => {
+    //             const result = data.data_response;
+    //             if (data.hasOwnProperty('data_response')) {
+    //                 this.contactForm.get('employee_email').setErrors(null);
+    //                 this.employeeId = result.employee_id;
+    //             } else {
+    //                 this.contactForm.get('employee_email').setErrors({notFound: true});
+    //             }
+    //         }).catch(() => {
+    //             this.contactForm.get('employee_email').setErrors({notFound: true});
+    //         }).finally(() => {
+    //             this.isChecking = false;
+    //         });
+    //     }
+    // }
 
     deleteContact(id: any) {
         this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
@@ -310,5 +312,23 @@ export class SingleCompanyPage implements OnInit {
             this.employeeItems = data.data_response;
             (this.employeeItems.length === 0) ? this.noEmployeeRecord = true : this.noEmployeeRecord = false;
         });
+    }
+
+    async openSearch() {
+        const createModal = await this.modalController.create({
+            component: SearchModalPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+                type: 'employees',
+            }
+        });
+        createModal.onDidDismiss().then((response) => {
+            if (response.data) {
+                this.contactForm.get('employee_email').setValue(response.data.employee_email);
+                this.employeeId = response.data.employee_id;
+            }
+        });
+        return await createModal.present();
     }
 }

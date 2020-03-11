@@ -20,6 +20,7 @@ export class ConversationPage implements OnInit {
     section: any;
     items: any;
     noRecord: boolean;
+    showConversation = false;
 
     constructor(private http: HttpClient,
                 private alertService: AlertService,
@@ -91,4 +92,9 @@ export class ConversationPage implements OnInit {
     }
 
 
+    refreshContent() {
+        const temp = this.items;
+        this.items = null;
+        this.items = temp;
+    }
 }

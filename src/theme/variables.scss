@@ -15,6 +15,14 @@
   min-width: 50%;
 }
 
+.item-interactive-disabled.sc-ion-label-md-h:not(.item-multiple-inputs), .item-interactive-disabled:not(.item-multiple-inputs) .sc-ion-label-md-h {
+  opacity: 1.0 !important;
+}
+
+.native-input[disabled], .item-interactive-disabled .select-disabled {
+  opacity: 1.0 !important;
+  color: mediumblue !important;
+}
 
 :root {
   /** primary **/

@@ -8,6 +8,7 @@ import {SingleEmployeePageRoutingModule} from './single-employee-routing.module'
 
 import {SingleEmployeePage} from './single-employee.page';
 import {SharedComponentsModule} from '../../sharedModules/SharedModules';
+import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import {SharedComponentsModule} from '../../sharedModules/SharedModules';
         ReactiveFormsModule,
         SharedComponentsModule
     ],
-    declarations: [SingleEmployeePage]
+    declarations: [SingleEmployeePage, SearchModalPage],
+    entryComponents: [SearchModalPage]
 })
 export class SingleEmployeePageModule {
 }

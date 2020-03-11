@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {ActivatedRoute} from '@angular/router';
 import {EnvService} from '../../../services/env.service';
-import {ActionSheetController, NavController} from '@ionic/angular';
+import {ActionSheetController, ModalController, NavController} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpRequestService} from '../../../services/http-request.service';
 import {AuthService} from '../../../services/auth.service';
 import {HttpHeaders} from '@angular/common/http';
+import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @Component({
     selector: 'app-single-employee',
@@ -16,7 +17,7 @@ import {HttpHeaders} from '@angular/common/http';
 export class SingleEmployeePage implements OnInit {
 
     item: any;
-    jobItems: any;
+    jobItems: any[];
     isMD: any;
     isEdit: boolean;
     editForm: FormGroup;
@@ -33,6 +34,7 @@ export class SingleEmployeePage implements OnInit {
     constructor(private route: ActivatedRoute,
                 private env: EnvService,
                 private actionSheetController: ActionSheetController,
+                private modalController: ModalController,
                 private alertService: AlertService,
                 private navCtrl: NavController,
                 private formBuilder: FormBuilder,
@@ -186,19 +188,36 @@ export class SingleEmployeePage implements OnInit {
         return false;
     }
 
-    deleteJob(company: any) {
-        this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
-            alert.onDidDismiss().then(confirm => {
-                if (confirm.role === 'success') {
-                    this.httpRequestService.delete('employees/' + encodeURIComponent(this.id) + '/jobs/' + company).then(data => {
-                        this.alertService.presentToast(data.message, 'success', 1500, false);
-                        this.getJobsList(this.id);
-                    }).catch(err => {
-                        console.error(err);
-                    });
-                }
-            });
-        });
+    editJob(company: any) {
+        // this.jobForm = this.formBuilder.group({
+        //     employee_company_Id: ['', Validators.compose([Validators.required])],
+        //     job_designation: ['', Validators.compose([])],
+        //     job_department: ['', Validators.compose([])],
+        //     job_hired_date: ['', Validators.compose([])],
+        //     is_current_job: [false, Validators.compose([])],
+        // });
+        for (const item of this.jobItems) {
+            if (item.company === company) {
+                this.jobForm.get('employee_company_Id').setValue(item.company);
+                this.jobForm.get('job_designation').setValue(item.designation);
+                this.jobForm.get('job_department').setValue(item.department);
+                this.jobForm.get('job_hired_date').setValue(item.hired_time);
+                this.jobForm.get('is_current_job').setValue(item.is_current_job);
+                break;
+            }
+        }
+        // this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
+        //     alert.onDidDismiss().then(confirm => {
+        //         if (confirm.role === 'success') {
+        //             this.httpRequestService.delete('employees/' + encodeURIComponent(this.id) + '/jobs/' + company).then(data => {
+        //                 this.alertService.presentToast(data.message, 'success', 1500, false);
+        //                 this.getJobsList(this.id);
+        //             }).catch(err => {
+        //                 console.error(err);
+        //             });
+        //         }
+        //     });
+        // });
     }
 
     private getCompany() {
@@ -299,5 +318,22 @@ export class SingleEmployeePage implements OnInit {
         }).catch(err => {
             console.error(err);
         });
+    }
+
+    async openSearch() {
+        const createModal = await this.modalController.create({
+            component: SearchModalPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+                type: 'companies',
+            }
+        });
+        createModal.onDidDismiss().then((response) => {
+            if (response.data) {
+                this.jobForm.get('employee_company_Id').setValue(response.data.company_reg_num);
+            }
+        });
+        return await createModal.present();
     }
 }

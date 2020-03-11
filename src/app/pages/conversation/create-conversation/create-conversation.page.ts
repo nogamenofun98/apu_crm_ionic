@@ -5,6 +5,7 @@ import {HttpRequestService} from '../../../services/http-request.service';
 import {ModalController, NavController, NavParams} from '@ionic/angular';
 import {AlertService} from '../../../services/alert.service';
 import {HttpHeaders} from '@angular/common/http';
+import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @Component({
     selector: 'app-create-conversation',
@@ -129,5 +130,28 @@ export class CreateConversationPage implements OnInit {
             this.statusList = data.data_response;
         }).catch(err => console.error(err))
         ;
+    }
+
+    async openSearch() {
+        const createModal = await this.modalController.create({
+            component: SearchModalPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+                type: (this.source === 'company' ? 'companies' : 'employees'),
+            }
+        });
+        createModal.onDidDismiss().then((response) => {
+            if (response.data) {
+                if (this.source === 'company') {
+                    this.createForm.get('target_id').setValue(response.data.company_reg_num);
+                    this.targetId = response.data.company_reg_num;
+                } else {
+                    this.createForm.get('target_id').setValue(response.data.employee_full_name);
+                    this.targetId = response.data.employee_id;
+                }
+            }
+        });
+        return await createModal.present();
     }
 }
