@@ -8,16 +8,6 @@
 </ion-header>
 
 <ion-content class="ion-padding">
-    <!--    <ion-segment [(ngModel)]="section">-->
-    <!--        <ion-segment-button value="profile">-->
-    <!--            User Info-->
-    <!--        </ion-segment-button>-->
-    <!--        <ion-segment-button value="job">-->
-    <!--            Working Records-->
-    <!--        </ion-segment-button>-->
-    <!--    </ion-segment>-->
-    <!--    <ng-container [ngSwitch]="section">-->
-    <!--        <ng-container *ngSwitchCase="'profile'">-->
     <div *ngIf="item">
 
         <ion-fab *ngIf="isMD" horizontal="end" slot="floating" vertical="top">
@@ -50,7 +40,10 @@
                         <ion-icon name="send"></ion-icon>
                     </ion-fab-button>
                     <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
-
+                    <ion-fab-button (click)="newConversation()" color="secondary">
+                        <ion-icon name="chatboxes"></ion-icon>
+                    </ion-fab-button>
+                    <ion-label style="text-align: center">New Chat</ion-label>
                 </ion-fab-list>
             </ion-fab>
         </div>

@@ -15,6 +15,7 @@ import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.pag
 export class CreateConversationPage implements OnInit {
     createForm: FormGroup;
     source: any;
+    targetItem = null;
     isChecking = false;
     industryList: any;
     statusList: any;
@@ -27,16 +28,25 @@ export class CreateConversationPage implements OnInit {
                 private formBuilder: FormBuilder, private navParams: NavParams) {
         // console.error('constructor run');
         this.source = this.navParams.get('source');
+        this.targetItem = this.navParams.get('item');
         this.createForm = this.formBuilder.group({
-            target_id: ['', Validators.compose([
+            target_name: ['', Validators.compose([
                 Validators.required
             ])],
             conversation: ['', Validators.compose([])],
             status_id: ['', Validators.compose([
                 Validators.required
             ])],
-
         });
+        if (this.targetItem) {
+            if (this.source === 'company') {
+                this.createForm.get('target_name').setValue(this.targetItem.company_name);
+                this.targetId = this.targetItem.company_reg_num;
+            } else {
+                this.createForm.get('target_name').setValue(this.targetItem.employee_full_name);
+                this.targetId = this.targetItem.employee_id;
+            }
+        }
     }
 
     ngOnInit() {
@@ -44,47 +54,47 @@ export class CreateConversationPage implements OnInit {
         this.getUserIndustryArea();
     }
 
-    checkExist() {
-        const targetId = this.createForm.get('target_id').value;
-        if (targetId !== '') {
-            this.createForm.get('target_id').setErrors({asd: true}); // prevent the form submit before the http req comes back
-            this.isChecking = true;
-            let url = '';
-            if (this.source === 'company') {
-                url = 'companies/check-comp-reg-num/';
-            } else {
-                url = 'employees/check-emp/';
-            }
-            this.httpRequestService.read(url + encodeURIComponent(targetId)).then(data => {
-                const result = data.data_response;
-                if (data.hasOwnProperty('data_response')) {
-                    if (this.source === 'company') {
-                        if (this.industryArea.name === 'All' || result.company_industry === this.industryArea.id) { // check comp is same area as user or not
-                            this.createForm.get('target_id').setErrors(null);
-                        } else {
-                            // company not belong to the area
-                            this.createForm.get('target_id').setErrors({notFound: true});
-                        }
-                        this.targetId = result.company_reg_num;
-                    } else {
-                        if (this.industryArea.name === 'All' || result.employee_industry === this.industryArea.id) {
-                            this.createForm.get('target_id').setErrors(null);
-                        } else {
-                            // company not belong to the area
-                            this.createForm.get('target_id').setErrors({notFound: true});
-                        }
-                        this.targetId = result.employee_id;
-                    }
-                } else {
-                    this.createForm.get('target_id').setErrors({notFound: true});
-                }
-            }).catch(() => {
-                this.createForm.get('target_id').setErrors({notFound: true});
-            }).finally(() => {
-                this.isChecking = false;
-            });
-        }
-    }
+    // checkExist() {
+    //     const targetId = this.createForm.get('target_name').value;
+    //     if (targetId !== '') {
+    //         this.createForm.get('target_name').setErrors({asd: true}); // prevent the form submit before the http req comes back
+    //         this.isChecking = true;
+    //         let url = '';
+    //         if (this.source === 'company') {
+    //             url = 'companies/check-comp-reg-num/';
+    //         } else {
+    //             url = 'employees/check-emp/';
+    //         }
+    //         this.httpRequestService.read(url + encodeURIComponent(targetId)).then(data => {
+    //             const result = data.data_response;
+    //             if (data.hasOwnProperty('data_response')) {
+    //                 if (this.source === 'company') {
+    //                     if (this.industryArea.name === 'All' || result.company_industry === this.industryArea.id) { // check comp is same area as user or not
+    //                         this.createForm.get('target_name').setErrors(null);
+    //                     } else {
+    //                         // company not belong to the area
+    //                         this.createForm.get('target_name').setErrors({notFound: true});
+    //                     }
+    //                     this.targetId = result.company_reg_num;
+    //                 } else {
+    //                     if (this.industryArea.name === 'All' || result.employee_industry === this.industryArea.id) {
+    //                         this.createForm.get('target_name').setErrors(null);
+    //                     } else {
+    //                         // company not belong to the area
+    //                         this.createForm.get('target_name').setErrors({notFound: true});
+    //                     }
+    //                     this.targetId = result.employee_id;
+    //                 }
+    //             } else {
+    //                 this.createForm.get('target_name').setErrors({notFound: true});
+    //             }
+    //         }).catch(() => {
+    //             this.createForm.get('target_name').setErrors({notFound: true});
+    //         }).finally(() => {
+    //             this.isChecking = false;
+    //         });
+    //     }
+    // }
 
     dismissModal() {
         this.modalController.dismiss(false);
@@ -144,10 +154,10 @@ export class CreateConversationPage implements OnInit {
         createModal.onDidDismiss().then((response) => {
             if (response.data) {
                 if (this.source === 'company') {
-                    this.createForm.get('target_id').setValue(response.data.company_reg_num);
+                    this.createForm.get('target_name').setValue(response.data.company_name);
                     this.targetId = response.data.company_reg_num;
                 } else {
-                    this.createForm.get('target_id').setValue(response.data.employee_full_name);
+                    this.createForm.get('target_name').setValue(response.data.employee_full_name);
                     this.targetId = response.data.employee_id;
                 }
             }

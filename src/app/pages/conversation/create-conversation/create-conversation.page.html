@@ -19,10 +19,10 @@
 <ion-content class="ion-padding">
 
     <form (ngSubmit)="createForm.valid && create(createForm)" [formGroup]="createForm">
-        <ion-input formControlName="target_id" style="display:none" type="text"></ion-input>
+        <ion-input formControlName="target_name" style="display:none" type="text"></ion-input>
         <ion-item>
-            <ion-label>{{(source == "company") ? "Company Reg Num*" : "Employee Email*"}}
-                : {{createForm.controls.target_id.value}}</ion-label>
+            <ion-label>{{(source == "company") ? "Company Name*" : "Employee Name*"}}
+                : {{createForm.controls.target_name.value}}</ion-label>
             <ion-button (click)="openSearch()" color="secondary" size="default" type="button">Search</ion-button>
         </ion-item>
 

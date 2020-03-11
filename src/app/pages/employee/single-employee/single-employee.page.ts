@@ -8,6 +8,7 @@ import {HttpRequestService} from '../../../services/http-request.service';
 import {AuthService} from '../../../services/auth.service';
 import {HttpHeaders} from '@angular/common/http';
 import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
+import {CreateConversationPage} from '../../conversation/create-conversation/create-conversation.page';
 
 @Component({
     selector: 'app-single-employee',
@@ -27,7 +28,6 @@ export class SingleEmployeePage implements OnInit {
     isManageAll = false;
     empIndustryArea = '';
     industryItem = {id: '', name: ''};
-    section: any;
     private id: string;
     noRecord: boolean;
 
@@ -50,7 +50,6 @@ export class SingleEmployeePage implements OnInit {
     }
 
     ngOnInit() {
-        this.section = 'profile';
         this.item = null;
         this.route.paramMap.subscribe(params => {
             this.id = params.get('id');
@@ -81,6 +80,13 @@ export class SingleEmployeePage implements OnInit {
                         this.isEdit = true;
                     }
                 },
+                {
+                    text: 'New Chat',
+                    icon: 'chatboxes',
+                    handler: () => {
+                        this.newConversation();
+                    }
+                },
             ];
         } else {
             button = [
@@ -105,6 +111,13 @@ export class SingleEmployeePage implements OnInit {
                     icon: 'send',
                     handler: () => {
                         this.submitForm();
+                    }
+                },
+                {
+                    text: 'New Chat',
+                    icon: 'chatboxes',
+                    handler: () => {
+                        this.newConversation();
                     }
                 },
             ];
@@ -189,13 +202,6 @@ export class SingleEmployeePage implements OnInit {
     }
 
     editJob(company: any) {
-        // this.jobForm = this.formBuilder.group({
-        //     employee_company_Id: ['', Validators.compose([Validators.required])],
-        //     job_designation: ['', Validators.compose([])],
-        //     job_department: ['', Validators.compose([])],
-        //     job_hired_date: ['', Validators.compose([])],
-        //     is_current_job: [false, Validators.compose([])],
-        // });
         for (const item of this.jobItems) {
             if (item.company === company) {
                 this.jobForm.get('employee_company_Id').setValue(item.company);
@@ -206,46 +212,34 @@ export class SingleEmployeePage implements OnInit {
                 break;
             }
         }
-        // this.alertService.presentAlertConfirm('Are you sure to delete this record?').then(alert => {
-        //     alert.onDidDismiss().then(confirm => {
-        //         if (confirm.role === 'success') {
-        //             this.httpRequestService.delete('employees/' + encodeURIComponent(this.id) + '/jobs/' + company).then(data => {
-        //                 this.alertService.presentToast(data.message, 'success', 1500, false);
-        //                 this.getJobsList(this.id);
-        //             }).catch(err => {
-        //                 console.error(err);
-        //             });
-        //         }
-        //     });
-        // });
     }
 
-    private getCompany() {
-        const regNum = this.jobForm.get('employee_company_Id').value;
-        if (regNum !== '') {
-            this.jobForm.get('employee_company_Id').setErrors({asd: true}); // prevent the form submit before the http req comes back
-            this.isChecking = true;
-            this.httpRequestService.read('companies/check-comp-reg-num/' + encodeURIComponent(regNum)).then(data => {
-                const result = data.data_response;
-                if (data.hasOwnProperty('data_response')) {
-                    if (result.company_industry === this.editForm.get('employee_industry_id').value) { // check comp is same area as employee or not
-                        this.jobForm.get('employee_company_Id').setErrors(null);
-                    } else {
-                        // company not belong to the area
-                        this.jobForm.get('employee_company_Id').setErrors({notFound: true});
-                    }
-                } else {
-                    // meaning comp id not found
-                    this.jobForm.get('employee_company_Id').setErrors({notFound: true});
-                }
-
-            }).catch(() => {
-                this.jobForm.get('employee_company_Id').setErrors({notFound: true});
-            }).finally(() => {
-                this.isChecking = false;
-            });
-        }
-    }
+    // private getCompany() {
+    //     const regNum = this.jobForm.get('employee_company_Id').value;
+    //     if (regNum !== '') {
+    //         this.jobForm.get('employee_company_Id').setErrors({asd: true}); // prevent the form submit before the http req comes back
+    //         this.isChecking = true;
+    //         this.httpRequestService.read('companies/check-comp-reg-num/' + encodeURIComponent(regNum)).then(data => {
+    //             const result = data.data_response;
+    //             if (data.hasOwnProperty('data_response')) {
+    //                 if (result.company_industry === this.editForm.get('employee_industry_id').value) { // check comp is same area as employee or not
+    //                     this.jobForm.get('employee_company_Id').setErrors(null);
+    //                 } else {
+    //                     // company not belong to the area
+    //                     this.jobForm.get('employee_company_Id').setErrors({notFound: true});
+    //                 }
+    //             } else {
+    //                 // meaning comp id not found
+    //                 this.jobForm.get('employee_company_Id').setErrors({notFound: true});
+    //             }
+    //
+    //         }).catch(() => {
+    //             this.jobForm.get('employee_company_Id').setErrors({notFound: true});
+    //         }).finally(() => {
+    //             this.isChecking = false;
+    //         });
+    //     }
+    // }
 
     private getItem(id: string) {
         this.httpRequestService.read('employees/' + encodeURIComponent(id)).then((data) => {
@@ -333,6 +327,21 @@ export class SingleEmployeePage implements OnInit {
             if (response.data) {
                 this.jobForm.get('employee_company_Id').setValue(response.data.company_reg_num);
             }
+        });
+        return await createModal.present();
+    }
+
+    async newConversation() {
+        const createModal = await this.modalController.create({
+            component: CreateConversationPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+                source: 'employee',
+                item: this.item,
+            }
+        });
+        createModal.onDidDismiss().then((isOk) => {
         });
         return await createModal.present();
     }

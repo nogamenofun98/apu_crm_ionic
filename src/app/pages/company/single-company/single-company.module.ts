@@ -8,7 +8,6 @@ import {SingleCompanyPageRoutingModule} from './single-company-routing.module';
 
 import {SingleCompanyPage} from './single-company.page';
 import {SharedComponentsModule} from '../../sharedModules/SharedModules';
-import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
 
 @NgModule({
     imports: [
@@ -19,8 +18,8 @@ import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.pag
         SharedComponentsModule,
         ReactiveFormsModule
     ],
-    declarations: [SingleCompanyPage, SearchModalPage],
-    entryComponents: [SearchModalPage]
+    declarations: [SingleCompanyPage],
+    entryComponents: []
 })
 export class SingleCompanyPageModule {
 }

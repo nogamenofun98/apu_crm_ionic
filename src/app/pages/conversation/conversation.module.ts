@@ -8,8 +8,6 @@ import {ConversationPageRoutingModule} from './conversation-routing.module';
 
 import {ConversationPage} from './conversation.page';
 import {SharedComponentsModule} from '../sharedModules/SharedModules';
-import {CreateConversationPage} from './create-conversation/create-conversation.page';
-import {SearchModalPage} from '../sharedModules/search-modal/search-modal.page';
 
 @NgModule({
     imports: [
@@ -20,8 +18,8 @@ import {SearchModalPage} from '../sharedModules/search-modal/search-modal.page';
         ReactiveFormsModule,
         SharedComponentsModule
     ],
-    declarations: [ConversationPage, CreateConversationPage, SearchModalPage],
-    entryComponents: [CreateConversationPage, SearchModalPage]
+    declarations: [ConversationPage,],
+    entryComponents: []
 })
 export class ConversationPageModule {
 }

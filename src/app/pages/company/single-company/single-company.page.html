@@ -25,7 +25,6 @@
     <div *ngIf="item">
         <ion-fab *ngIf="isMD" horizontal="end" slot="floating" vertical="top">
             <ion-fab-button (click)="showMenu()" class="ion-float-end" color="primary" size="small">
-                <!--                <ion-fab-button class="ion-float-end" color="primary" size="small">-->
                 <ion-icon name="menu"></ion-icon>
             </ion-fab-button>
         </ion-fab>
@@ -52,7 +51,10 @@
                         <ion-icon name="send"></ion-icon>
                     </ion-fab-button>
                     <ion-label *ngIf="isEdit" style="text-align: center">Submit Edit</ion-label>
-
+                    <ion-fab-button (click)="newConversation()" color="secondary">
+                        <ion-icon name="chatboxes"></ion-icon>
+                    </ion-fab-button>
+                    <ion-label style="text-align: center">New Chat</ion-label>
                 </ion-fab-list>
             </ion-fab>
         </div>

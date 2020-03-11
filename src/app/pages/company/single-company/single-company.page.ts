@@ -8,6 +8,7 @@ import {HttpRequestService} from '../../../services/http-request.service';
 import {HttpHeaders} from '@angular/common/http';
 import {AuthService} from '../../../services/auth.service';
 import {SearchModalPage} from '../../sharedModules/search-modal/search-modal.page';
+import {CreateConversationPage} from '../../conversation/create-conversation/create-conversation.page';
 
 @Component({
     selector: 'app-single-company',
@@ -75,6 +76,13 @@ export class SingleCompanyPage implements OnInit {
                         this.isEdit = true;
                     }
                 },
+                {
+                    text: 'New Chat',
+                    icon: 'chatboxes',
+                    handler: () => {
+                        this.newConversation();
+                    }
+                },
             ];
         } else {
             button = [
@@ -99,6 +107,13 @@ export class SingleCompanyPage implements OnInit {
                     icon: 'send',
                     handler: () => {
                         this.submitForm();
+                    }
+                },
+                {
+                    text: 'New Chat',
+                    icon: 'chatboxes',
+                    handler: () => {
+                        this.newConversation();
                     }
                 },
             ];
@@ -328,6 +343,21 @@ export class SingleCompanyPage implements OnInit {
                 this.contactForm.get('employee_email').setValue(response.data.employee_email);
                 this.employeeId = response.data.employee_id;
             }
+        });
+        return await createModal.present();
+    }
+
+    async newConversation() {
+        const createModal = await this.modalController.create({
+            component: CreateConversationPage,
+            cssClass: 'create-modal',
+            componentProps: {
+                modalController: this.modalController,
+                source: 'company',
+                item: this.item,
+            }
+        });
+        createModal.onDidDismiss().then((isOk) => {
         });
         return await createModal.present();
     }
